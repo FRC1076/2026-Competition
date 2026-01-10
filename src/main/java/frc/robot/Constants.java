@@ -13,7 +13,20 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    public static class OperatorConstants {
+    public static class OIConstants {
         public static final int kDriverControllerPort = 0;
+        public static final int kOperatorControllerPort = 1;
+    }
+
+    public static class SystemConstants {
+        public static final RobotMode kMode = RobotMode.REAL;
+        public static final boolean kEnableSignalLogger = false;
+        public static final boolean kEnableRTPriority = true;
+
+        public static enum RobotMode {
+            REAL,
+            SIM,
+            REPLAY;
+        }
     }
 }
