@@ -12,4 +12,10 @@ public interface FlywheelIO {
 
         public double temperatureCelcius = 0;
     }
+
+    public abstract void updateInputs(FlywheelIOInputs inputs);
+
+    public abstract void setVoltage(double volts);
+
+    public abstract void setVelocityRadPerSec(double velocityRadPerSec);
 }
