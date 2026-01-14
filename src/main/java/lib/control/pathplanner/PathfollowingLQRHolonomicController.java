@@ -10,7 +10,6 @@ import com.pathplanner.lib.trajectory.PathPlannerTrajectoryState;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import lib.control.LQRHolonomicController;
-import lib.control.LQRHolonomicController.LQRHolonomicDriveControllerTolerances;
 
 /** Provides an LQR holonomic controller in the interface shape of a PathFollowingController, for compatibility with pathplanner */
 public class PathfollowingLQRHolonomicController extends LQRHolonomicController implements PathFollowingController {
