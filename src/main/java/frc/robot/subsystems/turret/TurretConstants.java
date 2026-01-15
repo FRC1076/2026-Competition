@@ -29,5 +29,9 @@ public class TurretConstants {
     public static final double kMaxJerkRadPerSec3 = 0;
 
     // FOC
-    public static final boolean kEnableFOC = false;
+    public static final boolean kEnableFOC = true;
+
+    // SysId
+    public static final double kSysIdRampRate = 1;
+    public static final double kSysIdStepVoltage = 4;
 }
