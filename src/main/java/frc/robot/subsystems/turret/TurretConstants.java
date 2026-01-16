@@ -1,19 +1,30 @@
 package frc.robot.subsystems.turret;
 
+import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import frc.robot.Constants.CANConstants;
+
 public class TurretConstants {
-    // Device ID
+    // CAN
     public static final int kCanId = 0;
+    public static final CANBus kCANBus = CANConstants.kCANivoreBus;
 
     // Voltage and current limits
     public static final double kMaxVoltage = 12;
     public static final double kCurrentLimitAmps = 40;
 
+    // Manual control
+    public static final double kMaxManualControlVolts = 4;
+
     // If inverted and brake mode
     public static final InvertedValue kInvertedValue = InvertedValue.Clockwise_Positive;
     public static final NeutralModeValue kNeutralMode = NeutralModeValue.Brake;
+
+    // Internal absolute encoder stuff
+    public static final double kEncoderOffsetRad = 0;
+    public static final double kGearRatio = 10;
 
     // Closed loop configs
     public static final double kP = 0;
@@ -30,6 +41,10 @@ public class TurretConstants {
 
     // FOC
     public static final boolean kEnableFOC = true;
+
+    // Software stops
+    public static final double kMaxPositionRad = Math.PI / 2;
+    public static final double kMinPositionRad = -Math.PI / 2;
 
     // SysId
     public static final double kSysIdRampRate = 1;

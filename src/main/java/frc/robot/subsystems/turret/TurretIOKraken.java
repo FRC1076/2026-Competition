@@ -32,7 +32,7 @@ public class TurretIOKraken implements TurretIO {
     private final PositionVoltage m_positionRequest;
 
     public TurretIOKraken() {
-        m_motor = new TalonFX(TurretConstants.kCanId);
+        m_motor = new TalonFX(TurretConstants.kCanId, TurretConstants.kCANBus);
         m_motorConfig = new TalonFXConfiguration();
         m_unitConverter = new TalonFXUnitConverter();
 
@@ -47,6 +47,10 @@ public class TurretIOKraken implements TurretIO {
 
         // Set brake mode
         m_motorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+
+        // Offset from internal absolute encoder
+        m_motorConfig.Feedback.FeedbackRotorOffset = TurretConstants.kEncoderOffsetRad;
+        m_motorConfig.Feedback.SensorToMechanismRatio = TurretConstants.kGearRatio;
 
         // Closed loop
         m_motorConfig.Slot0.kP = m_unitConverter.fromSIkP(TurretConstants.kP);

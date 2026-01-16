@@ -41,10 +41,25 @@ public class TurretSubsystem extends SubsystemBase {
         Logger.processInputs("Turret", inputs);
     }
 
-    /** Apply a voltage to the motor */
+    /** Apply a voltage to the motor with software stops enabled */
     public Command applyVoltage(double volts) {
+        if (inputs.motorPositionRad >= TurretConstants.kMaxPositionRad) {
+            volts = 0;
+        } else if (inputs.motorPositionRad <= TurretConstants.kMinPositionRad) {
+            volts = 0;
+        }
+
+        final double voltage = volts;
         return Commands.runOnce(
-            () -> io.setVoltage(volts),
+            () -> io.setVoltage(voltage),
+            this
+        );
+    }
+
+    /** Apply a voltage to the motor with software stops disabeld */
+    public Command applyVoltageUnrestricted(double volts) {
+        return Commands.runOnce(
+            () -> io.setVoltage(volts), 
             this
         );
     }
