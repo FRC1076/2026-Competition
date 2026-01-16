@@ -11,10 +11,7 @@ import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
 
-import frc.robot.Constants.FlywheelConstants;
-import frc.robot.Constants.FlywheelConstants.Control;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
-import edu.wpi.first.wpilibj.Servo;
 
 public class FlywheelIOKraken implements FlywheelIO {
     // Create a motor, configuration, and unit converter here
@@ -22,7 +19,6 @@ public class FlywheelIOKraken implements FlywheelIO {
     private final TalonFXConfiguration m_motorConfig;
     private final TalonFXUnitConverter m_unitConverter;
 
-    private final Servo m_servo;
     // Make a MotionMagic velocity request here
     private final MotionMagicVelocityVoltage m_velocityRequest = new MotionMagicVelocityVoltage(0);
 
@@ -34,8 +30,7 @@ public class FlywheelIOKraken implements FlywheelIO {
 
     public FlywheelIOKraken() {
         // Instantiate motor here
-        m_motor = new TalonFX(FlywheelConstants.kMotorPort);
-        m_servo = new Servo(FlywheelConstants.kServoPort);
+        m_motor = new TalonFX(FlywheelConstants.kCanId);
 
         // Instantiate configuration and unit converter
         m_unitConverter = new TalonFXUnitConverter();
@@ -54,12 +49,12 @@ public class FlywheelIOKraken implements FlywheelIO {
 
         // Configure motiom magic based on constants (kP, kI, kD, kS, kV, kA, accleration limit, jerk limit)
         // Make sure to use .fromSIkP(), etc in the unit converter!
-        m_motorConfig.Slot0.kP = m_unitConverter.fromSIkP(Control.kP);
-        m_motorConfig.Slot0.kI = m_unitConverter.fromSIkI(Control.kI);
-        m_motorConfig.Slot0.kD = m_unitConverter.fromSIkD(Control.kD);
-        m_motorConfig.Slot0.kS = m_unitConverter.fromSIkS(Control.kS);
-        m_motorConfig.Slot0.kV = m_unitConverter.fromSIkV(Control.kV);
-        m_motorConfig.Slot0.kA = m_unitConverter.fromSIkA(Control.kA);
+        m_motorConfig.Slot0.kP = m_unitConverter.fromSIkP(FlywheelConstants.kP);
+        m_motorConfig.Slot0.kI = m_unitConverter.fromSIkI(FlywheelConstants.kI);
+        m_motorConfig.Slot0.kD = m_unitConverter.fromSIkD(FlywheelConstants.kD);
+        m_motorConfig.Slot0.kS = m_unitConverter.fromSIkS(FlywheelConstants.kS);
+        m_motorConfig.Slot0.kV = m_unitConverter.fromSIkV(FlywheelConstants.kV);
+        m_motorConfig.Slot0.kA = m_unitConverter.fromSIkA(FlywheelConstants.kA);
 
         // Apply the configuration to the motor
         m_motor.getConfigurator().apply(m_motorConfig);
@@ -80,13 +75,10 @@ public class FlywheelIOKraken implements FlywheelIO {
     @Override
     public void setVelocityRadPerSec(double velocityRadPerSec) {
         // Set the velocity of the motor
-        if(velocityRadPerSec != 0)
-        {
+        if(velocityRadPerSec != 0) {
             m_velocityRequest.Velocity = m_unitConverter.fromSIVel(velocityRadPerSec);
             m_motor.setControl(m_velocityRequest);
-        }
-        else
-        {
+        } else {
             m_motor.setVoltage(0);
         }
     }
@@ -102,7 +94,5 @@ public class FlywheelIOKraken implements FlywheelIO {
         inputs.motorAppliedVoltage = m_voltageSignal.getValueAsDouble();
         inputs.motorVelocityRadiansPerSecond = m_unitConverter.toSIVel(m_velocitySignal.getValueAsDouble());
         inputs.motorCurrent = m_currentSignal.getValueAsDouble();
-
-        inputs.servoAngle = m_servo.getAngle() * 2 * Math.PI;
     }
 }
