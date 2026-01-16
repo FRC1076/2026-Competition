@@ -7,6 +7,9 @@ package frc.robot;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.SystemConstants;
 import frc.robot.Constants.SystemConstants.RobotMode;
+import frc.robot.subsystems.flywheel.FlywheelIODisabled;
+import frc.robot.subsystems.flywheel.FlywheelIOKraken;
+import frc.robot.subsystems.flywheel.FlywheelSubsystem;
 import frc.robot.subsystems.turret.TurretConstants;
 import frc.robot.subsystems.turret.TurretIODisabled;
 import frc.robot.subsystems.turret.TurretIOKraken;
@@ -29,6 +32,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private final TurretSubsystem m_turret;
+    private final FlywheelSubsystem m_flywheel;
 
     // Controllers
     private final SamuraiPS5Controller m_driverController =
@@ -41,8 +45,10 @@ public class RobotContainer {
     public RobotContainer() {
         if (SystemConstants.kMode == RobotMode.REAL) {
             m_turret = new TurretSubsystem(new TurretIOKraken());
+            m_flywheel = new FlywheelSubsystem(new FlywheelIOKraken());
         } else {
             m_turret = new TurretSubsystem(new TurretIODisabled());
+            m_flywheel = new FlywheelSubsystem(new FlywheelIODisabled());
         }
 
         // Configure the trigger bindings
@@ -76,6 +82,18 @@ public class RobotContainer {
         m_operatorController.leftActive()
             .whileTrue(m_turret.applyVoltage(
                     m_operatorController.getLeftX() * TurretConstants.kMaxManualControlVolts));
+
+        m_operatorController.a()
+            .onTrue(m_flywheel.applyVoltage(0));
+        
+        m_operatorController.b()
+            .onTrue(m_flywheel.applyVoltage(4));
+
+        m_operatorController.x()
+            .onTrue(m_flywheel.applyVoltage(8));
+
+        m_operatorController.y()
+            .onTrue(m_flywheel.applyVoltage(12));
     }
 
     /**
