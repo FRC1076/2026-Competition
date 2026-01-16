@@ -1,0 +1,64 @@
+package frc.robot.subsystems.flywheel;
+
+import org.littletonrobotics.junction.Logger;
+
+import static edu.wpi.first.units.Units.Volts;
+
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+
+
+public class FlywheelSubsystem extends SubsystemBase {
+    // Declare a FlywheelIO, FlywheelIOInputsAutoLogged, and SysIdRoutine
+    private final FlywheelIO io;
+    private final FlywheelIOInputsAutoLogged inputs = new FlywheelIOInputsAutoLogged();
+    private final SysIdRoutine sysId;
+
+    public FlywheelSubsystem(FlywheelIO io) {
+        // Instatiate FlywheelIO
+        this.io = io;
+
+        // Set up SysId
+        sysId = new SysIdRoutine(
+            new SysIdRoutine.Config(
+                null, null, null, 
+                (state) -> Logger.recordOutput("Flywheel/SysIdState", state.toString())
+            ),
+            new SysIdRoutine.Mechanism(
+                (voltage) -> io.setVoltage(voltage.in(Volts)), 
+                null, 
+                this
+            )
+        );
+
+    }
+
+    @Override
+    public void periodic() {
+        // Update inputs and log them
+        io.updateInputs(inputs);
+        Logger.processInputs("Flywheel", inputs);
+    }
+
+    // Make command to set voltage
+    public Command applyVoltage(double volts) {
+        return Commands.runOnce(() -> io.setVoltage(volts), this);
+    }
+
+    // Make command to set velocity in radians per second
+    public Command applyVelocityPerSec(double velocity) {
+        return Commands.runOnce(() -> io.setVelocityRadPerSec(velocity), this);
+    }
+
+    // Make SysId quasistatic and dynamic commands
+    public Command sysIdQuasistatic(Direction direction) {
+        return sysId.quasistatic(direction);
+    }
+
+    public Command sysIdDynamic(Direction direction) {
+        return sysId.dynamic(direction);
+    }
+}
