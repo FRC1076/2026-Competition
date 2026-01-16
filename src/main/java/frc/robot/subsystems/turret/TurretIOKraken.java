@@ -32,7 +32,7 @@ public class TurretIOKraken implements TurretIO {
     private final MotionMagicVoltage m_positionRequest;
 
     public TurretIOKraken() {
-        m_motor = new TalonFX(TurretConstants.kCanId, TurretConstants.kCANBus);
+        m_motor = new TalonFX(TurretConstants.kCANId, TurretConstants.kCANBus);
         m_motorConfig = new TalonFXConfiguration();
         m_unitConverter = new TalonFXUnitConverter();
 

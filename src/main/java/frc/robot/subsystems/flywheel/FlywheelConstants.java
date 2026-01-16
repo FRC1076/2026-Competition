@@ -1,11 +1,15 @@
 package frc.robot.subsystems.flywheel;
 
+import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import frc.robot.Constants.CANConstants;
+
 public class FlywheelConstants {
     // General constants here
-    public static final int kCanId = 43;
+    public static final int kCANId = 0;
+    public static final CANBus kCANBus = CANConstants.kCANivoreBus;
 
     public static final int kCurrentLimit = 40;
 

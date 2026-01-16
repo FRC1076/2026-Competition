@@ -30,7 +30,7 @@ public class FlywheelIOKraken implements FlywheelIO {
 
     public FlywheelIOKraken() {
         // Instantiate motor here
-        m_motor = new TalonFX(FlywheelConstants.kCanId);
+        m_motor = new TalonFX(FlywheelConstants.kCANId, FlywheelConstants.kCANBus);
 
         // Instantiate configuration and unit converter
         m_unitConverter = new TalonFXUnitConverter();
