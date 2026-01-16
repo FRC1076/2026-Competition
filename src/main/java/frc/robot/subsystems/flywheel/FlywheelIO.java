@@ -11,6 +11,10 @@ public interface FlywheelIO {
         public double velocityRadiansPerSecond = 0;
 
         public double temperatureCelcius = 0;
+        public double servoAngle;
+        public double motorAppliedVoltage;
+        public double motorVelocityRadiansPerSecond;
+        public double motorCurrent;
     }
 
     public abstract void updateInputs(FlywheelIOInputs inputs);
@@ -18,4 +22,7 @@ public interface FlywheelIO {
     public abstract void setVoltage(double volts);
 
     public abstract void setVelocityRadPerSec(double velocityRadPerSec);
+
+    public default void setServoAngleRad(double radians) {}
+
 }
