@@ -74,6 +74,14 @@ public class SamuraiXboxController extends CommandXboxController {
         return rightStickY_DB.getAsDouble();
     }
 
+    public Trigger leftActive() {
+        return new Trigger(() -> (getLeftX() != 0 || getLeftY() != 0));
+    }
+
+    public Trigger rightActive() {
+        return new Trigger(() -> (getRightX() != 0 || getRightY() != 0));
+    }
+
     @Override
     public Trigger leftTrigger() {
         return super.leftTrigger(triggerThreshold);
