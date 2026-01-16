@@ -2,7 +2,7 @@ package frc.robot.subsystems.turret;
 
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -29,7 +29,7 @@ public class TurretIOKraken implements TurretIO {
 
     // Control requests
     private final VoltageOut m_voltageRequest;
-    private final PositionVoltage m_positionRequest;
+    private final MotionMagicVoltage m_positionRequest;
 
     public TurretIOKraken() {
         m_motor = new TalonFX(TurretConstants.kCanId, TurretConstants.kCANBus);
@@ -78,7 +78,7 @@ public class TurretIOKraken implements TurretIO {
         // Set up control requests
         m_voltageRequest = new VoltageOut(0)
             .withEnableFOC(TurretConstants.kEnableFOC);
-        m_positionRequest = new PositionVoltage(0)
+        m_positionRequest = new MotionMagicVoltage(0)
             .withEnableFOC(TurretConstants.kEnableFOC);
     }
 
@@ -90,7 +90,7 @@ public class TurretIOKraken implements TurretIO {
 
     @Override
     public void setPosition(double positionRadians) {
-        m_positionRequest.Position = positionRadians;
+        m_positionRequest.Position = m_unitConverter.fromSIPos(positionRadians);
         m_motor.setControl(m_positionRequest);
     }
 
