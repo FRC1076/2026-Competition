@@ -28,6 +28,8 @@ public interface HoodIO {
 
     public abstract void setVoltage(double volts);
 
+    public abstract void setPosition(double radians);
+
     public default void simulationPeriodic() {
         
     }

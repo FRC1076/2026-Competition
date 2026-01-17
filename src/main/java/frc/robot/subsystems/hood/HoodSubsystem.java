@@ -2,11 +2,10 @@ package frc.robot.subsystems.hood;
 
 import static edu.wpi.first.units.Units.Volts;
 
-import java.util.function.DoubleSupplier;
-
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
@@ -31,21 +30,6 @@ public class HoodSubsystem extends SubsystemBase {
         );
     }
 
-    public void setVoltage(double volts) {
-        io.setVoltage(volts);
-    }
-
-    public double getAngleRadians() {
-        return inputs.angleRadians;
-    }
-
-    public void stop() {
-        setVoltage(0);
-    }
-    public Command applyManualControl(DoubleSupplier controlSupplier) {
-        return run(() -> setVoltage(controlSupplier.getAsDouble() * HoodConstants.maxOperatorControlVolts));
-    }
-
     @Override
     public void periodic() {
         io.updateInputs(inputs);
@@ -55,6 +39,43 @@ public class HoodSubsystem extends SubsystemBase {
     @Override
     public void simulationPeriodic() {
         io.simulationPeriodic();
+    }
+
+    public Command applyVoltage(double volts) {
+        if (inputs.angleRadians >= HoodConstants.kMaxHoodAngleRadians && volts > 0) {
+            volts = 0;
+        } else if (inputs.angleRadians <= HoodConstants.kMinHoodAngleRadians && volts < 0) {
+            volts = 0;
+        }
+
+        final double voltage = volts;
+
+        return Commands.runOnce(
+            () -> io.setVoltage(voltage),
+            this
+        );
+    }
+
+    public Command applyVoltageUnrestricted(double volts) {
+        return Commands.runOnce(
+            () -> io.setVoltage(volts), 
+            this
+        );
+    }
+
+    public Command applyPosition(double radians) {
+        if (inputs.angleRadians > HoodConstants.kMaxHoodAngleRadians) {
+            radians = HoodConstants.kMaxHoodAngleRadians;
+        } else if (inputs.angleRadians < HoodConstants.kMinHoodAngleRadians) {
+            radians = HoodConstants.kMinHoodAngleRadians;
+        }
+
+        final double targetRadians = radians;
+
+        return Commands.runOnce(
+            () -> io.setPosition(targetRadians), 
+            this
+        );
     }
 
     public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
