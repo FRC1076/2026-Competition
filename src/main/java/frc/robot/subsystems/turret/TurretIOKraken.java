@@ -39,8 +39,10 @@ public class TurretIOKraken implements TurretIO {
         // Voltage and current configs
         m_motorConfig.Voltage.PeakForwardVoltage = TurretConstants.kMaxVoltage;
         m_motorConfig.Voltage.PeakReverseVoltage = -1 * TurretConstants.kMaxVoltage;
-        m_motorConfig.CurrentLimits.StatorCurrentLimit = TurretConstants.kCurrentLimitAmps;
+        m_motorConfig.CurrentLimits.StatorCurrentLimit = TurretConstants.kStatorCurrentLimitAmps;
         m_motorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+        m_motorConfig.CurrentLimits.SupplyCurrentLimit = TurretConstants.kSupplyCurrentLimitAmps;
+        m_motorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 
         // Inverted?
         m_motorConfig.MotorOutput.Inverted = TurretConstants.kInvertedValue;

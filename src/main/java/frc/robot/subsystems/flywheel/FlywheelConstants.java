@@ -11,7 +11,10 @@ public class FlywheelConstants {
     public static final int kCANId = 0;
     public static final CANBus kCANBus = CANConstants.kCANivoreBus;
 
-    public static final int kCurrentLimit = 40;
+    // Voltage and current limits
+    public static final double kMaxVoltage = 12;
+    public static final double kStatorCurrentLimit = 60;
+    public static final double kSupplyCurrentLimit = 40;
 
     public static final double kManualFlywheelVolts = 12;
     public static final double kManualReverseVolts = 4;

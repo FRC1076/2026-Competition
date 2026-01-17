@@ -37,9 +37,11 @@ public class FlywheelIOKraken implements FlywheelIO {
         m_motorConfig = new TalonFXConfiguration();
 
         // Configure voltage and current limits
-        m_motorConfig.Voltage.PeakForwardVoltage = 12;
-        m_motorConfig.Voltage.PeakForwardVoltage = -12;
-        m_motorConfig.CurrentLimits.StatorCurrentLimit = FlywheelConstants.kCurrentLimit;
+        m_motorConfig.Voltage.PeakForwardVoltage = FlywheelConstants.kMaxVoltage;
+        m_motorConfig.Voltage.PeakForwardVoltage = -1 * FlywheelConstants.kMaxVoltage;
+        m_motorConfig.CurrentLimits.StatorCurrentLimit = FlywheelConstants.kStatorCurrentLimit;
+        m_motorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+        m_motorConfig.CurrentLimits.SupplyCurrentLimit = FlywheelConstants.kSupplyCurrentLimit;
 
         // Set inverted based on constants
         m_motorConfig.MotorOutput.Inverted = FlywheelConstants.kInverted;
