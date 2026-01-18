@@ -11,7 +11,7 @@ import frc.robot.commands.drive.TeleopDriveCommand;
 import frc.robot.subsystems.Elastic;
 import frc.robot.subsystems.drive.DriveConstants.PathPlannerConstants;
 
-import lib.vision.VisionLocalizationSystem;
+import lib.vision.localization.VisionLocalizationSystem;
 
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
