@@ -1,7 +1,6 @@
 package lib.vision.localization;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,18 +48,15 @@ public class NorthstarLocalizer implements CameraLocalizer {
         this.xyStdDevCoefficient = xyStdDevCoefficient;
         this.thetaStdDevCoefficient = thetaStdDevCoefficient;
     }
-    
-    public static record NorthstarPoseEstimate (
-        CommonPoseEstimate poseEstimate,
-        double reciprocalStdDevs
-    ) {}
+
 
     @Override
     public Optional<CommonPoseEstimate> getPoseEstimate() {
         camera.updateInputs();
         AprilTagInputsAutoLogged aprilTagInputs = camera.getAprilTagInputs();
 
-        ArrayList<NorthstarPoseEstimate> allPoseEstimates = new ArrayList<>();
+        CommonPoseEstimate selectedEstimate = null;
+        double selectedEstimateProductStdDevs = Double.MAX_VALUE;
 
         for (int frameIndex = 0;
             frameIndex < aprilTagInputs.timestamps.length;
@@ -165,28 +161,24 @@ public class NorthstarLocalizer implements CameraLocalizer {
                         * camera.getConfig().stdDevFactor()
                     : Double.POSITIVE_INFINITY;
             
-            allPoseEstimates.add(
-                new NorthstarPoseEstimate(
-                    new CommonPoseEstimate(
-                        robotPose.toPose2d(), 
-                        timestamp, 
-                        VecBuilder.fill(xyStdDev, xyStdDev, thetaStdDev),
-                        values[0] == 1
-                            ? true
-                            : false
-                    ), 
-                    1.0 / xyStdDev * xyStdDev * thetaStdDev
-                )
-            );
+            if (xyStdDev * xyStdDev * thetaStdDev < selectedEstimateProductStdDevs) {
+                selectedEstimate = new CommonPoseEstimate(
+                    robotPose.toPose2d(), 
+                    timestamp,
+                    VecBuilder.fill(xyStdDev, xyStdDev, thetaStdDev),
+                    useVisionRotation
+                );
+
+                selectedEstimateProductStdDevs = xyStdDev * xyStdDev * thetaStdDev;
+            } 
         }
 
-        if (allPoseEstimates.size() == 0) {
+        if (selectedEstimate == null) {
             // No estimates
             return Optional.empty();
         } else {
-            // Use the best estimate (sorts by the reciprocal of std devs so the lowest is first)
-            allPoseEstimates.sort(Comparator.comparing(NorthstarPoseEstimate::reciprocalStdDevs));
-            return Optional.of(allPoseEstimates.get(0).poseEstimate);
+            // Use the best estimate
+            return Optional.of(selectedEstimate);
         }
     }
 
