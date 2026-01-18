@@ -7,6 +7,11 @@ package frc.robot;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.SystemConstants;
 import frc.robot.Constants.SystemConstants.RobotMode;
+import frc.robot.commands.drive.TeleopDriveCommand;
+import frc.robot.subsystems.drive.DriveIOHardware;
+import frc.robot.subsystems.drive.DriveIOSim;
+import frc.robot.subsystems.drive.DriveSubsystem;
+import frc.robot.subsystems.drive.TunerConstants;
 import frc.robot.subsystems.flywheel.FlywheelIODisabled;
 import frc.robot.subsystems.flywheel.FlywheelIOKraken;
 import frc.robot.subsystems.flywheel.FlywheelSubsystem;
@@ -35,6 +40,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
+    private final DriveSubsystem m_drive;
     private final TurretSubsystem m_turret;
     private final FlywheelSubsystem m_flywheel;
     private final HoodSubsystem m_hood;
@@ -44,19 +50,38 @@ public class RobotContainer {
         new SamuraiPS5Controller(OIConstants.kDriverControllerPort);
     private final SamuraiXboxController m_operatorController = 
         new SamuraiXboxController(OIConstants.kOperatorControllerPort);
+
+    TeleopDriveCommand teleopDriveCommand;
     
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
         if (SystemConstants.kMode == RobotMode.REAL) {
+            m_drive = new DriveSubsystem(
+                new DriveIOHardware(TunerConstants.createDrivetrain()),
+                null,
+                null
+            );
             m_turret = new TurretSubsystem(new TurretIOKraken());
             m_flywheel = new FlywheelSubsystem(new FlywheelIOKraken());
             m_hood = new HoodSubsystem(new HoodIONeo());
         } else {
+            m_drive = new DriveSubsystem(
+                new DriveIOSim(TunerConstants.createDrivetrain()),
+                null,
+                null
+            );
             m_turret = new TurretSubsystem(new TurretIODisabled());
             m_flywheel = new FlywheelSubsystem(new FlywheelIODisabled());
             m_hood = new HoodSubsystem(new HoodIODisabled());
         }
+
+        teleopDriveCommand = new TeleopDriveCommand(
+            m_drive,
+            () -> m_driverController.getLeftX(),
+            () -> m_driverController.getLeftY(),
+            () -> m_driverController.getRightX()
+        );
 
         // Configure the trigger bindings
         configureBindings();
@@ -81,7 +106,7 @@ public class RobotContainer {
 
     /** Bind triggers on driver controller to commands */
     private void configureDriverBindings() {
-        m_driverController.getLeftX(); // swerve stuff goes here when that is done
+        m_drive.setDefaultCommand(teleopDriveCommand);
     }
 
     /** Bind triggers on operator controller to commands */
