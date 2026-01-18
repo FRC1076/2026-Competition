@@ -179,11 +179,14 @@ public class NorthstarLocalizer implements CameraLocalizer {
                 )
             );
         }
+
         if (allPoseEstimates.size() == 0) {
+            // No estimates
             return Optional.empty();
         } else {
+            // Use the best estimate (sorts by the reciprocal of std devs so the lowest is first)
             allPoseEstimates.sort(Comparator.comparing(NorthstarPoseEstimate::reciprocalStdDevs));
-            return Optional.of(allPoseEstimates.get(1).poseEstimate);
+            return Optional.of(allPoseEstimates.get(0).poseEstimate);
         }
     }
 
