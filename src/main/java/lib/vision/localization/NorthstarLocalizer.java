@@ -3,6 +3,7 @@ package lib.vision.localization;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.VecBuilder;
@@ -11,29 +12,28 @@ import edu.wpi.first.math.geometry.Quaternion;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
-import frc.robot.FieldConstants;
-import frc.robot.RobotState;
 import lib.vision.AprilTagInputsAutoLogged;
 import lib.vision.NorthstarCamera;
 
 public class NorthstarLocalizer implements CameraLocalizer {
     private final NorthstarCamera camera;
 
-    private AprilTagFieldLayout aprilTagLayout;
+    private final AprilTagFieldLayout aprilTagLayout;
 
-    private double fieldBorderMargin;
+    private final Supplier<Rotation2d> headingSupplier;
+
     
-    private double ambiguityThreshold;
+    private final double ambiguityThreshold;
 
-    private double xyStdDevCoefficient;
-    private double thetaStdDevCoefficient;
+    private final double xyStdDevCoefficient;
+    private final double thetaStdDevCoefficient;
 
 
     public NorthstarLocalizer(
         NorthstarCamera camera,
         AprilTagFieldLayout aprilTagLayout,
+        Supplier<Rotation2d> headingSupplier,
         double ambiguityThreshold, 
-        double fieldBorderMargin,
         double xyStdDevCoefficient,
         double thetaStdDevCoefficient
     ) {
@@ -41,7 +41,7 @@ public class NorthstarLocalizer implements CameraLocalizer {
 
         this.aprilTagLayout = aprilTagLayout;
 
-        this.fieldBorderMargin = fieldBorderMargin;
+        this.headingSupplier = headingSupplier;
 
         this.ambiguityThreshold = ambiguityThreshold;
 
@@ -107,7 +107,7 @@ public class NorthstarLocalizer implements CameraLocalizer {
 
                 // Check for ambiguity and select based on estimated rotation
                 if (error0 < error1 * ambiguityThreshold || error1 < error0 * ambiguityThreshold) {
-                    Rotation2d currentRotation = RobotState.getInstance().getRotation();
+                    Rotation2d currentRotation = headingSupplier.get();
                     Rotation2d visionRotation0 = robotPose0.toPose2d().getRotation();
                     Rotation2d visionRotation1 = robotPose1.toPose2d().getRotation();
                     if (Math.abs(currentRotation.minus(visionRotation0).getRadians())
@@ -121,14 +121,6 @@ public class NorthstarLocalizer implements CameraLocalizer {
                 }
             } else {
                 continue;
-            }
-
-            // Exit if robot pose is off the field
-            if (robotPose.getX() < -fieldBorderMargin
-                || robotPose.getX() > FieldConstants.fieldLength + fieldBorderMargin
-                || robotPose.getY() < -fieldBorderMargin
-                || robotPose.getY() > FieldConstants.fieldWidth + fieldBorderMargin) {
-            continue;
             }
 
             // Get tag poses and update last detection times

@@ -41,6 +41,11 @@ public class VisionLocalizationSystem {
     private TriConsumer<Pose2d, Double, Matrix<N3, N1>> measurementConsumer = (pose, timestamp, stddevs) -> {}; //A default no-op consumer is instantiated to prevent null pointer dereferences
 
     private final Map<String, CamStruct> cameras = new HashMap<>();
+
+    private double fieldWidthMeters = 8.07;
+    private double fieldLengthMeters = 16.54;
+    private double fieldPerimeterToleranceMeters = 0.5;
+    private boolean validateForFieldPerimeter = true;
     
     /**
      * Registers a consumer
@@ -94,6 +99,26 @@ public class VisionLocalizationSystem {
         }
     }
 
+    /** Set the width of the field perimeter for validation of poses */
+    public void setFieldWidth(double fieldWidthMeters) {
+        this.fieldWidthMeters = fieldWidthMeters;
+    }
+
+    /** Set the length of the field perimeter for validation of poses */
+    public void setFieldLength(double fieldLengthMeters) {
+        this.fieldLengthMeters = fieldLengthMeters;
+    }
+
+    /** Set the tolerance with the perimeter of the field for validating poses */
+    public void setValidationTolerance(double toleranceMeters) {
+        this.fieldPerimeterToleranceMeters = toleranceMeters;
+    }
+
+    /** Set whether or not to validate poses for being within the field perimeter */
+    public void enablePoseValidation(boolean enable) {
+        this.validateForFieldPerimeter = enable;
+    }
+
     /**
      * Fetches pose estimate from cameras and sends them to all consumers. This function should be called exactly once every main function loop
      */
@@ -105,11 +130,17 @@ public class VisionLocalizationSystem {
             if (camStruct.cameraActive) {
                 camStruct.camera.getPoseEstimate().ifPresent(
                     (estimate) -> {
-                        measurementConsumer.accept(
-                            estimate.pose(),
-                            estimate.timestampSeconds(),
-                            estimate.stdDevs()
-                        );
+                        if ((estimate.pose().getX() > -fieldPerimeterToleranceMeters
+                            && estimate.pose().getX() < fieldLengthMeters + fieldPerimeterToleranceMeters
+                            && estimate.pose().getY() > -fieldPerimeterToleranceMeters
+                            && estimate.pose().getY() < fieldWidthMeters + fieldPerimeterToleranceMeters)
+                            || !validateForFieldPerimeter) {
+                            measurementConsumer.accept(
+                                estimate.pose(),
+                                estimate.timestampSeconds(),
+                                estimate.stdDevs()
+                            );
+                        }
                     }
                 );
             }

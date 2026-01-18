@@ -7,7 +7,6 @@ package frc.robot;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.SystemConstants;
 import frc.robot.Constants.SystemConstants.RobotMode;
-import frc.robot.FieldConstants.AprilTagLayoutType;
 import frc.robot.subsystems.flywheel.FlywheelIODisabled;
 import frc.robot.subsystems.flywheel.FlywheelIOKraken;
 import frc.robot.subsystems.flywheel.FlywheelSubsystem;
@@ -19,11 +18,8 @@ import frc.robot.subsystems.turret.TurretConstants;
 import frc.robot.subsystems.turret.TurretIODisabled;
 import frc.robot.subsystems.turret.TurretIOKraken;
 import frc.robot.subsystems.turret.TurretSubsystem;
-import frc.robot.subsystems.vision.Vision;
-import frc.robot.subsystems.vision.VisionIONorthstar;
 import lib.hardware.hid.SamuraiPS5Controller;
 import lib.hardware.hid.SamuraiXboxController;
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.wpilibj.Threads;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -42,7 +38,6 @@ public class RobotContainer {
     private final TurretSubsystem m_turret;
     private final FlywheelSubsystem m_flywheel;
     private final HoodSubsystem m_hood;
-    private final Vision m_vision;
 
     // Controllers
     private final SamuraiPS5Controller m_driverController =
@@ -62,10 +57,6 @@ public class RobotContainer {
             m_flywheel = new FlywheelSubsystem(new FlywheelIODisabled());
             m_hood = new HoodSubsystem(new HoodIODisabled());
         }
-
-        AprilTagLayoutType type = FieldConstants.defaultAprilTagType;
-        m_vision = new Vision(type, 
-            new VisionIONorthstar(type, 0));
 
         // Configure the trigger bindings
         configureBindings();

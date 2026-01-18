@@ -14,7 +14,6 @@ import edu.wpi.first.networktables.StringPublisher;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
-import frc.robot.FieldConstants;
 
 public class NorthstarCamera {
     private final String deviceId;
@@ -69,7 +68,7 @@ public class NorthstarCamera {
         configTable.getIntegerTopic("camera_exposure").publish().set(config.exposure());
         configTable.getDoubleTopic("camera_gain").publish().set(config.gain());
         configTable.getDoubleTopic("camera_denoise").publish().set(config.denoise());
-        configTable.getDoubleTopic("fiducial_size_m").publish().set(FieldConstants.aprilTagWidth);
+        configTable.getDoubleTopic("fiducial_size_m").publish().set(config.tagWidth());
         configTable.getStringTopic("tag_layout").publish().set(aprilTagLayout);
         isRecordingPublisher = configTable.getBooleanTopic("is_recording").publish();
         timestampPublisher = configTable.getIntegerTopic("timestamp").publish();
