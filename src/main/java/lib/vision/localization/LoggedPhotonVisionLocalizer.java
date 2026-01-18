@@ -1,4 +1,4 @@
-package lib.vision;
+package lib.vision.localization;
 
 import java.util.List;
 import java.util.Optional;
@@ -8,6 +8,7 @@ import org.littletonrobotics.junction.Logger;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonPipelineResult;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
@@ -139,7 +140,10 @@ public class LoggedPhotonVisionLocalizer implements CameraLocalizer {
                 return new CommonPoseEstimate(
                     estimate.estimatedPose.toPose2d(),
                     estimate.timestampSeconds,
-                    stddevs
+                    stddevs,
+                    (estimate.targetsUsed.size() > 1 && estimate.strategy.equals(PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR))
+                        ? true
+                        : false
                 );
             }
         );

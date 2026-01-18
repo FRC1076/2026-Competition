@@ -2,7 +2,7 @@
 // You may use, distribute, and modify this software under the terms of
 // the license found in the root directory of this project
 
-package lib.vision;
+package lib.vision.localization;
 
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -21,7 +21,8 @@ public interface CameraLocalizer {
     public static record CommonPoseEstimate(
         Pose2d pose,
         double timestampSeconds,
-        Matrix<N3, N1> stdDevs
+        Matrix<N3, N1> stdDevs,
+        boolean hasValidRotation
     ) {}
 
     public abstract Optional<CommonPoseEstimate> getPoseEstimate();
@@ -35,4 +36,6 @@ public interface CameraLocalizer {
     public default void setFallbackPoseStrategy(PhotonPoseEstimator.PoseStrategy strategy) {}
 
     public default void log() {}
+
+    public default void setRecording() {}
 }

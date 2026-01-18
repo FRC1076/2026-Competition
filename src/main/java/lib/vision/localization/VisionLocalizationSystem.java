@@ -2,7 +2,7 @@
 // You may use, distribute, and modify this software under the terms of
 // the license found in the root directory of this project
 
-package lib.vision;
+package lib.vision.localization;
 
 import java.util.HashMap;
 import java.util.Map;
