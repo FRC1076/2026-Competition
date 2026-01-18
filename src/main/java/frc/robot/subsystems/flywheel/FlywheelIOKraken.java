@@ -11,7 +11,8 @@ import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
 
-import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
+import com.ctre.phoenix6.controls.MotionMagicVelocityTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.VoltageOut;
 
 public class FlywheelIOKraken implements FlywheelIO {
     // Create a motor, configuration, and unit converter here
@@ -19,8 +20,10 @@ public class FlywheelIOKraken implements FlywheelIO {
     private final TalonFXConfiguration m_motorConfig;
     private final TalonFXUnitConverter m_unitConverter;
 
-    // Make a MotionMagic velocity request here
-    private final MotionMagicVelocityVoltage m_velocityRequest = new MotionMagicVelocityVoltage(0);
+    // Make a control requests here
+    private final VoltageOut m_voltageRequest;
+    // private final MotionMagicVelocityVoltage m_velocityRequest;
+    private final MotionMagicVelocityTorqueCurrentFOC m_velocityRequest;
 
     // Make voltage, velocity, current, and temperature status signals here
     private final StatusSignal<Voltage> m_voltageSignal;
@@ -66,12 +69,17 @@ public class FlywheelIOKraken implements FlywheelIO {
         m_velocitySignal = m_motor.getVelocity();
         m_currentSignal = m_motor.getTorqueCurrent();
         m_temperatureSignal = m_motor.getDeviceTemp();
+
+        m_voltageRequest = new VoltageOut(0)
+            .withEnableFOC(FlywheelConstants.kEnableFoc);
+        m_velocityRequest = new MotionMagicVelocityTorqueCurrentFOC(0);
     }
 
     @Override
     public void setVoltage(double volts) {
         // Set the voltage of the motor
-        m_motor.setVoltage(volts);
+        m_voltageRequest.withOutput(volts);
+        m_motor.setControl(m_voltageRequest);
     }
 
     @Override

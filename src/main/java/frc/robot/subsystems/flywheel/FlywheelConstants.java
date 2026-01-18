@@ -33,5 +33,7 @@ public class FlywheelConstants {
 
     public static final double kMaxAcceleration = 2000;
     public static final double kMaxJerk = 160000;
+
+    public static final boolean kEnableFoc = true;
 }
 
