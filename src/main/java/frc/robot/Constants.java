@@ -6,6 +6,9 @@ package frc.robot;
 
 import com.ctre.phoenix6.CANBus;
 
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -26,6 +29,7 @@ public final class Constants {
         public static final RobotMode kMode = RobotMode.SIM;
         public static final boolean kEnableSignalLogger = false;
         public static final boolean kEnableRTPriority = true;
+        public static final boolean kLogOdometry = true;
 
         public static enum RobotMode {
             REAL,
@@ -34,8 +38,46 @@ public final class Constants {
         }
     }
 
+    /** Contains starting position and team */
+    public static class GameConstants {
+
+        public static Alliance teamColor = Alliance.Blue;
+        public static AutonSides autonSide = AutonSides.Left;
+        public static boolean rearRightCameraEnabledAuton = false; // Only set to true if running algae auton
+
+        // Autonomous command is selected in getAutonomousCommand() in RobotContainer
+        
+        public enum TeamColors {
+            kTeamColorBlue("BLUE"),
+            kTeamColorRed("RED");
+
+            public final String color;
+
+            private TeamColors(String color) {
+                this.color = color;
+            }
+        }
+        
+        // States describing whether the auton is on the left or right side of the alliance
+        public enum AutonSides {
+            Left(false),
+            Right(true);
+
+            public final boolean isRightSide;
+
+            private AutonSides (boolean isRightSide) {
+                this.isRightSide = isRightSide;
+            }
+        }
+    }
+
     public static class CANConstants {
         public static final CANBus kRioBus = new CANBus("rio");
         public static final CANBus kCANivoreBus = new CANBus("Default Name");
+    }
+
+    public static class FieldConstants {
+        public static final double fieldWidthMeters = Units.inchesToMeters(317.7); // Distance from one edge of the field to the other
+        public static final double fieldLengthMeters = Units.inchesToMeters(651.2); // Distance in meters from one drive station to the other side
     }
 }
