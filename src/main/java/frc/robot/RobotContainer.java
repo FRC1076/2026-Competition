@@ -8,6 +8,7 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.SystemConstants;
 import frc.robot.Constants.SystemConstants.RobotMode;
 import frc.robot.commands.drive.TeleopDriveCommand;
+import frc.robot.subsystems.Elastic;
 import frc.robot.subsystems.drive.DriveIOHardware;
 import frc.robot.subsystems.drive.DriveIOSim;
 import frc.robot.subsystems.drive.DriveSubsystem;
@@ -25,6 +26,7 @@ import frc.robot.subsystems.turret.TurretIOKraken;
 import frc.robot.subsystems.turret.TurretSubsystem;
 import lib.hardware.hid.SamuraiPS5Controller;
 import lib.hardware.hid.SamuraiXboxController;
+import lib.vision.VisionLocalizationSystem;
 import edu.wpi.first.wpilibj.Threads;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -44,6 +46,9 @@ public class RobotContainer {
     private final TurretSubsystem m_turret;
     private final FlywheelSubsystem m_flywheel;
     private final HoodSubsystem m_hood;
+    private final VisionLocalizationSystem m_vision;
+
+    private final Elastic m_elastic;
 
     // Controllers
     private final SamuraiPS5Controller m_driverController =
@@ -56,11 +61,15 @@ public class RobotContainer {
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
+        // Vision and elastic are independent of being real or simulated
+        m_vision = new VisionLocalizationSystem();
+        m_elastic = new Elastic();
+
         if (SystemConstants.kMode == RobotMode.REAL) {
             m_drive = new DriveSubsystem(
                 new DriveIOHardware(TunerConstants.createDrivetrain()),
-                null,
-                null
+                m_vision,
+                m_elastic
             );
             m_turret = new TurretSubsystem(new TurretIOKraken());
             m_flywheel = new FlywheelSubsystem(new FlywheelIOKraken());
@@ -68,8 +77,8 @@ public class RobotContainer {
         } else {
             m_drive = new DriveSubsystem(
                 new DriveIOSim(TunerConstants.createDrivetrain()),
-                null,
-                null
+                m_vision,
+                m_elastic
             );
             m_turret = new TurretSubsystem(new TurretIODisabled());
             m_flywheel = new FlywheelSubsystem(new FlywheelIODisabled());
