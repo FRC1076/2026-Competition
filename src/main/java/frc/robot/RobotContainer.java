@@ -28,6 +28,7 @@ import frc.robot.subsystems.turret.TurretIOKraken;
 import frc.robot.subsystems.turret.TurretSubsystem;
 import lib.hardware.hid.SamuraiPS5Controller;
 import lib.hardware.hid.SamuraiXboxController;
+import lib.vision.DefenseNoiseSimulator;
 import lib.vision.PhotonVisionLocalizer;
 import lib.vision.VisionLocalizationSystem;
 
@@ -63,6 +64,9 @@ public class RobotContainer {
         new SamuraiXboxController(OIConstants.kOperatorControllerPort);
 
     TeleopDriveCommand teleopDriveCommand;
+
+    // Odometry noise creator to simulate impacts
+    private final DefenseNoiseSimulator m_impactSim; 
     
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -105,6 +109,9 @@ public class RobotContainer {
             m_hood = new HoodSubsystem(new HoodIODisabled());
         }
 
+        m_impactSim = new DefenseNoiseSimulator(() -> m_drive.getPose());
+        m_vision.addCamera(m_impactSim);
+
         teleopDriveCommand = new TeleopDriveCommand(
             m_drive,
             () -> m_driverController.getLeftX(),
@@ -136,6 +143,9 @@ public class RobotContainer {
     /** Bind triggers on driver controller to commands */
     private void configureDriverBindings() {
         m_drive.setDefaultCommand(teleopDriveCommand);
+
+        m_driverController.cross()
+            .onTrue(Commands.runOnce(() -> m_impactSim.startImpact(5, 1.5)));
     }
 
     /** Bind triggers on operator controller to commands */

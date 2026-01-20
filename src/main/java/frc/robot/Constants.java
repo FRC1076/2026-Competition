@@ -37,7 +37,7 @@ public final class Constants {
     }
 
     public static class SystemConstants {
-        public static final RobotMode kMode = RobotMode.REAL;
+        public static final RobotMode kMode = RobotMode.SIM;
         public static final boolean kEnableSignalLogger = false;
         public static final boolean kEnableRTPriority = true;
         public static final boolean kLogOdometry = true;
