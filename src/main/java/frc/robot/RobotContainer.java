@@ -116,6 +116,17 @@ public class RobotContainer {
     /** Bind triggers on driver controller to commands */
     private void configureDriverBindings() {
         m_drive.setDefaultCommand(teleopDriveCommand);
+
+        m_driverController.L1().and(m_driverController.R1().negate())
+            .whileTrue(teleopDriveCommand.applyDoubleClutch());
+
+        m_driverController.R1().and(m_driverController.L1().negate())
+            .whileTrue(teleopDriveCommand.applySingleClutch());
+
+        m_driverController.create()
+            .onTrue(Commands.runOnce(() ->
+                m_drive.resetHeading()
+            ));
     }
 
     /** Bind triggers on operator controller to commands */
