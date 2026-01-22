@@ -25,6 +25,18 @@ import frc.robot.subsystems.turret.TurretIOKraken;
 import frc.robot.subsystems.turret.TurretSubsystem;
 import lib.hardware.hid.SamuraiPS5Controller;
 import lib.hardware.hid.SamuraiXboxController;
+import lib.vision.NorthstarCamera;
+import lib.vision.NorthstarCameraConfig;
+import lib.vision.localization.*;
+
+import java.util.function.Function;
+import java.util.Optional;
+
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Threads;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -44,6 +56,7 @@ public class RobotContainer {
     private final TurretSubsystem m_turret;
     private final FlywheelSubsystem m_flywheel;
     private final HoodSubsystem m_hood;
+    private final VisionLocalizationSystem m_vision;
 
     // Controllers
     private final SamuraiPS5Controller m_driverController =
@@ -56,6 +69,30 @@ public class RobotContainer {
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
+        m_vision = new VisionLocalizationSystem();
+        m_vision.addCamera(new NorthstarLocalizer(
+            new NorthstarCamera(
+                new NorthstarCameraConfig(
+                    (Double timestamp) -> Optional.of(new Pose3d()),
+                    "0",
+                    1200,
+                    800,
+                    1,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ),
+                0,
+                "2026-official.json"),
+                AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded),
+                () -> new Rotation2d(),
+                1,
+                1,
+                1
+        ));
+
         if (SystemConstants.kMode == RobotMode.REAL) {
             m_drive = new DriveSubsystem(
                 new DriveIOHardware(TunerConstants.createDrivetrain()),
