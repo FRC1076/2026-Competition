@@ -12,6 +12,7 @@ import org.littletonrobotics.junction.Logger;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonPipelineResult;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
@@ -21,6 +22,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 
 public class PhotonVisionLocalizer implements CameraLocalizer {
@@ -42,6 +44,8 @@ public class PhotonVisionLocalizer implements CameraLocalizer {
     private static final Matrix<N3, N1> maxStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
     private final PhotonCamera camera;
     private final PhotonPoseEstimator poseEstimator;
+    private PoseStrategy primaryStrategy;
+    private PoseStrategy multiTagFallbackStrategy;
     private final Supplier<Rotation2d> headingSupplier;
     private final Matrix<N3, N1> defaultSingleStdDevs;
     private final Matrix<N3, N1> defaultMultiStdDevs;
@@ -50,19 +54,22 @@ public class PhotonVisionLocalizer implements CameraLocalizer {
     public PhotonVisionLocalizer(
         PhotonCamera camera, 
         Transform3d offset,
-        PhotonPoseEstimator.PoseStrategy primaryStrategy,
-        PhotonPoseEstimator.PoseStrategy multiTagFallbackStrategy,
+        PoseStrategy primaryStrategy,
+        PoseStrategy multiTagFallbackStrategy,
         Supplier<Rotation2d> headingSupplier,
         AprilTagFieldLayout fieldLayout,
         Matrix<N3, N1> defaultSingleStdDevs,
         Matrix<N3, N1> defaultMultiStdDevs
     ) {
         this.camera = camera;
-        this.poseEstimator = new PhotonPoseEstimator(fieldLayout, primaryStrategy, offset);
-        poseEstimator.setMultiTagFallbackStrategy(multiTagFallbackStrategy);
+        this.poseEstimator = new PhotonPoseEstimator(fieldLayout, offset);
+        this.primaryStrategy = primaryStrategy;
+        this.multiTagFallbackStrategy = multiTagFallbackStrategy;
         this.headingSupplier = headingSupplier;
         this.defaultSingleStdDevs = defaultSingleStdDevs;
         this.defaultMultiStdDevs = defaultMultiStdDevs;
+
+        checkStrategies();
     }
 
     /**
@@ -106,6 +113,28 @@ public class PhotonVisionLocalizer implements CameraLocalizer {
         return stdDevs;
     }
 
+    private Optional<EstimatedRobotPose> getEstimate(PhotonPipelineResult result) {
+        boolean hasTargets = result.hasTargets();
+        
+        if (hasTargets == false) {
+            return Optional.empty();
+        }
+
+        if (primaryStrategy == PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR && result.multitagResult.isPresent()) {
+            return poseEstimator.estimateCoprocMultiTagPose(result);
+        } else if (multiTagFallbackStrategy == PoseStrategy.PNP_DISTANCE_TRIG_SOLVE) {
+            return poseEstimator.estimatePnpDistanceTrigSolvePose(result);
+        } else if (multiTagFallbackStrategy == PoseStrategy.LOWEST_AMBIGUITY) {
+            return poseEstimator.estimateLowestAmbiguityPose(result);
+        } else if (multiTagFallbackStrategy == PoseStrategy.AVERAGE_BEST_TARGETS) {
+            return poseEstimator.estimateAverageBestTargetsPose(result);
+        } else if (multiTagFallbackStrategy == PoseStrategy.CLOSEST_TO_CAMERA_HEIGHT) {
+            return poseEstimator.estimateClosestToCameraHeightPose(result);
+        }
+
+        return Optional.empty(); // something went wrong
+    } 
+
     /**
      * Gets the pose estimate from the camera
      * @return The pose estimate, or Optional.empty() if no estimate is available
@@ -131,10 +160,7 @@ public class PhotonVisionLocalizer implements CameraLocalizer {
         */
 
         for (var res : results) {
-            if(res.hasTargets()){
-                visionEst = poseEstimator.update(res);
-
-            }
+            visionEst = getEstimate(res);
         }
 
         return visionEst.map(
@@ -158,5 +184,59 @@ public class PhotonVisionLocalizer implements CameraLocalizer {
 
     public String getName() {
         return camera.getName();
+    }
+
+    @Override
+    public void setPoseStrategy(PoseStrategy strategy) {
+        primaryStrategy = strategy;
+        checkStrategies();
+    }
+
+    @Override
+    public void setFallbackPoseStrategy(PoseStrategy strategy) {
+        multiTagFallbackStrategy = strategy;
+        checkStrategies();
+    }
+
+    /** Check that the chosen pose strategies are supported in this class */
+    private void checkStrategies() {
+        // Check that selected pose strategies are supported
+        if (primaryStrategy == PoseStrategy.CLOSEST_TO_LAST_POSE ||
+            primaryStrategy == PoseStrategy.CLOSEST_TO_REFERENCE_POSE ||
+            primaryStrategy == PoseStrategy.CONSTRAINED_SOLVEPNP ||
+            primaryStrategy == PoseStrategy.MULTI_TAG_PNP_ON_RIO
+        ) {
+            DriverStation.reportWarning("The selected primary pose strategy, " + primaryStrategy.toString() + ", is not supported. Using lowest ambiguity", false);
+            primaryStrategy = PoseStrategy.LOWEST_AMBIGUITY;
+            multiTagFallbackStrategy = PoseStrategy.LOWEST_AMBIGUITY;
+        }
+
+        if (multiTagFallbackStrategy == PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR ||
+            multiTagFallbackStrategy == PoseStrategy.MULTI_TAG_PNP_ON_RIO
+        ) {
+            if (primaryStrategy != PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR) {
+                DriverStation.reportWarning("Cannot use a multi-tag strategy as multi-tag fallback strategy! Using primary strategy, " + primaryStrategy.toString(), false);
+            } else {
+                DriverStation.reportWarning("Cannot use a multi-tag strategy as multi-tag fallback strategy! Using lowest ambiguity", false);
+            }
+        } else if (multiTagFallbackStrategy == PoseStrategy.CLOSEST_TO_LAST_POSE ||
+            multiTagFallbackStrategy == PoseStrategy.CLOSEST_TO_REFERENCE_POSE ||
+            multiTagFallbackStrategy == PoseStrategy.CONSTRAINED_SOLVEPNP ||
+            multiTagFallbackStrategy == PoseStrategy.AVERAGE_BEST_TARGETS
+        ) {
+            if (primaryStrategy != PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR) {
+                DriverStation.reportWarning("The selected multi-tag fallback strategy, " + multiTagFallbackStrategy.toString() + ", is not supported. Using primary strategy, " + primaryStrategy.toString(), false);
+            } else {
+                DriverStation.reportWarning("Cannot use a multi-tag strategy as multi-tag fallback strategy! Using lowest ambiguity", false);
+                multiTagFallbackStrategy = PoseStrategy.LOWEST_AMBIGUITY;
+            }
+        }
+
+        if (primaryStrategy != PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR &&
+            primaryStrategy != multiTagFallbackStrategy
+        ) {
+            DriverStation.reportWarning("Must use multi-tag on co-processor as primary strategy for the multi-tag fallback strategy to be different. Setting to primary strategy, " + primaryStrategy.toString(), false);
+            multiTagFallbackStrategy = primaryStrategy;
+        }
     }
 }
