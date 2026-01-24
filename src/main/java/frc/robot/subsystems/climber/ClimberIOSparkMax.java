@@ -58,7 +58,7 @@ public class ClimberIOSparkMax implements ClimberIO {
 
     @Override
     public void setVoltage(double volts) {
-        this.appliedVoltage = volts;
+        inputs.appliedVoltage = volts;
     }
 
     @Override
