@@ -7,7 +7,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
-import edu.wpi.first.math.controller.ProfiledPIDController;
+import com.revrobotics.spark.SparkClosedLoopController;
 
 public class ClimberIOSparkMax implements ClimberIO {
     private final SparkMax m_motor;
@@ -15,7 +15,7 @@ public class ClimberIOSparkMax implements ClimberIO {
 
     private final RelativeEncoder m_encoder;
 
-    private final ProfiledPIDController m_profiledPIDController;
+    private SparkClosedLoopController m_closedLoopController;
 
     private boolean PIDEnabled = false;
 
@@ -24,13 +24,6 @@ public class ClimberIOSparkMax implements ClimberIO {
     public ClimberIOSparkMax() {
 
         PIDEnabled = false;
-
-        m_profiledPIDController = new ProfiledPIDController(
-            ClimberConstants.kP,
-            ClimberConstants.kI,
-            ClimberConstants.kD,
-            ClimberConstants.kProfileConstraints
-        );
 
         m_motor = new SparkMax(ClimberConstants.kCANId, MotorType.kBrushless);
         m_motorConfig = new SparkMaxConfig();
@@ -42,6 +35,9 @@ public class ClimberIOSparkMax implements ClimberIO {
             .smartCurrentLimit((int) ClimberConstants.kCurrentLimit)
             .voltageCompensation(ClimberConstants.kVoltageCompensation);
 
+        m_motorConfig.closedLoop
+            .pid(ClimberConstants.kP, ClimberConstants.kI, ClimberConstants.kD);
+        
         m_motorConfig.encoder
             .positionConversionFactor(ClimberConstants.kPositionConversionFactor)
             .velocityConversionFactor(ClimberConstants.kVelocityConversionFactor)
@@ -56,18 +52,20 @@ public class ClimberIOSparkMax implements ClimberIO {
         m_encoder.setPosition(0);
 
         m_motor.setCANTimeout(0);
+
+        m_closedLoopController = m_motor.getClosedLoopController();
     }
 
     @Override
     public void setVoltage(double volts) {
-        inputs.appliedVoltage = volts;
+        this.appliedVoltage = volts;
     }
 
     @Override
     public void setPosition(double positionMeters) {
         PIDEnabled = true;
         targetPosition = positionMeters;
-        m_profiledPIDController.setReference(positionMeters, SparkMax.ControlType.kPosition);
+        m_closedLoopController.setReference(positionMeters, SparkMax.ControlType.kPosition);
     }
 
     @Override
