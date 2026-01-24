@@ -81,9 +81,9 @@ public class RobotContainer {
                 m_vision,
                 m_elastic
             );
-            m_turret = new TurretSubsystem(new TurretIOKraken());
-            m_flywheel = new FlywheelSubsystem(new FlywheelIOKraken());
-            m_hood = new HoodSubsystem(new HoodIONeo());
+            m_turret = new TurretSubsystem(new TurretIODisabled());
+            m_flywheel = new FlywheelSubsystem(new FlywheelIODisabled());
+            m_hood = new HoodSubsystem(new HoodIODisabled());
 
             for (PhotonConfig config : PhotonConfig.values()) {
                 PhotonCamera cam = new PhotonCamera(config.name);
@@ -114,8 +114,8 @@ public class RobotContainer {
 
         teleopDriveCommand = new TeleopDriveCommand(
             m_drive,
-            () -> m_driverController.getLeftX(),
             () -> m_driverController.getLeftY(),
+            () -> m_driverController.getLeftX(),
             () -> m_driverController.getRightX()
         );
 
@@ -143,6 +143,11 @@ public class RobotContainer {
     /** Bind triggers on driver controller to commands */
     private void configureDriverBindings() {
         m_drive.setDefaultCommand(teleopDriveCommand);
+
+        m_driverController.create()
+            .onTrue(Commands.runOnce(
+                () -> m_drive.resetHeading()
+            ));
 
         m_driverController.cross()
             .onTrue(Commands.runOnce(() -> m_impactSim.startImpact(5, 1.5)));

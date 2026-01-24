@@ -37,7 +37,7 @@ public final class Constants {
     }
 
     public static class SystemConstants {
-        public static final RobotMode kMode = RobotMode.SIM;
+        public static final RobotMode kMode = RobotMode.REAL;
         public static final boolean kEnableSignalLogger = false;
         public static final boolean kEnableRTPriority = true;
         public static final boolean kLogOdometry = true;
@@ -98,11 +98,29 @@ public final class Constants {
                 TEST_CAMERA_ONE(
                     "TEST_CAMERA_1",
                     kDefaultMultiTagStdDevs,
-                    kDefaultMultiTagStdDevs,
+                    kDefaultSingleTagStdDevs,
                     PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
                     PoseStrategy.PNP_DISTANCE_TRIG_SOLVE,
-                    8.5, 10.75, 3,
-                    0, 0, 45
+                    9, 9, 9,
+                    0, 0, 20
+                ),
+                TEST_CAMERA_TWO(
+                    "TEST_CAMERA_2",
+                    kDefaultMultiTagStdDevs,
+                    kDefaultSingleTagStdDevs,
+                    PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+                    PoseStrategy.PNP_DISTANCE_TRIG_SOLVE,
+                    9, -9, 9,
+                    0, 0, -20
+                ),
+                TEST_CAMERA_THREE(
+                    "TEST_CAMERA_3",
+                    kDefaultMultiTagStdDevs,
+                    kDefaultSingleTagStdDevs,
+                    PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+                    PoseStrategy.PNP_DISTANCE_TRIG_SOLVE,
+                    -9, -9, 9,
+                    0, 0, -70
                 );
 
                 public final String name;
