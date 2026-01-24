@@ -60,14 +60,14 @@ public class ClimberIOSparkMax implements ClimberIO {
 
     @Override
     public void setVoltage(double volts) {
-        appliedVoltage = volts;
+        inputs.appliedVoltage = volts;
     }
 
     @Override
     public void setPosition(double positionMeters) {
         PIDEnabled = true;
         targetPosition = positionMeters;
-        pidController.setReference(positionMeters, SparkMax.ControlType.kPosition);
+        m_profiledPIDController.setReference(positionMeters, SparkMax.ControlType.kPosition);
     }
 
     @Override
