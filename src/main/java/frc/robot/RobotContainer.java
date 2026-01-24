@@ -114,9 +114,9 @@ public class RobotContainer {
 
         teleopDriveCommand = new TeleopDriveCommand(
             m_drive,
-            () -> m_driverController.getLeftY(),
-            () -> m_driverController.getLeftX(),
-            () -> m_driverController.getRightX()
+            () -> -m_driverController.getLeftY(),
+            () -> -m_driverController.getLeftX(),
+            () -> -m_driverController.getRightX()
         );
 
         // Configure the trigger bindings
