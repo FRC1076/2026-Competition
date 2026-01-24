@@ -125,3 +125,5 @@ gversion {
     timeZone     = "America/New_York" // Use preferred time zone
     indent       = "    "
 }
+
+compileJava.options.encoding = 'UTF-8'
