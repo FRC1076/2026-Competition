@@ -26,10 +26,10 @@ public class ClimberIOSparkMax implements ClimberIO {
         PIDEnabled = false;
 
         m_profiledPIDController = new ProfiledPIDController(
-            ClimberConstants.kP(),
-            ClimberConstants.kI(),
-            ClimberConstants.kD(),
-            ClimberConstants.kProfileConstraints()
+            ClimberConstants.kP,
+            ClimberConstants.kI,
+            ClimberConstants.kD,
+            ClimberConstants.kProfileConstraints
         );
 
         m_motor = new SparkMax(ClimberConstants.kCANId, MotorType.kBrushless);
@@ -72,12 +72,12 @@ public class ClimberIOSparkMax implements ClimberIO {
 
     @Override
     public void updateInputs(ClimberIOInputs inputs) {
-        inputs.appliedVolts = m_motor.getAppliedOutput() * m_motor.getBusVoltage();
+        inputs.appliedVoltage = m_motor.getAppliedOutput() * m_motor.getBusVoltage();
         inputs.appliedOutput = m_motor.getAppliedOutput();
         inputs.currentAmps = m_motor.getOutputCurrent();
 
-        inputs.climberHeightMeters = m_encoder.getPosition();
-        inputs.velocityMetersPerSecond = m_encoder.getVelocity();
+        inputs.climberPosition = m_encoder.getPosition();
+        inputs.climberVelocity = m_encoder.getVelocity();
     }
 
     public void setPIDEnabled(boolean enabled) {

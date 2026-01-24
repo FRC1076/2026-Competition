@@ -9,14 +9,13 @@ public interface ClimberIO {
 
         public double appliedVoltage = 0;
         public double currentAmps = 0;
-
-        public double velocityRadiansPerSecond = 0;
+        public double appliedOutput = 0;
 
         public double temperatureCelsius = 0;
         public double motorCurrent = 0;
 
-        public double motorPositionMeters = 0;
-        public double motorVelocityRadPerSec = 0;
+        public double climberPosition = 0;
+        public double climberVelocity = 0;
     }
 
     public abstract void setVoltage(double volts);

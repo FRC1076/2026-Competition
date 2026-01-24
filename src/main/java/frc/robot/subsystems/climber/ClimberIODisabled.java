@@ -20,8 +20,8 @@ public class ClimberIODisabled implements ClimberIO {
 
     @Override
     public void updateInputs(ClimberIOInputs inputs) {
-        inputs.motorAppliedVoltage = appliedVoltage;
-        inputs.motorPositionRad = targetPosition;
+        inputs.appliedVoltage = appliedVoltage;
+        inputs.motorPositionMeters = targetPosition;
     }
 
     @Override
