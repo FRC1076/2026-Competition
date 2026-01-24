@@ -9,7 +9,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 
-public class ClimberSubsystem implements ClimberIO {
+public class ClimberIOSparkMax implements ClimberIO {
     private final SparkMax m_motor;
     private final SparkMaxConfig m_motorConfig;
 
@@ -21,7 +21,7 @@ public class ClimberSubsystem implements ClimberIO {
 
     private double targetPosition = 0.0;
 
-    public ElevatorIOHardware() {
+    public ClimberIOSparkMax() {
 
         PIDEnabled = false;
 
