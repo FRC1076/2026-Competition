@@ -26,6 +26,6 @@ public class ClimberIODisabled implements ClimberIO {
 
     @Override
     public void stop() {
-
+        this.setVoltage(0.0);
     }
 }

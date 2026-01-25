@@ -11,7 +11,6 @@ public interface ClimberIO {
         public double currentAmps = 0;
         public double appliedOutput = 0;
 
-        public double temperatureCelsius = 0;
         public double motorCurrent = 0;
 
         public double climberPosition = 0;

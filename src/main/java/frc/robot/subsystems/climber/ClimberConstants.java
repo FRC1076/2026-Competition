@@ -1,11 +1,6 @@
 package frc.robot.subsystems.climber;
 
-import edu.wpi.first.math.util.Units;
-
 import com.ctre.phoenix6.CANBus;
-import com.ctre.phoenix6.signals.InvertedValue;
-import com.ctre.phoenix6.signals.NeutralModeValue;
-
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 
 import frc.robot.Constants.CANConstants;
@@ -29,10 +24,9 @@ public class ClimberConstants{
     public static final double kMinPositionMeters = 0;
     
     public static final double kGearRatio = 16;
-    public static final double kSprocketToothCount = 22;
-    public static final double kSprocketPitch = Units.inchesToMeters(1.0/4); // Pitch is the distance between two adjacent teeth
+    public static final double kDrumRadius = 0.0254;
 
-    public static final double kPositionConversionFactor = ((kSprocketToothCount * kSprocketPitch) / kGearRatio);
+    public static final double kPositionConversionFactor = (kDrumRadius / kGearRatio);
     public static final double kVelocityConversionFactor = kPositionConversionFactor / 60.0;
         
 

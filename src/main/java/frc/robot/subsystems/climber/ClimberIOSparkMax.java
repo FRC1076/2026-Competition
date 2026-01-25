@@ -1,8 +1,8 @@
 package frc.robot.subsystems.climber;
 
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.SparkBase.PersistMode;
-import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.PersistMode;
+import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.config.SparkMaxConfig;
@@ -17,13 +17,7 @@ public class ClimberIOSparkMax implements ClimberIO {
 
     private SparkClosedLoopController m_closedLoopController;
 
-    private boolean PIDEnabled = false;
-
-    private double targetPosition = 0.0;
-
     public ClimberIOSparkMax() {
-
-        PIDEnabled = false;
 
         m_motor = new SparkMax(ClimberConstants.kCANId, MotorType.kBrushless);
         m_motorConfig = new SparkMaxConfig();
@@ -58,15 +52,13 @@ public class ClimberIOSparkMax implements ClimberIO {
 
     @Override
     public void setVoltage(double volts) {
-        this.setPIDEnabled(false);
+        // we do not need to set PID control to false because we're running it on a closed loop controller, when we manually set the voltage it knows that it's not PID anymore
         m_motor.setVoltage(volts);
     }
 
     @Override
     public void setPosition(double positionMeters) {
-        PIDEnabled = true;
-        targetPosition = positionMeters;
-        m_closedLoopController.setReference(positionMeters, SparkMax.ControlType.kPosition);
+        m_closedLoopController.setSetpoint(positionMeters, SparkMax.ControlType.kPosition);
     }
 
     @Override
@@ -77,10 +69,6 @@ public class ClimberIOSparkMax implements ClimberIO {
 
         inputs.climberPosition = m_encoder.getPosition();
         inputs.climberVelocity = m_encoder.getVelocity();
-    }
-
-    public void setPIDEnabled(boolean enabled) {
-        this.PIDEnabled = enabled;
     }
 
     public void stop() {
