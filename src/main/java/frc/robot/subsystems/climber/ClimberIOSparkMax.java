@@ -58,7 +58,8 @@ public class ClimberIOSparkMax implements ClimberIO {
 
     @Override
     public void setVoltage(double volts) {
-        inputs.appliedVoltage = volts;
+        this.setPIDEnabled(false);
+        m_motor.setVoltage(volts);
     }
 
     @Override
@@ -83,7 +84,6 @@ public class ClimberIOSparkMax implements ClimberIO {
     }
 
     public void stop() {
-        this.setPIDEnabled(false);
         this.setVoltage(0.0);
     }
 
