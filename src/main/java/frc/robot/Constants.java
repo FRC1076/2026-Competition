@@ -95,15 +95,17 @@ public final class Constants {
             public static final Vector<N3> kDefaultMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 0.5);
 
             public static enum PhotonConfig {
-                TEST_CAMERA_ONE(
-                    "TEST_CAMERA_1",
-                    kDefaultMultiTagStdDevs,
-                    kDefaultMultiTagStdDevs,
-                    PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-                    PoseStrategy.PNP_DISTANCE_TRIG_SOLVE,
-                    8.5, 10.75, 3,
-                    0, 0, 45
-                );
+                // TEST_CAMERA_ONE(
+                //     "TEST_CAMERA_1",
+                //     kDefaultMultiTagStdDevs,
+                //     kDefaultMultiTagStdDevs,
+                //     PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+                //     PoseStrategy.PNP_DISTANCE_TRIG_SOLVE,
+                //     8.5, 10.75, 3,
+                //     0, 0, 45
+                // );
+                ; // Single semicolon to allow for constructor below,
+                // empty for now as there are no camera
 
                 public final String name;
                 public final Transform3d offset;
