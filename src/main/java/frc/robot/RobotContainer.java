@@ -6,7 +6,9 @@ package frc.robot;
 
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.SystemConstants;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.Constants.SystemConstants.RobotMode;
+import frc.robot.Constants.VisionConstants.PhotonVision.PhotonConfig;
 import frc.robot.commands.drive.TeleopDriveCommand;
 import frc.robot.subsystems.Elastic;
 import frc.robot.subsystems.drive.DriveIOHardware;
@@ -26,7 +28,11 @@ import frc.robot.subsystems.turret.TurretIOKraken;
 import frc.robot.subsystems.turret.TurretSubsystem;
 import lib.hardware.hid.SamuraiPS5Controller;
 import lib.hardware.hid.SamuraiXboxController;
+import lib.vision.PhotonVisionLocalizer;
 import lib.vision.VisionLocalizationSystem;
+
+import org.photonvision.PhotonCamera;
+
 import edu.wpi.first.wpilibj.Threads;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -74,6 +80,20 @@ public class RobotContainer {
             m_turret = new TurretSubsystem(new TurretIOKraken());
             m_flywheel = new FlywheelSubsystem(new FlywheelIOKraken());
             m_hood = new HoodSubsystem(new HoodIONeo());
+
+            for (PhotonConfig config : PhotonConfig.values()) {
+                PhotonCamera cam = new PhotonCamera(config.name);
+                m_vision.addCamera(new PhotonVisionLocalizer(
+                    cam,
+                    config.offset,
+                    config.multiTagPoseStrategy,
+                    config.singleTagPoseStrategy,
+                    () -> m_drive.getPose().getRotation(),
+                    VisionConstants.kAprilTagFieldLayout,
+                    config.defaultSingleTagStdDevs,
+                    config.defaultMultiTagStdDevs)
+                );
+            }
         } else {
             m_drive = new DriveSubsystem(
                 new DriveIOSim(TunerConstants.createDrivetrain()),
