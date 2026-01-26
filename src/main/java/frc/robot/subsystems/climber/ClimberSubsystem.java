@@ -40,6 +40,13 @@ public class ClimberSubsystem extends SubsystemBase {
         Logger.processInputs("Climber", inputs);
     }
 
+    public Command applyVoltage(double volts) {
+        return Commands.runOnce(
+            () -> io.setVoltage(volts),
+            this
+        );
+    }
+
     public Command applyPosition(double meters) {
         return Commands.runOnce(
             () -> io.setPosition(meters),
