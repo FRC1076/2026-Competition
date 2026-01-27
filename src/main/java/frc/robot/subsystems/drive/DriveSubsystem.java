@@ -64,6 +64,8 @@ public class DriveSubsystem extends SubsystemBase {
         } else {
             io.setAllianceRotation(Rotation2d.fromDegrees(0));
         }
+
+        io.resetHeading();
         
         try {
             AutoBuilder.configure(

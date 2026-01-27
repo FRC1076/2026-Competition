@@ -52,7 +52,7 @@ public final class Constants {
     /** Contains starting position and team */
     public static class GameConstants {
 
-        public static Alliance teamColor = Alliance.Blue;
+        public static Alliance teamColor = Alliance.Red;
         public static AutonSides autonSide = AutonSides.Left;
         public static boolean rearRightCameraEnabledAuton = false; // Only set to true if running algae auton
 
@@ -102,7 +102,7 @@ public final class Constants {
                     PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
                     PoseStrategy.PNP_DISTANCE_TRIG_SOLVE,
                     9, 9, 9,
-                    0, 0, 20
+                    0, 0, 40
                 ),
                 TEST_CAMERA_TWO(
                     "TEST_CAMERA_2",
@@ -111,7 +111,7 @@ public final class Constants {
                     PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
                     PoseStrategy.PNP_DISTANCE_TRIG_SOLVE,
                     9, -9, 9,
-                    0, 0, -20
+                    0, 0, -40
                 ),
                 TEST_CAMERA_THREE(
                     "TEST_CAMERA_3",
@@ -120,7 +120,7 @@ public final class Constants {
                     PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
                     PoseStrategy.PNP_DISTANCE_TRIG_SOLVE,
                     -9, -9, 9,
-                    0, 0, -70
+                    0, 0, -160
                 );
 
                 public final String name;
