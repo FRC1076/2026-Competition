@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
-
 public class ClimberSubsystem extends SubsystemBase {
     private final ClimberIO io;
     private final ClimberIOInputsAutoLogged inputs = new ClimberIOInputsAutoLogged();
@@ -67,8 +66,7 @@ public class ClimberSubsystem extends SubsystemBase {
             () -> io.stop(),
             this
         );
-    }
-    
+    }   
 }
 
     

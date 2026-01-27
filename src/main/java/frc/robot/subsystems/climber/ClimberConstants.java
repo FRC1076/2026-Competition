@@ -6,7 +6,6 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import frc.robot.Constants.CANConstants;
 
 public class ClimberConstants{
-
     public static final int kCANId = 0;
     public static final CANBus kCANBus = CANConstants.kRioBus;
 
@@ -28,7 +27,4 @@ public class ClimberConstants{
 
     public static final double kPositionConversionFactor = (kDrumRadius / kGearRatio);
     public static final double kVelocityConversionFactor = kPositionConversionFactor / 60.0;
-        
-
-
 }

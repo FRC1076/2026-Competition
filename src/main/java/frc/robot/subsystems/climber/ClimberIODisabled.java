@@ -21,7 +21,7 @@ public class ClimberIODisabled implements ClimberIO {
     @Override
     public void updateInputs(ClimberIOInputs inputs) {
         inputs.appliedVoltage = appliedVoltage;
-        inputs.climberPosition = targetPosition;
+        inputs.positionMeters = targetPosition;
     }
 
     @Override

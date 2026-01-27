@@ -67,12 +67,11 @@ public class ClimberIOSparkMax implements ClimberIO {
         inputs.appliedOutput = m_motor.getAppliedOutput();
         inputs.currentAmps = m_motor.getOutputCurrent();
 
-        inputs.climberPosition = m_encoder.getPosition();
-        inputs.climberVelocity = m_encoder.getVelocity();
+        inputs.positionMeters = m_encoder.getPosition();
+        inputs.velocityMPS = m_encoder.getVelocity();
     }
 
     public void stop() {
         this.setVoltage(0.0);
     }
-
 }
