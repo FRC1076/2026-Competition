@@ -1,5 +1,10 @@
 package frc.robot.subsystems.kicker;
 
 public class KickerConstants {
-    public static final int kMotorPort = 0;
+    // CAN Id
+    public static final int kCanId = 0;
+
+    // Voltage compensation and current limit
+    public static final double kVoltageCompensation = 10.5;
+    public static final int kCurrentLimitAmps = 20;
 }
