@@ -21,8 +21,6 @@ public interface SlapdownIO {
         public double velocityRadiansPerSecond = 0;
     }
 
-    public abstract SlapdownControlConstants getControlConstants();
-
     public abstract void setVoltage(double volts);
 
     public abstract void updateInputs(SlapdownIOInputs inputs);

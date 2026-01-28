@@ -1,23 +1,15 @@
 package frc.robot.subsystems.slapdown;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Rotation2d;
 
-import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.SparkMaxAlternateEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.AlternateEncoderConfig;
-import com.revrobotics.spark.config.AbsoluteEncoderConfig;
-import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
-
-import com.revrobotics.spark.SparkClosedLoopController;
 
 public class SlapdownIOSparkMax implements SlapdownIO {
     private final SparkMax m_motor;
@@ -54,11 +46,6 @@ public class SlapdownIOSparkMax implements SlapdownIO {
     @Override
     public void setVoltage(double volts) {
         m_motor.setVoltage(volts);
-    }
-
-    @Override
-    public SlapdownControlConstants getControlConstants() {
-        return realControlConstants;
     }
 
     @Override
