@@ -6,11 +6,11 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
-public class KickerIOHardware implements KickerIO{
+public class KickerIONeo implements KickerIO{
     private final SparkMax m_motor; 
     private final SparkMaxConfig m_motorConfig;
 
-    public KickerIOHardware() {
+    public KickerIONeo() {
         m_motor = new SparkMax(KickerConstants.kCanId, MotorType.kBrushless);
         m_motorConfig = new SparkMaxConfig();
 
