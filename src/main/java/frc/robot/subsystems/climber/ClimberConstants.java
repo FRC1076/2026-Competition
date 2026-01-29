@@ -9,12 +9,19 @@ public class ClimberConstants{
     public static final int kCANId = 51;
     public static final CANBus kCANBus = CANConstants.kRioBus;
 
+    // PID
     public static final double kP = 0;
     public static final double kI = 0;
     public static final double kD = 0;
     public static final Constraints kProfileConstraints = new Constraints(4 * Math.PI, 3.5 * Math.PI);
 
-    public static final boolean motorInverted = false;
+    // Feedforward
+    public static final double kS = 0;
+    public static final double kG = 0;
+    public static final double kV = 0;
+    public static final double kA = 0;
+
+    public static final boolean kMotorInverted = false;
 
     public static final double kVoltageCompensation = 12; 
     public static final double kCurrentLimit = 40;

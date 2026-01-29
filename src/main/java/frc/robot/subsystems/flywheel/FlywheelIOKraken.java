@@ -29,7 +29,7 @@ public class FlywheelIOKraken implements FlywheelIO {
     private final StatusSignal<Voltage> m_voltageSignal;
     private final StatusSignal<AngularVelocity> m_velocitySignal;
     private final StatusSignal<Current> m_currentSignal;
-    private final StatusSignal<Temperature> m_temperatureSignal; /*edit */
+    private final StatusSignal<Temperature> m_temperatureSignal;
 
     public FlywheelIOKraken() {
         // Instantiate motor here
@@ -43,7 +43,6 @@ public class FlywheelIOKraken implements FlywheelIO {
         m_motorConfig.Voltage.PeakForwardVoltage = FlywheelConstants.kMaxVoltage;
         m_motorConfig.Voltage.PeakForwardVoltage = -1 * FlywheelConstants.kMaxVoltage;
         m_motorConfig.CurrentLimits.StatorCurrentLimit = FlywheelConstants.kStatorCurrentLimit;
-        m_motorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
         m_motorConfig.CurrentLimits.SupplyCurrentLimit = FlywheelConstants.kSupplyCurrentLimit;
 
         // Set inverted based on constants
@@ -52,8 +51,7 @@ public class FlywheelIOKraken implements FlywheelIO {
         // Set brake mode based on constants
         m_motorConfig.MotorOutput.NeutralMode = FlywheelConstants.kNeutralMode;
 
-        // Configure motiom magic based on constants (kP, kI, kD, kS, kV, kA, accleration limit, jerk limit)
-        // Make sure to use .fromSIkP(), etc in the unit converter!
+        // Configure motiom magic
         m_motorConfig.Slot0.kP = m_unitConverter.fromSIkP(FlywheelConstants.kP);
         m_motorConfig.Slot0.kI = m_unitConverter.fromSIkI(FlywheelConstants.kI);
         m_motorConfig.Slot0.kD = m_unitConverter.fromSIkD(FlywheelConstants.kD);
@@ -71,7 +69,7 @@ public class FlywheelIOKraken implements FlywheelIO {
         m_temperatureSignal = m_motor.getDeviceTemp();
 
         m_voltageRequest = new VoltageOut(0)
-            .withEnableFOC(FlywheelConstants.kEnableFoc);
+            .withEnableFOC(FlywheelConstants.kEnableFOC);
         m_velocityRequest = new MotionMagicVelocityTorqueCurrentFOC(0);
     }
 
@@ -85,7 +83,7 @@ public class FlywheelIOKraken implements FlywheelIO {
     @Override
     public void setVelocityRadPerSec(double velocityRadPerSec) {
         // Set the velocity of the motor
-        if(velocityRadPerSec != 0) {
+        if (velocityRadPerSec != 0) {
             m_velocityRequest.Velocity = m_unitConverter.fromSIVel(velocityRadPerSec);
             m_motor.setControl(m_velocityRequest);
         } else {
@@ -96,13 +94,16 @@ public class FlywheelIOKraken implements FlywheelIO {
     @Override
     public void updateInputs(FlywheelIOInputs inputs) {
         // Update inputs based on status signals
-        m_voltageSignal.refresh();
-        m_velocitySignal.refresh();
-        m_currentSignal.refresh();
-        m_temperatureSignal.refresh();
+        StatusSignal.refreshAll(
+            m_voltageSignal,
+            m_velocitySignal,
+            m_currentSignal,
+            m_temperatureSignal
+        );
 
-        inputs.motorAppliedVoltage = m_voltageSignal.getValueAsDouble();
-        inputs.motorVelocityRadiansPerSecond = m_unitConverter.toSIVel(m_velocitySignal.getValueAsDouble());
-        inputs.motorCurrent = m_currentSignal.getValueAsDouble();
+        inputs.appliedVoltage = m_voltageSignal.getValueAsDouble();
+        inputs.velocityRadiansPerSecond = m_unitConverter.toSIVel(m_velocitySignal.getValueAsDouble());
+        inputs.currentAmps = m_currentSignal.getValueAsDouble();
+        inputs.temperatureDegC = m_temperatureSignal.getValueAsDouble();
     }
 }
