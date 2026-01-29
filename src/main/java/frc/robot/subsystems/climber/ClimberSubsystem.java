@@ -61,7 +61,7 @@ public class ClimberSubsystem extends SubsystemBase {
         return sysId.dynamic(direction);
     }
 
-    public Command applyStop() {
+    public Command stop() {
         return Commands.runOnce(
             () -> io.stop(),
             this
