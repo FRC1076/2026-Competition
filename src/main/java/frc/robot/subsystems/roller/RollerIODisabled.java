@@ -6,7 +6,6 @@ public class RollerIODisabled implements RollerIO {
     @Override
     public void setVoltage(double volts) {
         voltageTarget = volts;
-
     }
     
     @Override 

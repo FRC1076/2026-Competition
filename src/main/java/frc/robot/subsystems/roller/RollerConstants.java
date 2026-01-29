@@ -27,13 +27,4 @@ public class RollerConstants {
         public static final double kMaxAcceleration = 20000;
         public static final double kMaxJerk = 160000;
     }
-    public static class ControlSim {
-        public static final double kP = 1;
-        public static final double kI = 0;
-        public static final double kD = 0;
-
-        public static final double kS = 0;
-        public static final double kV = 0.025;
-        public static final double kA = 0;
-    }
 }
