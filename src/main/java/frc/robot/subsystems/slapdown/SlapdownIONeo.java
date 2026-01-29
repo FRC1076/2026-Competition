@@ -9,6 +9,9 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import com.revrobotics.spark.SparkMax;
+
+import org.littletonrobotics.junction.Logger;
+
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
 
@@ -56,8 +59,6 @@ public class SlapdownIONeo implements SlapdownIO {
             SlapdownConstants.kV,
             SlapdownConstants.kA
         );
-
-        //m_closedLoopController = new ProfiledPIDController(SlapdownConstants.kP, SlapdownConstants.kI, SlapdownConstants.kD, SlapdownConstants.kProfileConstraints, SlapdownConstants.kS, SlapdownConstants.kG, SlapdownConstants.kV, SlapdownConstants.kA);
     }
 
     @Override
@@ -79,7 +80,10 @@ public class SlapdownIONeo implements SlapdownIO {
          } 
 
         inputs.appliedVoltage = m_motor.getAppliedOutput() * m_motor.getBusVoltage();
-        inputs.currentAmps = m_motor.getOutputCurrent();        
+        inputs.currentAmps = m_motor.getOutputCurrent();
+
+        Logger.recordOutput("Slapdown/PIDTargetRadians", m_profiledPIDController.getGoal());
+        Logger.recordOutput("Slapdown/PIDEnabled", PIDEnabled);        
     }
 
     @Override
