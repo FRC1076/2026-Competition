@@ -10,10 +10,7 @@ public interface FlywheelIO {
 
         public double velocityRadiansPerSecond = 0;
 
-        public double temperatureCelcius = 0;
-        public double motorAppliedVoltage;
-        public double motorVelocityRadiansPerSecond;
-        public double motorCurrent;
+        public double temperatureDegC = 0;
     }
 
     public abstract void updateInputs(FlywheelIOInputs inputs);
