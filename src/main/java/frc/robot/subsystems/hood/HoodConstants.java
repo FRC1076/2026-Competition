@@ -2,7 +2,7 @@ package frc.robot.subsystems.hood;
 
 public class HoodConstants {
     // CAN Id
-    public static final int kCANId = 0;
+    public static final int kCANId = 32;
 
     // Voltage and current limits
     public static final double kSmartCurrentLimit = 10;

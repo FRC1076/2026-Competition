@@ -8,7 +8,7 @@ import frc.robot.Constants.CANConstants;
 
 public class TurretConstants {
     // CAN
-    public static final int kCANId = 0;
+    public static final int kCANId = 33;
     public static final CANBus kCANBus = CANConstants.kCANivoreBus;
 
     // Voltage and current limits
