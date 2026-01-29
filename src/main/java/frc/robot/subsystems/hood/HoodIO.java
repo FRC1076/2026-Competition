@@ -6,7 +6,7 @@ public interface HoodIO {
     @AutoLog
     public static class HoodIOInputs {
         public double appliedVolts = 0;
-        public double leadCurrentAmps = 0;
+        public double currentAmps = 0;
         public double angleRadians = 0;
         public double velocityRadiansPerSecond = 0;
     }
