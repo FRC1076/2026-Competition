@@ -23,17 +23,17 @@ public class FlywheelConstants {
     public static final NeutralModeValue kNeutralMode = NeutralModeValue.Brake;
 
 
-    public static final double kP = 1;
+    public static final double kP = 0;
     public static final double kI = 0;
     public static final double kD = 0;
 
     public static final double kS = 0;
-    public static final double kV = 0.025;
+    public static final double kV = 0;
     public static final double kA = 0;
 
     public static final double kMaxAcceleration = 2000;
     public static final double kMaxJerk = 160000;
 
-    public static final boolean kEnableFoc = true;
+    public static final boolean kEnableFOC = true;
 }
 
