@@ -9,7 +9,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 
 import com.revrobotics.spark.SparkClosedLoopController;
 
-public class ClimberIOSparkMax implements ClimberIO {
+public class ClimberIONeo implements ClimberIO {
     private final SparkMax m_motor;
     private final SparkMaxConfig m_motorConfig;
 
@@ -17,7 +17,7 @@ public class ClimberIOSparkMax implements ClimberIO {
 
     private SparkClosedLoopController m_closedLoopController;
 
-    public ClimberIOSparkMax() {
+    public ClimberIONeo() {
 
         m_motor = new SparkMax(ClimberConstants.kCANId, MotorType.kBrushless);
         m_motorConfig = new SparkMaxConfig();

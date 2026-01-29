@@ -6,10 +6,10 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import frc.robot.Constants.CANConstants;
 
 public class ClimberConstants{
-    public static final int kCANId = 0;
+    public static final int kCANId = 51;
     public static final CANBus kCANBus = CANConstants.kRioBus;
 
-    public static final double kP = 1;
+    public static final double kP = 0;
     public static final double kI = 0;
     public static final double kD = 0;
     public static final Constraints kProfileConstraints = new Constraints(4 * Math.PI, 3.5 * Math.PI);
