@@ -70,11 +70,13 @@ public class HoodIONeo implements HoodIO {
 
     @Override
     public void setVoltage(double volts) {
+        pidEnabled = false;
         m_leadMotor.setVoltage(volts);
     }
 
     @Override
     public void setPosition(double radians) {
+        pidEnabled = true;
         m_pidController.setGoal(radians);
     }
 
@@ -84,7 +86,7 @@ public class HoodIONeo implements HoodIO {
         inputs.velocityRadiansPerSecond = m_absoluteEncoder.getVelocity();
 
         if (pidEnabled) {
-            setVoltage(
+            m_leadMotor.setVoltage(
                 m_pidController.calculate(inputs.angleRadians) + m_feedforward.calculate(inputs.angleRadians, inputs.velocityRadiansPerSecond)
             );
         }

@@ -1,5 +1,6 @@
 package frc.robot.subsystems.slapdown;
 
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 
 import com.revrobotics.RelativeEncoder;
@@ -11,15 +12,17 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
 
-public class SlapdownIOSparkMax implements SlapdownIO {
+public class SlapdownIONeo implements SlapdownIO {
     private final SparkMax m_motor;
 
     private final SparkMaxConfig m_motorConfig;
     private final RelativeEncoder m_relativeEncoder;
 
-    private ProfiledPIDController m_closedLoopController;
+    private boolean PIDEnabled = false;
+    private final ProfiledPIDController m_profiledPIDController;
+    private final ArmFeedforward m_feedForwardController;
 
-    public SlapdownIOSparkMax() {
+    public SlapdownIONeo() {
         m_motor = new SparkMax(SlapdownConstants.kCANId, MotorType.kBrushless);
 
         m_motorConfig = new SparkMaxConfig();
@@ -40,34 +43,57 @@ public class SlapdownIOSparkMax implements SlapdownIO {
 
         m_relativeEncoder = m_motor.getEncoder();
 
+        m_profiledPIDController = new ProfiledPIDController(
+            SlapdownConstants.kP,
+            SlapdownConstants.kI,
+            SlapdownConstants.kD,
+            SlapdownConstants.kProfileConstraints
+        );
+
+        m_feedForwardController = new ArmFeedforward(
+            SlapdownConstants.kS,
+            SlapdownConstants.kG,
+            SlapdownConstants.kV,
+            SlapdownConstants.kA
+        );
+
         //m_closedLoopController = new ProfiledPIDController(SlapdownConstants.kP, SlapdownConstants.kI, SlapdownConstants.kD, SlapdownConstants.kProfileConstraints, SlapdownConstants.kS, SlapdownConstants.kG, SlapdownConstants.kV, SlapdownConstants.kA);
     }
 
     @Override
     public void setVoltage(double volts) {
         m_motor.setVoltage(volts);
+        PIDEnabled = false;
     }
 
     @Override
     public void updateInputs(SlapdownIOInputs inputs) {
-        inputs.appliedVoltage = m_motor.getAppliedOutput() * m_motor.getBusVoltage();
-        inputs.currentAmps = m_motor.getOutputCurrent();
-        /** These calculations are to get around the wraparound of the absolute encoder values
-         * If the value is greater than 180 degrees, it will become negative
-         * 
-         * 1. Subtract the zero offset to get within a range of 270 (-90) degrees to 90 degrees
-         * 2. Add 180 degrees
-         * 3. Modulo 360 to make the previously negative values, which were technically greater than 180 degrees, less than 180 degrees
-         * 4. Subtract 180 degrees to make values negative
-         */
-        //inputs.angleRadians = ((m_relativeEncoder.getPosition()  - SlapdownConstants.kZeroOffsetRadians + Math.PI) % (2 * Math.PI) - Math.PI);
         inputs.velocityRadiansPerSecond = m_relativeEncoder.getVelocity();
         inputs.angleRadians = m_relativeEncoder.getPosition();
+
+        if (PIDEnabled){
+            m_motor.setVoltage(
+                m_profiledPIDController.calculate(inputs.velocityRadiansPerSecond) +
+                m_feedForwardController.calculate(inputs.angleRadians,inputs.velocityRadiansPerSecond)
+            );
+         } 
+
+        inputs.appliedVoltage = m_motor.getAppliedOutput() * m_motor.getBusVoltage();
+        inputs.currentAmps = m_motor.getOutputCurrent();        
     }
 
     @Override
     public void stop() {
-        this.setVoltage(0.0);
+        PIDEnabled = false;
+        this.setVoltage(0);
+
     }
+
+    @Override 
+    public void setPosition(double radians){
+        m_profiledPIDController.setGoal(radians);
+        PIDEnabled = true;
+    }
+
 
 }

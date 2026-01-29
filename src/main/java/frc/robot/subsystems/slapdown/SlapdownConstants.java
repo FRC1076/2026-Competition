@@ -5,8 +5,7 @@ import frc.robot.Constants.CANConstants;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 
 public class SlapdownConstants {
-
-    public static final int kCANId = 0;
+    public static final int kCANId = 42;
     public static final CANBus kCANBus = CANConstants.kRioBus;
 
     public static final double kP = 0;
@@ -20,9 +19,9 @@ public class SlapdownConstants {
 
     public static final Constraints kProfileConstraints = new Constraints(4 * Math.PI, 3.5 * Math.PI);
 
-    public static final double wristAngleToleranceRadians = 0.1;
-    public static final double kMinWristAngleRadians = -Math.PI / 4;
-    public static final double kMaxWristAngleRadians = Math.PI / 2;
+    public static final double kAngleToleranceRadians = 0.1;
+    public static final double kMinAngleRadians = -Math.PI / 4;
+    public static final double kMaxAngleRadians = Math.PI / 2;
 
     public static final double maxOperatorControlVolts = 1;
     public static final double kSmartCurrentLimit = 40.0;
