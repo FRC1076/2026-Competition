@@ -4,9 +4,10 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 public class RollerConstants {
-    public static final int kMotorPort = 43;
+    public static final int kMotorPort = 41;
 
-    public static final int kCurrentLimit = 40;
+    public static final int kSupplyCurrentLimit = 40;
+    public static final int kStatorCurrentLimit = 60;
 
     public static final double kManualShootVolts = 12;
     public static final double kManualReverseVolts = 4;

@@ -6,7 +6,8 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 public class SpindexerConstants {
     public static final int kMotorPort = 43;
     
-    public static final int kCurrentLimit = 40;
+    public static final int kSupplyCurrentLimit = 30;
+    public static final int kStatorCurrentLimit = 50;
 
     public static final double kManualShootVolts = 12;
     public static final double kManualReserveVolts = 4;

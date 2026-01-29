@@ -7,6 +7,7 @@ public interface SpindexerIO {
     public static class SpindexerIOInputs {
         public double appliedVoltage = 0;
         public double currentAmps = 0;
+        public double motorTempDegC = 0;
     }
 
     public abstract void setVoltage(double volts);
