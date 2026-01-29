@@ -1,6 +1,9 @@
 package frc.robot.subsystems.climber;
 
 import com.revrobotics.spark.SparkMax;
+
+import org.littletonrobotics.junction.Logger;
+
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -83,6 +86,9 @@ public class ClimberIONeo implements ClimberIO {
 
         inputs.appliedVoltage = m_motor.getAppliedOutput() * m_motor.getBusVoltage();
         inputs.currentAmps = m_motor.getOutputCurrent();
+
+        Logger.recordOutput("Climber/PIDTargetRadians", m_profiledPidController.getGoal());
+        Logger.recordOutput("Climber/PIDEnabled", PIDEnabled);
     }
 
     public void stop() {

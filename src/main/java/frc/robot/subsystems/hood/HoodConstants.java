@@ -26,8 +26,8 @@ public class HoodConstants {
     public static final double kP = 0;
     public static final double kI = 0;
     public static final double kD = 0;
-    public static final double kMaxVelocityRadPerSec = 1;
-    public static final double kMaxAccelerationRadPerSec2 = 1;
+    public static final double kMaxVelocityRadPerSec = Math.PI;
+    public static final double kMaxAccelerationRadPerSec2 = 2*Math.PI;
 
     // Feedforward
     public static final double kS = 0;
