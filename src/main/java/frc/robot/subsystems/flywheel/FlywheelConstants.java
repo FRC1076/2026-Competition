@@ -20,7 +20,7 @@ public class FlywheelConstants {
     public static final double kManualReverseVolts = 4;
 
     public static final InvertedValue kInverted = InvertedValue.CounterClockwise_Positive;
-    public static final NeutralModeValue kNeutralMode = NeutralModeValue.Brake;
+    public static final NeutralModeValue kNeutralMode = NeutralModeValue.Coast;
 
 
     public static final double kP = 0;
@@ -31,8 +31,10 @@ public class FlywheelConstants {
     public static final double kV = 0;
     public static final double kA = 0;
 
-    public static final double kMaxAcceleration = 2000;
-    public static final double kMaxJerk = 160000;
+    public static final double kMaxAcceleration = 20000;
+    public static final double kMaxJerk = 1600000;
+
+    public static final double kSetpointToleranceRadPerSec = 25;
 
     public static final boolean kEnableFOC = true;
 }

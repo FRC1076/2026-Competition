@@ -47,7 +47,9 @@ public class FlywheelIOKraken implements FlywheelIO {
         m_motorConfig.Voltage.PeakForwardVoltage = FlywheelConstants.kMaxVoltage;
         m_motorConfig.Voltage.PeakReverseVoltage = -1 * FlywheelConstants.kMaxVoltage;
         m_motorConfig.CurrentLimits.StatorCurrentLimit = FlywheelConstants.kStatorCurrentLimit;
+        m_motorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
         m_motorConfig.CurrentLimits.SupplyCurrentLimit = FlywheelConstants.kSupplyCurrentLimit;
+        m_motorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 
         // Set inverted based on constants
         m_motorConfig.MotorOutput.Inverted = FlywheelConstants.kInverted;

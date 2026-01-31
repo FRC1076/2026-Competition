@@ -2,6 +2,7 @@ package frc.robot.subsystems.flywheel;
 
 import org.littletonrobotics.junction.Logger;
 
+import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -29,11 +30,18 @@ public class FlywheelSubsystem extends SubsystemBase {
             ),
             new SysIdRoutine.Mechanism(
                 (voltage) -> io.setVoltage(voltage.in(Volts)), 
-                null, 
+                (log) ->
+                    log.motor("Flywheel Kraken")
+                    .voltage(Volts.of(inputs.appliedVoltage))
+                    .angularVelocity(RadiansPerSecond.of(inputs.velocityRadiansPerSecond)), 
                 this
             )
         );
 
+    }
+
+    public boolean atSetpoint(double targetRadiansPerSecond) {
+        return Math.abs(inputs.velocityRadiansPerSecond - targetRadiansPerSecond) < FlywheelConstants.kSetpointToleranceRadPerSec;
     }
 
     @Override
