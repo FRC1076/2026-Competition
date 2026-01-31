@@ -22,6 +22,9 @@ import frc.robot.subsystems.hood.HoodConstants;
 import frc.robot.subsystems.hood.HoodIODisabled;
 import frc.robot.subsystems.hood.HoodIONeo;
 import frc.robot.subsystems.hood.HoodSubsystem;
+import frc.robot.subsystems.roller.RollerIODisabled;
+import frc.robot.subsystems.roller.RollerIOKraken;
+import frc.robot.subsystems.roller.RollerSubsystem;
 import frc.robot.subsystems.turret.TurretConstants;
 import frc.robot.subsystems.turret.TurretIODisabled;
 import frc.robot.subsystems.turret.TurretIOKraken;
@@ -52,6 +55,7 @@ public class RobotContainer {
     private final TurretSubsystem m_turret;
     private final FlywheelSubsystem m_flywheel;
     private final HoodSubsystem m_hood;
+    private final RollerSubsystem m_rollers;
     private final VisionLocalizationSystem m_vision;
 
     private final Elastic m_elastic;
@@ -80,6 +84,7 @@ public class RobotContainer {
             m_turret = new TurretSubsystem(new TurretIOKraken());
             m_flywheel = new FlywheelSubsystem(new FlywheelIOKraken());
             m_hood = new HoodSubsystem(new HoodIONeo());
+            m_rollers = new RollerSubsystem(new RollerIOKraken());
 
             for (PhotonConfig config : PhotonConfig.values()) {
                 PhotonCamera cam = new PhotonCamera(config.name);
@@ -103,6 +108,7 @@ public class RobotContainer {
             m_turret = new TurretSubsystem(new TurretIODisabled());
             m_flywheel = new FlywheelSubsystem(new FlywheelIODisabled());
             m_hood = new HoodSubsystem(new HoodIODisabled());
+            m_rollers = new RollerSubsystem(new RollerIODisabled());
         }
 
         teleopDriveCommand = new TeleopDriveCommand(
@@ -147,17 +153,23 @@ public class RobotContainer {
             .onTrue(Commands.runOnce(() ->
                 m_drive.resetHeading()
             ));
+
+        m_driverController.L2()
+            .onTrue(m_rollers.applyVoltage(8))
+            .onFalse(m_rollers.applyVoltage(0));
     }
 
     /** Bind triggers on operator controller to commands */
     private void configureOperatorBindings() {
         m_operatorController.leftActive()
             .whileTrue(m_turret.applyVoltage(
-                    m_operatorController.getLeftX() * TurretConstants.kMaxManualControlVolts));
+                    m_operatorController.getLeftX() * TurretConstants.kMaxManualControlVolts))
+            .onFalse(m_turret.applyVoltage(0));
 
         m_operatorController.rightActive()
             .whileTrue(m_hood.applyVoltage(
-                m_operatorController.getRightY() * HoodConstants.kMaxOperatorControlVolts));
+                m_operatorController.getRightY() * HoodConstants.kMaxOperatorControlVolts))
+            .onFalse(m_hood.applyVoltage(0));
 
         m_operatorController.a()
             .onTrue(m_flywheel.applyVoltage(0));
