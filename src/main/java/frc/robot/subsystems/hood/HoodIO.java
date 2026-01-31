@@ -17,7 +17,7 @@ public interface HoodIO {
 
     public abstract void setPosition(double radians);
 
-    public default void simulationPeriodic() {
+    public default void periodic() {
         
     }
 }

@@ -13,7 +13,7 @@ public class ClimberConstants{
     public static final double kP = 0;
     public static final double kI = 0;
     public static final double kD = 0;
-    public static final Constraints kProfileConstraints = new Constraints(4 * Math.PI, 3.5 * Math.PI);
+    public static final Constraints kProfileConstraints = new Constraints(1, 2);
 
     // Feedforward
     public static final double kS = 0;
@@ -32,6 +32,6 @@ public class ClimberConstants{
     public static final double kGearRatio = 16;
     public static final double kDrumRadius = 0.0254;
 
-    public static final double kPositionConversionFactor = (kDrumRadius / kGearRatio);
+    public static final double kPositionConversionFactor = ((2 * Math.PI * kDrumRadius) / kGearRatio);
     public static final double kVelocityConversionFactor = kPositionConversionFactor / 60.0;
 }

@@ -79,18 +79,20 @@ public class HoodIONeo implements HoodIO {
     }
 
     @Override
-    public void updateInputs (HoodIOInputs inputs) {
-        inputs.angleRadians = MathUtil.angleModulus(m_absoluteEncoder.getPosition()); // TODO: confirm this
-        inputs.velocityRadiansPerSecond = m_absoluteEncoder.getVelocity();
-
+    public void periodic() {
         if (pidEnabled) {
             m_leadMotor.setVoltage(
-                m_pidController.calculate(inputs.angleRadians) + m_feedforward.calculate(m_pidController.getSetpoint().position, m_pidController.getSetpoint().velocity)
+                m_pidController.calculate(m_absoluteEncoder.getPosition()) + m_feedforward.calculate(m_pidController.getSetpoint().position, m_pidController.getSetpoint().velocity)
             );
         }
+    }
 
+    @Override
+    public void updateInputs(HoodIOInputs inputs) {
         inputs.appliedVolts = m_leadMotor.getAppliedOutput() * m_leadMotor.getBusVoltage();
         inputs.currentAmps = m_leadMotor.getOutputCurrent();
+        inputs.angleRadians = MathUtil.angleModulus(m_absoluteEncoder.getPosition()); // TODO: confirm this
+        inputs.velocityRadiansPerSecond = m_absoluteEncoder.getVelocity();
         
         Logger.recordOutput("Hood/PIDTargetRadians", m_pidController.getSetpoint());
         Logger.recordOutput("Hood/PIDEnabled", pidEnabled);

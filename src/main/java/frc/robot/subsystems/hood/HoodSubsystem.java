@@ -35,6 +35,7 @@ public class HoodSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        io.periodic();
         io.updateInputs(inputs);
         Logger.processInputs("Hood", inputs);
 
@@ -43,11 +44,6 @@ public class HoodSubsystem extends SubsystemBase {
         } else if (applySoftwareStop && inputs.angleRadians <= HoodConstants.kMinHoodAngleRadians && inputs.appliedVolts < 0) {
             io.setVoltage(0);
         }
-    }
-
-    @Override
-    public void simulationPeriodic() {
-        io.simulationPeriodic();
     }
 
     public Command applyVoltage(double volts) {

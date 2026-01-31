@@ -35,10 +35,7 @@ public class ClimberIONeo implements ClimberIO {
         
         m_motorConfig.encoder
             .positionConversionFactor(ClimberConstants.kPositionConversionFactor)
-            .velocityConversionFactor(ClimberConstants.kVelocityConversionFactor)
-            .quadratureMeasurementPeriod(10)
-            .quadratureAverageDepth(2);
-
+            .velocityConversionFactor(ClimberConstants.kVelocityConversionFactor);
         
         m_motor.configure(m_motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         
@@ -74,18 +71,20 @@ public class ClimberIONeo implements ClimberIO {
     }
 
     @Override
-    public void updateInputs(ClimberIOInputs inputs) {
-        inputs.positionMeters = m_encoder.getPosition();
-        inputs.velocityMPS = m_encoder.getVelocity();
-
+    public void periodic() {
         if (PIDEnabled) {
             m_motor.setVoltage(
-                m_profiledPidController.calculate(inputs.positionMeters) + m_feedforward.calculate(inputs.velocityMPS)
+                m_profiledPidController.calculate(m_encoder.getPosition())+ m_feedforward.calculate(m_profiledPidController.getSetpoint().velocity)
             );
         }
+    }
 
+    @Override
+    public void updateInputs(ClimberIOInputs inputs) {
         inputs.appliedVoltage = m_motor.getAppliedOutput() * m_motor.getBusVoltage();
         inputs.currentAmps = m_motor.getOutputCurrent();
+        inputs.positionMeters = m_encoder.getPosition();
+        inputs.velocityMPS = m_encoder.getVelocity();
 
         Logger.recordOutput("Climber/PIDTargetRadians", m_profiledPidController.getGoal());
         Logger.recordOutput("Climber/PIDEnabled", PIDEnabled);

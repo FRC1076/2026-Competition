@@ -16,8 +16,11 @@ public interface ClimberIO {
 
     public abstract void setPosition(double positionMeters);
 
-    public abstract void updateInputs(ClimberIOInputs inputs);
-
     public abstract void stop();
 
+    public abstract void updateInputs(ClimberIOInputs inputs);
+
+    public default void periodic() {
+        
+    }
 }
