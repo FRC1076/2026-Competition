@@ -19,7 +19,7 @@ public class RollerIOKraken implements RollerIO {
     private final StatusSignal<Temperature> m_temperatureSignal;
 
     public RollerIOKraken() {
-        m_motor = new TalonFX(RollerConstants.kMotorPort);
+        m_motor = new TalonFX(RollerConstants.kMotorPort, RollerConstants.kCANBus);
 
         m_motorConfig = new TalonFXConfiguration();
 
