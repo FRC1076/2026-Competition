@@ -51,7 +51,7 @@ public class TurretIOKraken implements TurretIO {
         m_motorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
         // Offset from internal absolute encoder
-        m_motorConfig.Feedback.FeedbackRotorOffset = TurretConstants.kEncoderOffsetRad;
+        m_motorConfig.Feedback.FeedbackRotorOffset = m_unitConverter.fromSIPos(TurretConstants.kEncoderOffsetRad);
         m_motorConfig.Feedback.SensorToMechanismRatio = TurretConstants.kGearRatio;
 
         // Closed loop
@@ -67,6 +67,12 @@ public class TurretIOKraken implements TurretIO {
         m_motorConfig.MotionMagic.MotionMagicAcceleration = m_unitConverter.fromSIAccel(TurretConstants.kMaxAccelRadPerSec2);
         m_motorConfig.MotionMagic.MotionMagicJerk = m_unitConverter.fromSIJerk(TurretConstants.kMaxJerkRadPerSec3);
 
+        // Software Stops
+        m_motorConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = m_unitConverter.fromSIPos(TurretConstants.kMaxPositionRad);
+        m_motorConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+        m_motorConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = m_unitConverter.fromSIPos(TurretConstants.kMinPositionRad);
+        m_motorConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+
         // Apply configs
         m_motor.getConfigurator().apply(m_motorConfig);
 
@@ -81,6 +87,7 @@ public class TurretIOKraken implements TurretIO {
         m_voltageRequest = new VoltageOut(0)
             .withEnableFOC(TurretConstants.kEnableFOC);
         m_positionRequest = new MotionMagicVoltage(0)
+            .withSlot(0)
             .withEnableFOC(TurretConstants.kEnableFOC);
     }
 
@@ -97,6 +104,17 @@ public class TurretIOKraken implements TurretIO {
     }
 
     @Override
+    public void setSoftwareStops(boolean enabled) {
+        if (m_motorConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable == enabled) {
+            return;
+        }
+
+        m_motorConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = enabled;
+        m_motorConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = enabled;
+        m_motor.getConfigurator().apply(m_motorConfig.SoftwareLimitSwitch);
+    }
+
+    @Override
     public void updateInputs(TurretIOInputs inputs) {
         StatusSignal.refreshAll(
             m_voltageSignal,
@@ -108,8 +126,8 @@ public class TurretIOKraken implements TurretIO {
         
         inputs.motorAppliedVoltage = m_voltageSignal.getValueAsDouble();
         inputs.motorCurrentAmps = m_currentSignal.getValueAsDouble();
-        inputs.motorPositionRad = m_unitConverter.fromSIPos(m_motorPositionSignal.getValueAsDouble());
-        inputs.motorVelocityRadPerSec = m_unitConverter.fromSIVel(m_velocitySignal.getValueAsDouble());
+        inputs.motorPositionRad = m_unitConverter.toSIPos(m_motorPositionSignal.getValueAsDouble());
+        inputs.motorVelocityRadPerSec = m_unitConverter.toSIVel(m_velocitySignal.getValueAsDouble());
         inputs.motorTempDegC = m_temperatureSignal.getValueAsDouble();
     }
 }

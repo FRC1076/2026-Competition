@@ -20,4 +20,8 @@ public interface TurretIO {
     public abstract void setPosition(double positionRadians);
 
     public abstract void updateInputs(TurretIOInputs inputs);
+
+    public default void setSoftwareStops(boolean enabled) {
+        
+    }
 }
