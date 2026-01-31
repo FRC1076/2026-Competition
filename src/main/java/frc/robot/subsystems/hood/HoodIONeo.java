@@ -11,6 +11,7 @@ import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
@@ -40,20 +41,17 @@ public class HoodIONeo implements HoodIO {
             .setSparkMaxDataPortConfig()
             .inverted(true)
             .positionConversionFactor(HoodConstants.kPositionConversionFactor)
-            .velocityConversionFactor(HoodConstants.kVelocityConversionFactor);
+            .velocityConversionFactor(HoodConstants.kVelocityConversionFactor)
+            .zeroOffset(HoodConstants.kZeroOffsetRadians / (2*Math.PI));
 
-        m_leadMotorConfig.encoder 
-            .positionConversionFactor(HoodConstants.kPositionConversionFactor)
-            .velocityConversionFactor(HoodConstants.kVelocityConversionFactor);
-
-        m_leadMotor.configure(m_leadMotorConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
+        m_leadMotor.configure(m_leadMotorConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
 
         m_absoluteEncoder = m_leadMotor.getAbsoluteEncoder();
 
         m_pidController = new ProfiledPIDController(
             HoodConstants.kP,
             HoodConstants.kI,
-            HoodConstants.kV, 
+            HoodConstants.kD, 
             new Constraints(
                 HoodConstants.kMaxVelocityRadPerSec,
                 HoodConstants.kMaxAccelerationRadPerSec2
@@ -82,12 +80,12 @@ public class HoodIONeo implements HoodIO {
 
     @Override
     public void updateInputs (HoodIOInputs inputs) {
-        inputs.angleRadians = ((m_absoluteEncoder.getPosition()  - HoodConstants.kZeroOffsetRadians + Math.PI) % (2 * Math.PI) - Math.PI); // TODO: confirm this
+        inputs.angleRadians = MathUtil.angleModulus(m_absoluteEncoder.getPosition()); // TODO: confirm this
         inputs.velocityRadiansPerSecond = m_absoluteEncoder.getVelocity();
 
         if (pidEnabled) {
             m_leadMotor.setVoltage(
-                m_pidController.calculate(inputs.angleRadians) + m_feedforward.calculate(inputs.angleRadians, inputs.velocityRadiansPerSecond)
+                m_pidController.calculate(inputs.angleRadians) + m_feedforward.calculate(m_pidController.getSetpoint().position, m_pidController.getSetpoint().velocity)
             );
         }
 

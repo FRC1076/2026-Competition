@@ -4,6 +4,7 @@ import static edu.wpi.first.units.Units.Volts;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -13,6 +14,8 @@ public class HoodSubsystem extends SubsystemBase {
     private final HoodIO io;
     private final HoodIOInputsAutoLogged inputs = new HoodIOInputsAutoLogged();
     private final SysIdRoutine sysId;
+
+    private boolean applySoftwareStop = false;
 
     public HoodSubsystem(HoodIO io) {
         this.io = io;
@@ -24,7 +27,7 @@ public class HoodSubsystem extends SubsystemBase {
             ),
             new SysIdRoutine.Mechanism(
                 (voltage) -> io.setVoltage(voltage.in(Volts)),
-                null,
+                null, // TODO: do we need logging here?
                 this
             )
         );
@@ -34,6 +37,12 @@ public class HoodSubsystem extends SubsystemBase {
     public void periodic() {
         io.updateInputs(inputs);
         Logger.processInputs("Hood", inputs);
+
+        if (applySoftwareStop && inputs.angleRadians >= HoodConstants.kMaxHoodAngleRadians && inputs.appliedVolts > 0) {
+            io.setVoltage(0);
+        } else if (applySoftwareStop && inputs.angleRadians <= HoodConstants.kMinHoodAngleRadians && inputs.appliedVolts < 0) {
+            io.setVoltage(0);
+        }
     }
 
     @Override
@@ -42,21 +51,17 @@ public class HoodSubsystem extends SubsystemBase {
     }
 
     public Command applyVoltage(double volts) {
-        if (inputs.angleRadians >= HoodConstants.kMaxHoodAngleRadians && volts > 0) {
-            volts = 0;
-        } else if (inputs.angleRadians <= HoodConstants.kMinHoodAngleRadians && volts < 0) {
-            volts = 0;
-        }
-
-        final double voltage = volts;
+        applySoftwareStop = true;
 
         return Commands.runOnce(
-            () -> io.setVoltage(voltage),
+            () -> io.setVoltage(volts),
             this
         );
     }
 
     public Command applyVoltageUnrestricted(double volts) {
+        applySoftwareStop = false;
+
         return Commands.runOnce(
             () -> io.setVoltage(volts), 
             this
@@ -64,16 +69,10 @@ public class HoodSubsystem extends SubsystemBase {
     }
 
     public Command applyPosition(double radians) {
-        if (inputs.angleRadians > HoodConstants.kMaxHoodAngleRadians) {
-            radians = HoodConstants.kMaxHoodAngleRadians;
-        } else if (inputs.angleRadians < HoodConstants.kMinHoodAngleRadians) {
-            radians = HoodConstants.kMinHoodAngleRadians;
-        }
-
-        final double targetRadians = radians;
+        applySoftwareStop = true;
 
         return Commands.runOnce(
-            () -> io.setPosition(targetRadians), 
+            () -> io.setPosition(MathUtil.clamp(radians, HoodConstants.kMinHoodAngleRadians, HoodConstants.kMaxHoodAngleRadians)), 
             this
         );
     }

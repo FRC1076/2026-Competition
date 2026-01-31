@@ -16,10 +16,10 @@ public class HoodConstants {
     public static final double kMinHoodAngleRadians = 0;
     public static final double hoodAngleToleranceRadians = 0.1;
     
-    // Encoder stuff
-    public static final double kGearRatio = 1;
-    public static final double kPositionConversionFactor = 2 * Math.PI * kGearRatio;
-    public static final double kVelocityConversionFactor = kPositionConversionFactor * 60;
+    // Absolute encoder stuff
+    public static final double kEncoderGearRatio = 1;
+    public static final double kPositionConversionFactor = 2 * Math.PI * kEncoderGearRatio;
+    public static final double kVelocityConversionFactor = kPositionConversionFactor / 60;
     public static final double kZeroOffsetRadians = 0;
 
     // PID
