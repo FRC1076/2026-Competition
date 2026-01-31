@@ -19,7 +19,7 @@ public class FlywheelConstants {
     public static final double kManualFlywheelVolts = 12;
     public static final double kManualReverseVolts = 4;
 
-    public static final InvertedValue kInverted = InvertedValue.Clockwise_Positive;
+    public static final InvertedValue kInverted = InvertedValue.CounterClockwise_Positive;
     public static final NeutralModeValue kNeutralMode = NeutralModeValue.Brake;
 
 

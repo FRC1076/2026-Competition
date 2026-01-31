@@ -45,7 +45,7 @@ public class FlywheelIOKraken implements FlywheelIO {
 
         // Configure voltage and current limits
         m_motorConfig.Voltage.PeakForwardVoltage = FlywheelConstants.kMaxVoltage;
-        m_motorConfig.Voltage.PeakForwardVoltage = -1 * FlywheelConstants.kMaxVoltage;
+        m_motorConfig.Voltage.PeakReverseVoltage = -1 * FlywheelConstants.kMaxVoltage;
         m_motorConfig.CurrentLimits.StatorCurrentLimit = FlywheelConstants.kStatorCurrentLimit;
         m_motorConfig.CurrentLimits.SupplyCurrentLimit = FlywheelConstants.kSupplyCurrentLimit;
 
@@ -73,15 +73,15 @@ public class FlywheelIOKraken implements FlywheelIO {
         m_temperatureSignal = m_motor.getDeviceTemp();
 
         m_voltageRequest = new VoltageOut(0)
-            .withEnableFOC(FlywheelConstants.kEnableFOC);
+            .withEnableFOC(FlywheelConstants.kEnableFOC)
+            .withOverrideBrakeDurNeutral(true);
         m_velocityRequest = new MotionMagicVelocityTorqueCurrentFOC(0);
     }
 
     @Override
     public void setVoltage(double volts) {
         // Set the voltage of the motor
-        m_voltageRequest.withOutput(volts);
-        m_motor.setControl(m_voltageRequest);
+        m_motor.setVoltage(volts);
     }
 
     @Override

@@ -17,7 +17,7 @@ public class TurretConstants {
     public static final double kSupplyCurrentLimitAmps = 40;
 
     // Manual control
-    public static final double kMaxManualControlVolts = 4;
+    public static final double kMaxManualControlVolts = 0.5;
 
     // If inverted and brake mode
     public static final InvertedValue kInvertedValue = InvertedValue.Clockwise_Positive;

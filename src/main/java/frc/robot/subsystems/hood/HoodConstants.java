@@ -6,7 +6,7 @@ public class HoodConstants {
 
     // Voltage and current limits
     public static final double kSmartCurrentLimit = 10;
-    public static final double kMaxOperatorControlVolts = 10;
+    public static final double kMaxOperatorControlVolts = 5;
 
     // Inverted
     public static final boolean kMotorInverted = false;

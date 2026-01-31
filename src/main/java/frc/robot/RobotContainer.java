@@ -13,6 +13,7 @@ import frc.robot.commands.drive.TeleopDriveCommand;
 import frc.robot.subsystems.Elastic;
 import frc.robot.subsystems.drive.DriveIOHardware;
 import frc.robot.subsystems.drive.DriveIOSim;
+import frc.robot.subsystems.drive.DriveIODisabled;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.TunerConstants;
 import frc.robot.subsystems.flywheel.FlywheelIODisabled;
@@ -77,14 +78,15 @@ public class RobotContainer {
 
         if (SystemConstants.kMode == RobotMode.REAL) {
             m_drive = new DriveSubsystem(
-                new DriveIOHardware(TunerConstants.createDrivetrain()),
+                //new DriveIOHardware(TunerConstants.createDrivetrain()),
+                new DriveIODisabled(),
                 m_vision,
                 m_elastic
             );
             m_turret = new TurretSubsystem(new TurretIOKraken());
             m_flywheel = new FlywheelSubsystem(new FlywheelIOKraken());
             m_hood = new HoodSubsystem(new HoodIONeo());
-            m_rollers = new RollerSubsystem(new RollerIOKraken());
+            m_rollers = new RollerSubsystem(new RollerIODisabled());
 
             for (PhotonConfig config : PhotonConfig.values()) {
                 PhotonCamera cam = new PhotonCamera(config.name);
@@ -162,23 +164,23 @@ public class RobotContainer {
     /** Bind triggers on operator controller to commands */
     private void configureOperatorBindings() {
         m_operatorController.leftActive()
-            .whileTrue(m_turret.applyVoltage(
-                    m_operatorController.getLeftX() * TurretConstants.kMaxManualControlVolts))
-            .onFalse(m_turret.applyVoltage(0));
+            .whileTrue(m_turret.applyVoltageUnrestricted(
+                    m_operatorController.getLeftX() * TurretConstants.kMaxManualControlVolts));
+            //.onFalse(m_turret.applyVoltageUnrestricted(0));
 
         m_operatorController.rightActive()
-            .whileTrue(m_hood.applyVoltage(
-                m_operatorController.getRightY() * HoodConstants.kMaxOperatorControlVolts))
-            .onFalse(m_hood.applyVoltage(0));
+            .whileTrue(m_hood.applyVoltageUnrestricted(
+                m_operatorController.getRightY() * HoodConstants.kMaxOperatorControlVolts));
+            //.onFalse(m_hood.applyVoltageUnrestricted(0)); 
 
         m_operatorController.a()
             .onTrue(m_flywheel.applyVoltage(0));
         
         m_operatorController.b()
-            .onTrue(m_flywheel.applyVoltage(4));
+            .onTrue(m_flywheel.applyVoltage(6));
 
         m_operatorController.x()
-            .onTrue(m_flywheel.applyVoltage(8));
+            .onTrue(m_flywheel.applyVoltage(9));
 
         m_operatorController.y()
             .onTrue(m_flywheel.applyVoltage(12));
