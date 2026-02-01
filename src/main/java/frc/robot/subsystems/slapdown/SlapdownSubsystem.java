@@ -4,6 +4,8 @@ import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
+import java.util.function.DoubleSupplier;
+
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.MathUtil;
@@ -58,6 +60,7 @@ public class SlapdownSubsystem extends SubsystemBase{
         Logger.recordOutput("Slapdown/SoftwareStopsEnabled", softwareStopsEnabled);
     }
 
+    /** Set the voltage applied to the motor with software stops enabled */
     public Command applyVoltage(double volts) {
         softwareStopsEnabled = true;
 
@@ -67,6 +70,17 @@ public class SlapdownSubsystem extends SubsystemBase{
         );
     }
 
+    /** Run the motor at the supplied voltage with software stops enabled */
+    public Command runVoltage(DoubleSupplier volts) {
+        softwareStopsEnabled = true;
+
+        return Commands.run(
+            () -> io.setVoltage(volts.getAsDouble()),
+            this
+        );
+    }
+
+    /** Set the motor to the specified voltage with software stops enabled */
     public Command applyVoltageUnrestricted(double volts) {
         softwareStopsEnabled = false;
         
@@ -76,11 +90,32 @@ public class SlapdownSubsystem extends SubsystemBase{
         );
     }
 
+    /** Run the motor at the supplied voltage with software stops disabled */
+    public Command runVoltageUnrestricted(DoubleSupplier volts) {
+        softwareStopsEnabled = false;
+        
+        return Commands.run(
+            () -> io.setVoltage(volts.getAsDouble()),
+            this
+        );
+    }
+
+    /** Tell the slapdown to go to the specified position */
     public Command applyPosition(double radians) {
         softwareStopsEnabled = true;
 
         return Commands.runOnce(
             () -> io.setPosition(MathUtil.clamp(radians, SlapdownConstants.kMinAngleRadians, SlapdownConstants.kMaxAngleRadians)),
+            this
+        );
+    }
+
+    /** Run the slapdown to the supplied position */
+    public Command runPosition(DoubleSupplier radians) {
+        softwareStopsEnabled = true;
+
+        return Commands.run(
+            () -> io.setPosition(MathUtil.clamp(radians.getAsDouble(), SlapdownConstants.kMinAngleRadians, SlapdownConstants.kMaxAngleRadians)),
             this
         );
     }

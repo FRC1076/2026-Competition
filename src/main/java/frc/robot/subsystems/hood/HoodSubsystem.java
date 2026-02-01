@@ -4,6 +4,8 @@ import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
+import java.util.function.DoubleSupplier;
+
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.MathUtil;
@@ -52,6 +54,7 @@ public class HoodSubsystem extends SubsystemBase {
         }
     }
 
+    /** Set the motor to a voltage with software stops enabled */
     public Command applyVoltage(double volts) {
         applySoftwareStop = true;
 
@@ -61,6 +64,17 @@ public class HoodSubsystem extends SubsystemBase {
         );
     }
 
+    /** Run the motor at the supplied voltage with software stops enabled */
+    public Command runVoltage(DoubleSupplier volts) {
+        applySoftwareStop = true;
+
+        return Commands.run(
+            () -> io.setVoltage(volts.getAsDouble()),
+            this
+        );
+    }
+
+    /** Set the motor to a voltage with software stops disabled */
     public Command applyVoltageUnrestricted(double volts) {
         applySoftwareStop = false;
 
@@ -70,11 +84,32 @@ public class HoodSubsystem extends SubsystemBase {
         );
     }
 
+    /** Run the motor at the supplied voltage with software stops disabled */
+    public Command runVoltageUnrestricted(DoubleSupplier volts) {
+        applySoftwareStop = false;
+
+        return Commands.run(
+            () -> io.setVoltage(volts.getAsDouble()), 
+            this
+        );
+    }
+
+    /** Apply a position to the hood */
     public Command applyPosition(double radians) {
         applySoftwareStop = true;
 
         return Commands.runOnce(
             () -> io.setPosition(MathUtil.clamp(radians, HoodConstants.kMinHoodAngleRadians, HoodConstants.kMaxHoodAngleRadians)), 
+            this
+        );
+    }
+
+    /** Repeatedly tell the hood to go to a position based on the supplier */
+    public Command runPosition(DoubleSupplier radians) {
+        applySoftwareStop = true;
+
+        return Commands.run(
+            () -> io.setPosition(MathUtil.clamp(radians.getAsDouble(), HoodConstants.kMinHoodAngleRadians, HoodConstants.kMaxHoodAngleRadians)), 
             this
         );
     }

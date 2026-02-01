@@ -1,5 +1,7 @@
 package frc.robot.subsystems.spindexer;
 
+import java.util.function.DoubleSupplier;
+
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -23,6 +25,13 @@ public class SpindexerSubsystem extends SubsystemBase{
     public Command applyVoltage(double volts) {
         return Commands.runOnce(
             () -> io.setVoltage(volts),
+            this
+        );
+    }
+
+    public Command runVoltage(DoubleSupplier volts) {
+        return Commands.run(
+            () -> io.setVoltage(volts.getAsDouble()),
             this
         );
     }

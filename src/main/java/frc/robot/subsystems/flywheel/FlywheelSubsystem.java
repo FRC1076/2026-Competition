@@ -5,6 +5,8 @@ import org.littletonrobotics.junction.Logger;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -51,14 +53,36 @@ public class FlywheelSubsystem extends SubsystemBase {
         Logger.processInputs("Flywheel", inputs);
     }
 
-    // Make command to set voltage
+    /** Set the voltage of the motor */
     public Command applyVoltage(double volts) {
-        return Commands.runOnce(() -> io.setVoltage(volts), this);
+        return Commands.runOnce(
+            () -> io.setVoltage(volts),
+            this
+        );
     }
 
-    // Make command to set velocity in radians per second
-    public Command applyVelocityPerSec(double velocity) {
-        return Commands.runOnce(() -> io.setVelocityRadPerSec(velocity), this);
+    /** Run the motor at the supplied voltage */
+    public Command runVoltage(DoubleSupplier volts) {
+        return Commands.run(
+            () -> io.setVoltage(volts.getAsDouble()),
+            this
+        );
+    }
+
+    /** Tell the flywheel to run at the specified velocity */
+    public Command applyVelocityPerSec(double radPerSec) {
+        return Commands.runOnce(
+            () -> io.setVelocityRadPerSec(radPerSec),
+            this
+        );
+    }
+
+    /** Run the wheel at the supplied velocity */
+    public Command applyVelocityPerSec(DoubleSupplier radPerSec) {
+        return Commands.runOnce(
+            () -> io.setVelocityRadPerSec(radPerSec.getAsDouble()),
+            this
+        );
     }
 
     // Make SysId quasistatic and dynamic commands

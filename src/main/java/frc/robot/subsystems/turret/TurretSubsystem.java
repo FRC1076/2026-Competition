@@ -5,6 +5,8 @@ import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Volts;
 
+import java.util.function.DoubleSupplier;
+
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -57,12 +59,32 @@ public class TurretSubsystem extends SubsystemBase {
         );
     }
 
-    /** Apply a voltage to the motor with software stops disabeld */
+    /** Run the motor at a voltage with software stops enabled */
+    public Command runVoltage(DoubleSupplier volts) {
+        io.setSoftwareStops(true);
+
+        return Commands.runOnce(
+            () -> io.setVoltage(volts.getAsDouble()),
+            this
+        );
+    }
+
+    /** Apply a voltage to the motor with software stops disabled */
     public Command applyVoltageUnrestricted(double volts) {
         io.setSoftwareStops(false);
 
         return Commands.runOnce(
             () -> io.setVoltage(volts), 
+            this
+        );
+    }
+
+    /** Run the motor at a voltage with software stops disabled */
+    public Command runVoltageUnrestricted(DoubleSupplier volts) {
+        io.setSoftwareStops(false);
+
+        return Commands.runOnce(
+            () -> io.setVoltage(volts.getAsDouble()), 
             this
         );
     }
@@ -73,6 +95,16 @@ public class TurretSubsystem extends SubsystemBase {
 
         return Commands.runOnce(
             () -> io.setPosition(radians),
+            this
+        );
+    }
+
+    /** Repeatedly tell the motor to go to a specific position */
+    public Command runPosition(DoubleSupplier radians) {
+        io.setSoftwareStops(true);
+
+        return Commands.runOnce(
+            () -> io.setPosition(radians.getAsDouble()),
             this
         );
     }

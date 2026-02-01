@@ -6,6 +6,8 @@ import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -46,6 +48,7 @@ public class ClimberSubsystem extends SubsystemBase {
         Logger.processInputs("Climber", inputs);
     }
 
+    /** Set the motor to the specified voltage */
     public Command applyVoltage(double volts) {
         return Commands.runOnce(
             () -> io.setVoltage(volts),
@@ -53,9 +56,26 @@ public class ClimberSubsystem extends SubsystemBase {
         );
     }
 
+    /** Run the motor at the supplied voltage */
+    public Command runVoltage(DoubleSupplier volts) {
+        return Commands.run(
+            () -> io.setVoltage(volts.getAsDouble()),
+            this
+        );
+    }
+
+    /** Tell the climber to go to the specified position */
     public Command applyPosition(double meters) {
         return Commands.runOnce(
             () -> io.setPosition(meters),
+            this
+        );
+    }
+
+    /** Run the climber at the supplied position */
+    public Command runPosition(DoubleSupplier meters) {
+        return Commands.run(
+            () -> io.setPosition(meters.getAsDouble()),
             this
         );
     }

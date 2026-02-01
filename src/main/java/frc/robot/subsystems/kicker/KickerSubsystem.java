@@ -1,5 +1,7 @@
 package frc.robot.subsystems.kicker;
 
+import java.util.function.DoubleSupplier;
+
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -21,14 +23,21 @@ public class KickerSubsystem extends SubsystemBase {
         Logger.processInputs("Kicker", inputs);
     }
 
-    public Command setVoltage(double volts) {
+    public Command applyVoltage(double volts) {
         return Commands.runOnce(
             () -> io.setVoltage(volts),
             this
         );
     }
 
+    public Command runVoltage(DoubleSupplier volts) {
+        return Commands.run(
+            () -> io.setVoltage(volts.getAsDouble()),
+            this
+        );
+    }
+
     public Command stop() {
-        return setVoltage(0);
+        return applyVoltage(0);
     }
 }

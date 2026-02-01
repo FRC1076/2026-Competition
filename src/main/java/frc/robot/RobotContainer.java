@@ -187,13 +187,13 @@ public class RobotContainer {
     /** Bind triggers on operator controller to commands */
     private void configureOperatorBindings() {
         m_operatorController.leftActive()
-            .whileTrue(m_turret.applyVoltageUnrestricted(
-                    m_operatorController.getLeftX() * TurretConstants.kMaxManualControlVolts))
+            .whileTrue(m_turret.runVoltageUnrestricted(
+                () -> -m_operatorController.getLeftX() * TurretConstants.kMaxManualControlVolts))
             .onFalse(m_turret.applyVoltageUnrestricted(0));
 
         m_operatorController.rightActive()
-            .whileTrue(m_hood.applyVoltageUnrestricted(
-                m_operatorController.getRightY() * HoodConstants.kMaxOperatorControlVolts))
+            .whileTrue(m_hood.runVoltageUnrestricted(
+                () -> -m_operatorController.getRightY() * HoodConstants.kMaxOperatorControlVolts))
             .onFalse(m_hood.applyVoltageUnrestricted(0)); 
 
         m_operatorController.a()
