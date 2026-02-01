@@ -7,6 +7,7 @@ public interface RollerIO {
     public static class RollerIOInputs {
         public double appliedVoltage = 0;
         public double currentAmps = 0;
+        public double velocityRadPerSec;
         public double motorTempDegC = 0;
     }
 

@@ -13,7 +13,7 @@ public class TurretConstants {
 
     // Voltage and current limits
     public static final double kMaxVoltage = 12;
-    public static final double kStatorCurrentLimitAmps = 50;
+    public static final double kStatorCurrentLimitAmps = 40;
     public static final double kSupplyCurrentLimitAmps = 30;
 
     // Manual control
