@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.SystemConstants;
@@ -56,7 +57,7 @@ public class Robot extends LoggedRobot {
                 break;
         }
         
-        if (SystemConstants.kMode == RobotMode.REAL) {
+        if (SystemConstants.kMode == RobotMode.REAL || RobotBase.isReal()) {
             Logger.addDataReceiver(new WPILOGWriter()); // Log to a USB stick ("/U/logs")
             Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
         } else if (SystemConstants.kMode == RobotMode.SIM) {

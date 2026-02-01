@@ -13,7 +13,6 @@ import frc.robot.commands.drive.TeleopDriveCommand;
 import frc.robot.subsystems.Elastic;
 import frc.robot.subsystems.drive.DriveIOHardware;
 import frc.robot.subsystems.drive.DriveIOSim;
-import frc.robot.subsystems.drive.DriveIODisabled;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.TunerConstants;
 import frc.robot.subsystems.flywheel.FlywheelIODisabled;
@@ -23,9 +22,18 @@ import frc.robot.subsystems.hood.HoodConstants;
 import frc.robot.subsystems.hood.HoodIODisabled;
 import frc.robot.subsystems.hood.HoodIONeo;
 import frc.robot.subsystems.hood.HoodSubsystem;
+import frc.robot.subsystems.kicker.KickerIODisabled;
+import frc.robot.subsystems.kicker.KickerIONeo;
+import frc.robot.subsystems.kicker.KickerSubsystem;
 import frc.robot.subsystems.roller.RollerIODisabled;
 import frc.robot.subsystems.roller.RollerIOKraken;
 import frc.robot.subsystems.roller.RollerSubsystem;
+import frc.robot.subsystems.slapdown.SlapdownIODisabled;
+import frc.robot.subsystems.slapdown.SlapdownIONeo;
+import frc.robot.subsystems.slapdown.SlapdownSubsystem;
+import frc.robot.subsystems.spindexer.SpindexerIODisabled;
+import frc.robot.subsystems.spindexer.SpindexerIOKraken;
+import frc.robot.subsystems.spindexer.SpindexerSubsystem;
 import frc.robot.subsystems.turret.TurretConstants;
 import frc.robot.subsystems.turret.TurretIODisabled;
 import frc.robot.subsystems.turret.TurretIOKraken;
@@ -37,6 +45,7 @@ import lib.vision.VisionLocalizationSystem;
 
 import org.photonvision.PhotonCamera;
 
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Threads;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -53,10 +62,16 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private final DriveSubsystem m_drive;
+
     private final TurretSubsystem m_turret;
     private final FlywheelSubsystem m_flywheel;
     private final HoodSubsystem m_hood;
+
     private final RollerSubsystem m_rollers;
+    private final SlapdownSubsystem m_slapdown;
+    private final SpindexerSubsystem m_spindexer;
+    private final KickerSubsystem m_kicker;
+
     private final VisionLocalizationSystem m_vision;
 
     private final Elastic m_elastic;
@@ -76,17 +91,20 @@ public class RobotContainer {
         m_vision = new VisionLocalizationSystem();
         m_elastic = new Elastic();
 
-        if (SystemConstants.kMode == RobotMode.REAL) {
+        if (SystemConstants.kMode == RobotMode.REAL || RobotBase.isReal()) {
             m_drive = new DriveSubsystem(
-                //new DriveIOHardware(TunerConstants.createDrivetrain()),
-                new DriveIODisabled(),
+                new DriveIOHardware(TunerConstants.createDrivetrain()),
                 m_vision,
                 m_elastic
             );
             m_turret = new TurretSubsystem(new TurretIOKraken());
             m_flywheel = new FlywheelSubsystem(new FlywheelIOKraken());
             m_hood = new HoodSubsystem(new HoodIONeo());
-            m_rollers = new RollerSubsystem(new RollerIODisabled());
+
+            m_rollers = new RollerSubsystem(new RollerIOKraken());
+            m_slapdown = new SlapdownSubsystem(new SlapdownIONeo());
+            m_spindexer = new SpindexerSubsystem(new SpindexerIOKraken());
+            m_kicker = new KickerSubsystem(new KickerIONeo());
 
             for (PhotonConfig config : PhotonConfig.values()) {
                 PhotonCamera cam = new PhotonCamera(config.name);
@@ -107,10 +125,15 @@ public class RobotContainer {
                 m_vision,
                 m_elastic
             );
+
             m_turret = new TurretSubsystem(new TurretIODisabled());
             m_flywheel = new FlywheelSubsystem(new FlywheelIODisabled());
             m_hood = new HoodSubsystem(new HoodIODisabled());
+
             m_rollers = new RollerSubsystem(new RollerIODisabled());
+            m_slapdown = new SlapdownSubsystem(new SlapdownIODisabled());
+            m_spindexer = new SpindexerSubsystem(new SpindexerIODisabled());
+            m_kicker = new KickerSubsystem(new KickerIODisabled());
         }
 
         teleopDriveCommand = new TeleopDriveCommand(
@@ -165,13 +188,13 @@ public class RobotContainer {
     private void configureOperatorBindings() {
         m_operatorController.leftActive()
             .whileTrue(m_turret.applyVoltageUnrestricted(
-                    m_operatorController.getLeftX() * TurretConstants.kMaxManualControlVolts));
-            //.onFalse(m_turret.applyVoltageUnrestricted(0));
+                    m_operatorController.getLeftX() * TurretConstants.kMaxManualControlVolts))
+            .onFalse(m_turret.applyVoltageUnrestricted(0));
 
         m_operatorController.rightActive()
             .whileTrue(m_hood.applyVoltageUnrestricted(
-                m_operatorController.getRightY() * HoodConstants.kMaxOperatorControlVolts));
-            //.onFalse(m_hood.applyVoltageUnrestricted(0)); 
+                m_operatorController.getRightY() * HoodConstants.kMaxOperatorControlVolts))
+            .onFalse(m_hood.applyVoltageUnrestricted(0)); 
 
         m_operatorController.a()
             .onTrue(m_flywheel.applyVoltage(0));
