@@ -5,10 +5,8 @@ import org.littletonrobotics.junction.AutoLog;
 public interface SlapdownIO {
     @AutoLog
     public static class SlapdownIOInputs {
-
         public double appliedVoltage = 0;
         public double currentAmps = 0;
-        public double appliedOutput = 0;
 
         public double motorCurrent = 0;
 
@@ -22,6 +20,7 @@ public interface SlapdownIO {
 
     public abstract void updateInputs(SlapdownIOInputs inputs);
 
-    public abstract void stop();
+    public default void periodic() {
 
+    }
 }

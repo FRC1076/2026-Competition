@@ -20,9 +20,4 @@ public class SlapdownIODisabled implements SlapdownIO {
         inputs.appliedVoltage = voltageTarget;
         inputs.angleRadians = positionTarget;
     }
-
-    @Override
-    public void stop() {
-        this.setVoltage(0.0);
-    }
 }

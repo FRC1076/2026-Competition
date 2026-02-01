@@ -1,9 +1,12 @@
 package frc.robot.subsystems.slapdown;
 
+import static edu.wpi.first.units.Units.Radians;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -14,6 +17,8 @@ public class SlapdownSubsystem extends SubsystemBase{
     private final SlapdownIO io;
     private final SlapdownIOInputsAutoLogged inputs = new SlapdownIOInputsAutoLogged();
     private final SysIdRoutine sysId;
+
+    private boolean softwareStopsEnabled = true;
 
     public SlapdownSubsystem(SlapdownIO io) {
         this.io = io;
@@ -26,7 +31,11 @@ public class SlapdownSubsystem extends SubsystemBase{
 
             new SysIdRoutine.Mechanism(
                 (voltage) -> io.setVoltage(voltage.in(Volts)),
-                null,
+                (log) ->
+                    log.motor("Slapdown Neo")
+                        .voltage(Volts.of(inputs.appliedVoltage))
+                        .angularPosition(Radians.of(inputs.angleRadians))
+                        .angularVelocity(RadiansPerSecond.of(inputs.velocityRadiansPerSecond)),
                 this 
                 
             )
@@ -35,43 +44,43 @@ public class SlapdownSubsystem extends SubsystemBase{
 
     @Override
     public void periodic() {
+        if (softwareStopsEnabled) {
+            if (inputs.angleRadians >= SlapdownConstants.kMaxAngleRadians && inputs.appliedVoltage > 0) {
+                io.setVoltage(0);
+            } else if (inputs.angleRadians <= SlapdownConstants.kMinAngleRadians && inputs.appliedVoltage < 0) {
+                io.setVoltage(0);
+            }
+        }
+
         io.updateInputs(inputs);
         Logger.processInputs("Slapdown", inputs);
+
+        Logger.recordOutput("Slapdown/SoftwareStopsEnabled", softwareStopsEnabled);
     }
 
     public Command applyVoltage(double volts) {
-        if (inputs.angleRadians >= SlapdownConstants.kMaxAngleRadians && volts > 0) {
-            volts = 0;
-        } else if (inputs.angleRadians <= SlapdownConstants.kMinAngleRadians && volts < 0) {
-            volts = 0;
-        }
+        softwareStopsEnabled = true;
 
-        final double voltage = volts;
-
-        return Commands.runOnce(
-            () -> io.setVoltage(voltage),
-            this
-        );
-    }
-
-    public Command applyVoltageUnrestricted(double volts){
         return Commands.runOnce(
             () -> io.setVoltage(volts),
             this
         );
     }
 
-    public Command applyPosition(double positionRadians) {
-        if (positionRadians > SlapdownConstants.kMaxAngleRadians) {
-            positionRadians = SlapdownConstants.kMaxAngleRadians;
-        } else if (positionRadians < SlapdownConstants.kMaxAngleRadians) {
-            positionRadians = SlapdownConstants.kMinAngleRadians;
-        }
+    public Command applyVoltageUnrestricted(double volts) {
+        softwareStopsEnabled = false;
+        
+        return Commands.runOnce(
+            () -> io.setVoltage(volts),
+            this
+        );
+    }
 
-        final double radianTarget = positionRadians;
+    public Command applyPosition(double radians) {
+        softwareStopsEnabled = true;
 
         return Commands.runOnce(
-            () -> io.setPosition(radianTarget),
+            () -> io.setPosition(MathUtil.clamp(radians, SlapdownConstants.kMinAngleRadians, SlapdownConstants.kMaxAngleRadians)),
             this
         );
     }

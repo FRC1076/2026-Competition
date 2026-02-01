@@ -42,7 +42,7 @@ public class SlapdownIONeo implements SlapdownIO {
             .velocityConversionFactor(SlapdownConstants.kVelocityConversionFactor);
 
         // configure motors
-        m_motor.configure(m_motorConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
+        m_motor.configure(m_motorConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
 
         m_relativeEncoder = m_motor.getEncoder();
 
@@ -68,29 +68,25 @@ public class SlapdownIONeo implements SlapdownIO {
     }
 
     @Override
-    public void updateInputs(SlapdownIOInputs inputs) {
-        inputs.velocityRadiansPerSecond = m_relativeEncoder.getVelocity();
-        inputs.angleRadians = m_relativeEncoder.getPosition();
-
+    public void periodic() {
         if (PIDEnabled){
             m_motor.setVoltage(
-                m_profiledPIDController.calculate(inputs.velocityRadiansPerSecond) +
-                m_feedForwardController.calculate(inputs.angleRadians,inputs.velocityRadiansPerSecond)
+                m_profiledPIDController.calculate(m_relativeEncoder.getPosition()) +
+                m_feedForwardController.calculate(m_profiledPIDController.getSetpoint().position, m_profiledPIDController.getSetpoint().velocity)
             );
-         } 
-
-        inputs.appliedVoltage = m_motor.getAppliedOutput() * m_motor.getBusVoltage();
-        inputs.currentAmps = m_motor.getOutputCurrent();
-
-        Logger.recordOutput("Slapdown/PIDTargetRadians", m_profiledPIDController.getGoal());
-        Logger.recordOutput("Slapdown/PIDEnabled", PIDEnabled);        
+        } 
     }
 
     @Override
-    public void stop() {
-        PIDEnabled = false;
-        this.setVoltage(0);
+    public void updateInputs(SlapdownIOInputs inputs) {
+        inputs.appliedVoltage = m_motor.getAppliedOutput() * m_motor.getBusVoltage();
+        inputs.currentAmps = m_motor.getOutputCurrent();
 
+        inputs.angleRadians = m_relativeEncoder.getPosition();
+        inputs.velocityRadiansPerSecond = m_relativeEncoder.getVelocity();
+
+        Logger.recordOutput("Slapdown/PIDTargetRadians", m_profiledPIDController.getGoal());
+        Logger.recordOutput("Slapdown/PIDEnabled", PIDEnabled);        
     }
 
     @Override 

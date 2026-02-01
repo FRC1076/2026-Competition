@@ -28,7 +28,8 @@ public class SlapdownConstants {
 
     public static final boolean kMotorInverted = false;
 
-    public static final double kPositionConversionFactor = 2 * Math.PI;
+    public static final double kGearRatio = 25;
+    public static final double kPositionConversionFactor = 2 * Math.PI / kGearRatio;
     public static final double kVelocityConversionFactor = 2 * Math.PI / 60;
     public static final double kInitialPosition = Math.PI / 2;
 }
