@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class SamuraiPS5Controller extends CommandPS5Controller {
-    public static double kDefaultStickDeadband = 0.02;
+    public static double kDefaultStickDeadband = 0.05;
 
     private double stickDeadband;
 

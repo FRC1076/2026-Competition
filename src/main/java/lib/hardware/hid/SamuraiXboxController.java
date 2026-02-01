@@ -11,8 +11,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class SamuraiXboxController extends CommandXboxController {
-    public static double kDefaultStickDeadband = 0.02;
-    public static double kDefaultTriggerThreshold = 0.7;
+    public static double kDefaultStickDeadband = 0.05;
+    public static double kDefaultTriggerThreshold = 0.5;
 
     private double stickDeadband;
     private double triggerThreshold;
