@@ -1,12 +1,11 @@
 package frc.robot.subsystems.spindexer;
- //no servo,volecity,magicmotion, colsed loop
-
-import static edu.wpi.first.units.Units.Volts;
 
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
@@ -18,10 +17,11 @@ public class SpindexerIOKraken implements SpindexerIO {
     //Status Signals 
     private final StatusSignal<Voltage> m_voltageSignal;
     private final StatusSignal<Current> m_currentSignal;
+    private final StatusSignal<AngularVelocity> m_velocitySignal;
     private final StatusSignal<Temperature> m_temperatureSignal;
 
     public SpindexerIOKraken() {
-        m_motor = new TalonFX(SpindexerConstants.kMotorPort);
+        m_motor = new TalonFX(SpindexerConstants.kCANId, SpindexerConstants.kCANBus);
 
         m_motorConfig = new TalonFXConfiguration();
         
@@ -29,13 +29,18 @@ public class SpindexerIOKraken implements SpindexerIO {
         m_motorConfig.Voltage.PeakForwardVoltage = 12;
         m_motorConfig.Voltage.PeakReverseVoltage = -12;
         m_motorConfig.CurrentLimits.SupplyCurrentLimit = SpindexerConstants.kSupplyCurrentLimit;
+        m_motorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
         m_motorConfig.CurrentLimits.StatorCurrentLimit = SpindexerConstants.kStatorCurrentLimit;
+        m_motorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 
-        // inverted?
+        // Inverted
         m_motorConfig.MotorOutput.Inverted = SpindexerConstants.kInverted;
 
-        //set brake mode
+        // Set brake mode
         m_motorConfig.MotorOutput.NeutralMode = SpindexerConstants.kNeutralMode;
+
+        // Gear ratio
+        m_motorConfig.Feedback.SensorToMechanismRatio = SpindexerConstants.kGearRatio;
 
         //closed loop 
         m_motor.getConfigurator().apply(m_motorConfig);
@@ -43,6 +48,7 @@ public class SpindexerIOKraken implements SpindexerIO {
         // Set uo Satus signals 
         m_voltageSignal = m_motor.getMotorVoltage();
         m_currentSignal = m_motor.getTorqueCurrent();
+        m_velocitySignal = m_motor.getVelocity();
         m_temperatureSignal = m_motor.getDeviceTemp();
 
     }
@@ -60,8 +66,9 @@ public class SpindexerIOKraken implements SpindexerIO {
             m_temperatureSignal
         );
 
-        inputs.appliedVoltage = m_voltageSignal.getValue().in(Volts);
+        inputs.appliedVoltage = m_voltageSignal.getValueAsDouble();
         inputs.currentAmps = m_currentSignal.getValueAsDouble();
+        inputs.velocityRadPerSec = Units.rotationsPerMinuteToRadiansPerSecond(m_velocitySignal.getValueAsDouble());
         inputs.motorTempDegC = m_temperatureSignal.getValueAsDouble();
     }
 }   

@@ -1,5 +1,7 @@
 package frc.robot.subsystems.hood;
 
+import static edu.wpi.first.units.Units.Radians;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
 import org.littletonrobotics.junction.Logger;
@@ -27,7 +29,11 @@ public class HoodSubsystem extends SubsystemBase {
             ),
             new SysIdRoutine.Mechanism(
                 (voltage) -> io.setVoltage(voltage.in(Volts)),
-                null, // TODO: do we need logging here?
+                (log) ->
+                    log.motor("Hood Neo 550")
+                    .voltage(Volts.of(inputs.appliedVolts))
+                    .angularPosition(Radians.of(inputs.angleRadians))
+                    .angularVelocity(RadiansPerSecond.of(inputs.velocityRadiansPerSecond)),
                 this
             )
         );

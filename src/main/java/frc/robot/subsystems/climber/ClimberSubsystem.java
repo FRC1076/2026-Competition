@@ -2,6 +2,8 @@ package frc.robot.subsystems.climber;
 
 import org.littletonrobotics.junction.Logger;
 
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -25,7 +27,11 @@ public class ClimberSubsystem extends SubsystemBase {
             ),
             new SysIdRoutine.Mechanism(
                 (voltage) -> io.setVoltage(voltage.in(Volts)), 
-                null, 
+                (log) -> 
+                    log.motor("Climber Neo")
+                    .voltage(Volts.of(inputs.appliedVoltage))
+                    .linearPosition(Meters.of(inputs.positionMeters))
+                    .linearVelocity(MetersPerSecond.of(inputs.velocityMPS)), 
                 this
             )
         );

@@ -1,5 +1,7 @@
 package frc.robot.subsystems.turret;
 
+import static edu.wpi.first.units.Units.Radians;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Volts;
 
@@ -28,7 +30,11 @@ public class TurretSubsystem extends SubsystemBase {
             ), 
             new SysIdRoutine.Mechanism(
                 (voltage) -> io.setVoltage(voltage.in(Volts)), 
-                null, 
+                (log) ->
+                    log.motor("Turret Kraken")
+                    .voltage(Volts.of(inputs.motorAppliedVoltage))
+                    .angularPosition(Radians.of(inputs.motorPositionRad))
+                    .angularVelocity(RadiansPerSecond.of(inputs.motorVelocityRadPerSec)), 
                 this,
                 null
             )
