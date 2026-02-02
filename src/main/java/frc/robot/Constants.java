@@ -41,6 +41,7 @@ public final class Constants {
         public static final boolean kEnableSignalLogger = false;
         public static final boolean kEnableRTPriority = true;
         public static final boolean kLogOdometry = true;
+        public static final double kLoopPeriodMs = 20;
 
         public static enum RobotMode {
             REAL,
