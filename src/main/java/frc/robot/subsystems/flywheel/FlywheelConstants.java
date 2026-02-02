@@ -8,7 +8,8 @@ import frc.robot.Constants.CANConstants;
 
 public class FlywheelConstants {
     // General constants here
-    public static final int kCANId = 31;
+    public static final int kLeadMotorCANId = 31;
+    public static final int kFollowMotorCANId = 32;
     public static final CANBus kCANBus = CANConstants.kCANivoreBus;
 
     // Voltage and current limits

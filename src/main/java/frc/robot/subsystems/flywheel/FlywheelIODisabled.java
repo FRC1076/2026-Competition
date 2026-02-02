@@ -20,7 +20,7 @@ public class FlywheelIODisabled implements FlywheelIO {
 
     @Override
     public void updateInputs(FlywheelIOInputs inputs) {
-        inputs.appliedVoltage = appliedVoltage;
+        inputs.appliedLeadVoltage = appliedVoltage;
         inputs.velocityRadiansPerSecond = appliedVelocity;
     }
 }

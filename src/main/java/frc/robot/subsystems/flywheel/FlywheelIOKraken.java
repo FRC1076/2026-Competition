@@ -9,20 +9,27 @@ import org.littletonrobotics.junction.Logger;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.ControlModeValue;
 
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
 
+import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VoltageOut;
 
 public class FlywheelIOKraken implements FlywheelIO {
     // Create a motor, configuration, and unit converter here
-    private final TalonFX m_motor;
-    private final TalonFXConfiguration m_motorConfig;
+    private final TalonFX m_leadMotor;
+    private final TalonFXConfiguration m_leadMotorConfig;
+
+    private final TalonFX m_followMotor;
+    private final TalonFXConfiguration m_followMotorConfig;
+    
     private final TalonFXUnitConverter m_unitConverter;
+
 
     // Make a control requests here
     private final VoltageOut m_voltageRequest;
@@ -30,49 +37,65 @@ public class FlywheelIOKraken implements FlywheelIO {
     private final MotionMagicVelocityTorqueCurrentFOC m_velocityRequest;
 
     // Make voltage, velocity, current, and temperature status signals here
-    private final StatusSignal<Voltage> m_voltageSignal;
+    private final StatusSignal<Voltage> m_leadVoltageSignal;
+    private final StatusSignal<Current> m_leadCurrentSignal;
+    private final StatusSignal<Temperature> m_leadTemperatureSignal;
+
+    private final StatusSignal<Voltage> m_followVoltageSignal;
+    private final StatusSignal<Current> m_followCurrentSignal;
+    private final StatusSignal<Temperature> m_followTemperatureSignal;
+
     private final StatusSignal<AngularVelocity> m_velocitySignal;
-    private final StatusSignal<Current> m_currentSignal;
-    private final StatusSignal<Temperature> m_temperatureSignal;
 
     public FlywheelIOKraken() {
         // Instantiate motor here
-        m_motor = new TalonFX(FlywheelConstants.kCANId, FlywheelConstants.kCANBus);
+        m_leadMotor = new TalonFX(FlywheelConstants.kLeadMotorCANId, FlywheelConstants.kCANBus);
+        m_followMotor = new TalonFX(FlywheelConstants.kFollowMotorCANId, FlywheelConstants.kCANBus);
 
         // Instantiate configuration and unit converter
         m_unitConverter = new TalonFXUnitConverter();
-        m_motorConfig = new TalonFXConfiguration();
+        m_leadMotorConfig = new TalonFXConfiguration();
 
         // Configure voltage and current limits
-        m_motorConfig.Voltage.PeakForwardVoltage = FlywheelConstants.kMaxVoltage;
-        m_motorConfig.Voltage.PeakReverseVoltage = -1 * FlywheelConstants.kMaxVoltage;
-        m_motorConfig.CurrentLimits.StatorCurrentLimit = FlywheelConstants.kStatorCurrentLimit;
-        m_motorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-        m_motorConfig.CurrentLimits.SupplyCurrentLimit = FlywheelConstants.kSupplyCurrentLimit;
-        m_motorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+        m_leadMotorConfig.Voltage.PeakForwardVoltage = FlywheelConstants.kMaxVoltage;
+        m_leadMotorConfig.Voltage.PeakReverseVoltage = -1 * FlywheelConstants.kMaxVoltage;
+        m_leadMotorConfig.CurrentLimits.StatorCurrentLimit = FlywheelConstants.kStatorCurrentLimit;
+        m_leadMotorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+        m_leadMotorConfig.CurrentLimits.SupplyCurrentLimit = FlywheelConstants.kSupplyCurrentLimit;
+        m_leadMotorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 
         // Set inverted based on constants
-        m_motorConfig.MotorOutput.Inverted = FlywheelConstants.kInverted;
+        m_leadMotorConfig.MotorOutput.Inverted = FlywheelConstants.kInverted;
 
         // Set brake mode based on constants
-        m_motorConfig.MotorOutput.NeutralMode = FlywheelConstants.kNeutralMode;
+        m_leadMotorConfig.MotorOutput.NeutralMode = FlywheelConstants.kNeutralMode;
 
         // Configure motiom magic
-        m_motorConfig.Slot0.kP = m_unitConverter.fromSIkP(FlywheelConstants.kP);
-        m_motorConfig.Slot0.kI = m_unitConverter.fromSIkI(FlywheelConstants.kI);
-        m_motorConfig.Slot0.kD = m_unitConverter.fromSIkD(FlywheelConstants.kD);
-        m_motorConfig.Slot0.kS = m_unitConverter.fromSIkS(FlywheelConstants.kS);
-        m_motorConfig.Slot0.kV = m_unitConverter.fromSIkV(FlywheelConstants.kV);
-        m_motorConfig.Slot0.kA = m_unitConverter.fromSIkA(FlywheelConstants.kA);
+        m_leadMotorConfig.Slot0.kP = m_unitConverter.fromSIkP(FlywheelConstants.kP);
+        m_leadMotorConfig.Slot0.kI = m_unitConverter.fromSIkI(FlywheelConstants.kI);
+        m_leadMotorConfig.Slot0.kD = m_unitConverter.fromSIkD(FlywheelConstants.kD);
+        m_leadMotorConfig.Slot0.kS = m_unitConverter.fromSIkS(FlywheelConstants.kS);
+        m_leadMotorConfig.Slot0.kV = m_unitConverter.fromSIkV(FlywheelConstants.kV);
+        m_leadMotorConfig.Slot0.kA = m_unitConverter.fromSIkA(FlywheelConstants.kA);
+
+        m_followMotorConfig = m_leadMotorConfig.clone();
+        m_followMotor.setControl(new Follower(FlywheelConstants.kLeadMotorCANId, null));
+        
 
         // Apply the configuration to the motor
-        m_motor.getConfigurator().apply(m_motorConfig);
+        m_leadMotor.getConfigurator().apply(m_leadMotorConfig);
+        m_followMotor.getConfigurator().apply(m_followMotorConfig);
 
         // Set up status signals
-        m_voltageSignal = m_motor.getMotorVoltage();
-        m_velocitySignal = m_motor.getVelocity();
-        m_currentSignal = m_motor.getTorqueCurrent();
-        m_temperatureSignal = m_motor.getDeviceTemp();
+        m_leadVoltageSignal = m_leadMotor.getMotorVoltage();
+        m_leadCurrentSignal = m_leadMotor.getTorqueCurrent();
+        m_leadTemperatureSignal = m_leadMotor.getDeviceTemp();
+
+        m_followVoltageSignal = m_followMotor.getMotorVoltage();
+        m_followCurrentSignal = m_followMotor.getTorqueCurrent();
+        m_followTemperatureSignal = m_followMotor.getDeviceTemp();
+
+        m_velocitySignal = m_leadMotor.getVelocity();
 
         m_voltageRequest = new VoltageOut(0)
             .withEnableFOC(FlywheelConstants.kEnableFOC)
@@ -84,7 +107,7 @@ public class FlywheelIOKraken implements FlywheelIO {
     public void setVoltage(double volts) {
         // Set the voltage of the motor
         m_voltageRequest.withOutput(volts);
-        m_motor.setControl(m_voltageRequest);
+        m_leadMotor.setControl(m_voltageRequest);
     }
 
     @Override
@@ -92,9 +115,9 @@ public class FlywheelIOKraken implements FlywheelIO {
         // Set the velocity of the motor
         if (velocityRadPerSec != 0) {
             m_velocityRequest.Velocity = m_unitConverter.fromSIVel(velocityRadPerSec);
-            m_motor.setControl(m_velocityRequest);
+            m_leadMotor.setControl(m_velocityRequest);
         } else {
-            m_motor.setVoltage(0);
+            m_leadMotor.setVoltage(0);
         }
     }
 
@@ -102,16 +125,27 @@ public class FlywheelIOKraken implements FlywheelIO {
     public void updateInputs(FlywheelIOInputs inputs) {
         // Update inputs based on status signals
         StatusSignal.refreshAll(
-            m_voltageSignal,
-            m_velocitySignal,
-            m_currentSignal,
-            m_temperatureSignal
+            m_leadVoltageSignal,
+            m_leadCurrentSignal,
+            m_leadTemperatureSignal,
+
+            m_followVoltageSignal,
+            m_followCurrentSignal,
+            m_followTemperatureSignal,
+
+            m_velocitySignal
         );
 
-        inputs.appliedVoltage = m_voltageSignal.getValueAsDouble();
+        inputs.appliedLeadVoltage = m_leadVoltageSignal.getValueAsDouble();
+        inputs.leadCurrentAmps = m_leadCurrentSignal.getValueAsDouble();
+        inputs.leadTemperatureDegC = m_leadTemperatureSignal.getValueAsDouble();
+
+        inputs.followAppliedVoltage = m_followVoltageSignal.getValueAsDouble();
+        inputs.followCurrentAmps = m_followCurrentSignal.getValueAsDouble();
+        inputs.followTemperatureDegC = m_followTemperatureSignal.getValueAsDouble();
+
         inputs.velocityRadiansPerSecond = m_unitConverter.toSIVel(m_velocitySignal.getValueAsDouble());
-        inputs.currentAmps = m_currentSignal.getValueAsDouble();
-        inputs.temperatureDegC = m_temperatureSignal.getValueAsDouble();
+
 
         Logger.recordOutput("Flywheel/MagicMotionVelocitySetpoint", m_velocityRequest.getVelocityMeasure().in(RadiansPerSecond));
     }

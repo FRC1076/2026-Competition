@@ -34,7 +34,7 @@ public class FlywheelSubsystem extends SubsystemBase {
                 (voltage) -> io.setVoltage(voltage.in(Volts)), 
                 (log) ->
                     log.motor("Flywheel Kraken")
-                    .voltage(Volts.of(inputs.appliedVoltage))
+                    .voltage(Volts.of(inputs.appliedLeadVoltage))
                     .angularVelocity(RadiansPerSecond.of(inputs.velocityRadiansPerSecond)), 
                 this
             )
