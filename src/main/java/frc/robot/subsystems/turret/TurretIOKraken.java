@@ -29,6 +29,7 @@ public class TurretIOKraken implements TurretIO {
 
     // Control requests
     private final VoltageOut m_voltageRequest;
+    private final VoltageOut m_voltageRequestNoSoftStops;
     private final MotionMagicVoltage m_positionRequest;
 
     public TurretIOKraken() {
@@ -86,6 +87,9 @@ public class TurretIOKraken implements TurretIO {
         // Set up control requests
         m_voltageRequest = new VoltageOut(0)
             .withEnableFOC(TurretConstants.kEnableFOC);
+        m_voltageRequestNoSoftStops = new VoltageOut(0)
+            .withEnableFOC(TurretConstants.kEnableFOC)
+            .withIgnoreSoftwareLimits(true);
         m_positionRequest = new MotionMagicVoltage(0)
             .withSlot(0)
             .withEnableFOC(TurretConstants.kEnableFOC);
@@ -95,6 +99,12 @@ public class TurretIOKraken implements TurretIO {
     public void setVoltage(double volts) {
         m_voltageRequest.Output = volts;
         m_motor.setControl(m_voltageRequest);
+    }
+
+    @Override
+    public void setVoltageNoSoftStops(double volts) {
+        m_voltageRequestNoSoftStops.Output = volts;
+        m_motor.setControl(m_voltageRequestNoSoftStops);
     }
 
     @Override

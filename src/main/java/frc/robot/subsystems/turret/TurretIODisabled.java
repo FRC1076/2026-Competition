@@ -14,6 +14,11 @@ public class TurretIODisabled implements TurretIO {
     }
 
     @Override
+    public void setVoltageNoSoftStops(double volts) {
+        appliedVoltage = volts;
+    }
+
+    @Override
     public void setPosition(double positionRadians) {
         targetPosition = positionRadians;
     }

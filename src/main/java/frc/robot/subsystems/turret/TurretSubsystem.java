@@ -51,8 +51,6 @@ public class TurretSubsystem extends SubsystemBase {
 
     /** Apply a voltage to the motor with software stops enabled */
     public Command applyVoltage(double volts) {
-        io.setSoftwareStops(true);
-
         return Commands.runOnce(
             () -> io.setVoltage(volts),
             this
@@ -61,8 +59,6 @@ public class TurretSubsystem extends SubsystemBase {
 
     /** Run the motor at a voltage with software stops enabled */
     public Command runVoltage(DoubleSupplier volts) {
-        io.setSoftwareStops(true);
-
         return Commands.runOnce(
             () -> io.setVoltage(volts.getAsDouble()),
             this
@@ -71,28 +67,22 @@ public class TurretSubsystem extends SubsystemBase {
 
     /** Apply a voltage to the motor with software stops disabled */
     public Command applyVoltageUnrestricted(double volts) {
-        io.setSoftwareStops(false);
-
         return Commands.runOnce(
-            () -> io.setVoltage(volts), 
+            () -> io.setVoltageNoSoftStops(volts), 
             this
         );
     }
 
     /** Run the motor at a voltage with software stops disabled */
     public Command runVoltageUnrestricted(DoubleSupplier volts) {
-        io.setSoftwareStops(false);
-
         return Commands.runOnce(
-            () -> io.setVoltage(volts.getAsDouble()), 
+            () -> io.setVoltageNoSoftStops(volts.getAsDouble()), 
             this
         );
     }
 
     /** Tell the motor to go to a specific position */
     public Command applyPosition(double radians) {
-        io.setSoftwareStops(true);
-
         return Commands.runOnce(
             () -> io.setPosition(radians),
             this
@@ -101,8 +91,6 @@ public class TurretSubsystem extends SubsystemBase {
 
     /** Repeatedly tell the motor to go to a specific position */
     public Command runPosition(DoubleSupplier radians) {
-        io.setSoftwareStops(true);
-
         return Commands.runOnce(
             () -> io.setPosition(radians.getAsDouble()),
             this

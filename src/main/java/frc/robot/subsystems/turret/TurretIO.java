@@ -17,6 +17,8 @@ public interface TurretIO {
 
     public abstract void setVoltage(double volts);
 
+    public abstract void setVoltageNoSoftStops(double volts);
+
     public abstract void setPosition(double positionRadians);
 
     public abstract void updateInputs(TurretIOInputs inputs);
