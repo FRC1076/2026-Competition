@@ -3,6 +3,7 @@ package lib.ballistic;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.DriverStation;
 
 public class HoundSOTMCalculator {
     public static CommonSOTMSolution solveShootOnTheFly(
@@ -42,24 +43,28 @@ public class HoundSOTMCalculator {
                     targetSpeedRps);
 
             if (Math.abs(newSol.flightTimeSeconds() - t) < timeTolerance) {
+                final double launchYawRad = effectiveTarget.relativeTo(shooterPose).getRotation().getZ();
+
                 return new CommonSOTMSolution(
                         effectiveTarget,
                         newSol.launchPitchRad(),
                         newSol.launchSpeed(),
                         newSol.flightTimeSeconds(),
-                        0);
+                        launchYawRad);
             }
 
             sol = newSol;
             t = newSol.flightTimeSeconds();
         }
 
+        final double launchYawRad = effectiveTarget.relativeTo(shooterPose).getRotation().getZ();
+
         return new CommonSOTMSolution(
                 effectiveTarget,
                 sol.launchPitchRad(),
                 sol.launchSpeed(),
                 sol.flightTimeSeconds(),
-                0);
+                launchYawRad);
     }
 
     public record ShotSolution(
@@ -82,7 +87,8 @@ public class HoundSOTMCalculator {
 
         double d = Math.hypot(dx, dy);
         if (d < 1e-9) {
-            throw new IllegalArgumentException("Horizontal distance too small");
+            DriverStation.reportError("Horizontal distance for shot calulator is too small.", true);
+            return new ShotSolution(0, 0, Double.MAX_VALUE);
         }
 
         double v2 = launchSpeedMPS * launchSpeedMPS;
@@ -90,10 +96,10 @@ public class HoundSOTMCalculator {
 
         double discriminant = v2 * v2 - g * (g * d * d + 2.0 * dz * v2);
         if (discriminant < 0) {
-            return new ShotSolution(0, 0, 0);
+            return new ShotSolution(0, 0, Double.MAX_VALUE);
         }
 
-        // LOW-ARC solution (use +Math.sqrt(...) for high arc)
+        // HIGH-ARC solution (use -Math.sqrt(...) for low arc)
         double tanTheta = (v2 + Math.sqrt(discriminant)) / (g * d);
 
         double launchPitch = Math.atan(tanTheta);
