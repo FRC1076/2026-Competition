@@ -1,3 +1,7 @@
+// Credit to TechHOUNDS. This is a modified version of their shoot
+// on the fly calulator, which can be found here:
+// https://github.com/frc868/houndutil/blob/main/src/main/java/com/techhounds/houndutil/houndlib/ShootOnTheFlyCalculator.java
+
 package lib.ballistic;
 
 import edu.wpi.first.math.geometry.Pose3d;
