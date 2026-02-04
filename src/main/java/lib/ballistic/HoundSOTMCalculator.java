@@ -12,7 +12,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 
 public class HoundSOTMCalculator {
-    public static CommonSOTMSolution solveShootOnTheFly(
+    public static CommonShotSolution solveShootOnTheFly(
             Pose3d shooterPose,
             Pose3d targetPose,
             ChassisSpeeds fieldRelRobotVelocity,
@@ -52,7 +52,7 @@ public class HoundSOTMCalculator {
                 final double launchYawRad = effectiveTarget.relativeTo(shooterPose).getRotation().getZ();
 
                 Logger.recordOutput("Effective Auto-Aim Target", effectiveTarget);
-                return new CommonSOTMSolution(
+                return new CommonShotSolution(
                         sol.launchPitchRad(),
                         launchYawRad,
                         sol.flightTimeSeconds()
@@ -66,7 +66,7 @@ public class HoundSOTMCalculator {
         final double launchYawRad = effectiveTarget.relativeTo(shooterPose).getRotation().getZ();
 
         Logger.recordOutput("Effective Auto-Aim Target", effectiveTarget);
-        return new CommonSOTMSolution(
+        return new CommonShotSolution(
                 sol.launchPitchRad(),
                 launchYawRad,
                 sol.flightTimeSeconds()

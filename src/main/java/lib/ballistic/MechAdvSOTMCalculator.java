@@ -88,14 +88,14 @@ import org.littletonrobotics.junction.Logger;
         timeOfFlightMap.put(1.38, 0.90);
     }
 
-    public static CommonSOTMSolution getParameters(
+    public static CommonShotSolution calculate(
         Pose2d targetPose,
         Pose2d estimatedPose,
         ChassisSpeeds robotRelativeVelocity,
         ChassisSpeeds robotVelocity
     ) {
         if (latestParameters != null) {
-            return new CommonSOTMSolution(latestParameters.hoodAngle, latestParameters.turretAngle.getRadians(), 0);
+            return new CommonShotSolution(latestParameters.hoodAngle, latestParameters.turretAngle.getRadians(), 0);
         }
 
         // Calculate estimated pose while accounting for phase delay
@@ -163,7 +163,7 @@ import org.littletonrobotics.junction.Logger;
         Logger.recordOutput("ShotCalculator/LookaheadPose", lookaheadPose);
         Logger.recordOutput("ShotCalculator/TurretToTargetDistance", lookaheadTurretToTargetDistance);
 
-        return new CommonSOTMSolution(latestParameters.hoodAngle, latestParameters.turretAngle.getRadians(), timeOfFlightMap.get(lookaheadTurretToTargetDistance));
+        return new CommonShotSolution(latestParameters.hoodAngle, latestParameters.turretAngle.getRadians(), timeOfFlightMap.get(lookaheadTurretToTargetDistance));
     }
 
     public void clearShootingParameters() {

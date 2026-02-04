@@ -1,6 +1,6 @@
 package lib.ballistic;
 
-public record CommonSOTMSolution (
+public record CommonShotSolution (
     double launchPitchRad,
     double launchYawRad,
     double flightTimeSeconds
