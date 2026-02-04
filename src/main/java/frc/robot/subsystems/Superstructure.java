@@ -103,11 +103,13 @@ public class Superstructure {
     public void configureStateBasedBindings() {
         new Trigger(() -> m_superState.getTurretState() == TurretStates.AUTOAIM)
             .whileTrue(
-                Commands.parallel(
+                Commands.repeatingSequence(
                     Commands.runOnce(() -> updateShootingParams()),
-                    m_flywheel.runVelocityPerSec(() -> flywheelTargetSpeedRadPerSec),
-                    m_hood.runPosition(() -> m_shootingParams.launchPitchRad()),
-                    m_turret.runPosition(() -> m_shootingParams.launchYawRad() - m_robotPoseSupplier.get().getRotation().getRadians())
+                    Commands.parallel(
+                        m_flywheel.applyVelocityPerSec(flywheelTargetSpeedRadPerSec),
+                        m_hood.applyPosition(m_shootingParams.launchPitchRad()),
+                        m_turret.applyPosition(m_shootingParams.launchYawRad() - m_robotPoseSupplier.get().getRotation().getRadians())
+                    )
                 )
             );
     }
