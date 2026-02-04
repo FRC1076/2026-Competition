@@ -4,7 +4,7 @@
 
 package frc.robot.subsystems.drive;
 
-import frc.robot.Constants.FieldConstants;
+import frc.robot.PhysicalConstants.FieldConstants;
 import frc.robot.Constants.GameConstants;
 import frc.robot.commands.drive.PPDriveToPose;
 import frc.robot.commands.drive.TeleopDriveCommand;
@@ -197,7 +197,7 @@ public class DriveSubsystem extends SubsystemBase {
     public void resetPoseMirrored(Pose2d pose) {
         Pose2d newPose = new Pose2d(
             pose.getX(),
-            FieldConstants.fieldWidthMeters - pose.getY(),
+            FieldConstants.fieldWidth - pose.getY(),
             pose.getRotation().unaryMinus());
         io.resetPose(newPose);
     }
@@ -222,7 +222,7 @@ public class DriveSubsystem extends SubsystemBase {
     public Pose2d getMirroredPose() {
         Pose2d pose = new Pose2d(
             io.getPose().getX(),
-            FieldConstants.fieldWidthMeters - io.getPose().getY(),
+            FieldConstants.fieldWidth - io.getPose().getY(),
             io.getPose().getRotation().unaryMinus());
         return pose;
     }

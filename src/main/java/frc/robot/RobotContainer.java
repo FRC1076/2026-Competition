@@ -6,9 +6,8 @@ package frc.robot;
 
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.SystemConstants;
-import frc.robot.Constants.VisionConstants;
 import frc.robot.Constants.SystemConstants.RobotMode;
-import frc.robot.Constants.VisionConstants.PhotonVision.PhotonConfig;
+import frc.robot.PhysicalConstants.VisionConstants.PhotonVision.PhotonConfig;
 import frc.robot.commands.drive.TeleopDriveCommand;
 import frc.robot.subsystems.Elastic;
 import frc.robot.subsystems.drive.DriveIOHardware;
@@ -114,7 +113,7 @@ public class RobotContainer {
                     config.multiTagPoseStrategy,
                     config.singleTagPoseStrategy,
                     () -> m_drive.getPose().getRotation(),
-                    VisionConstants.kAprilTagFieldLayout,
+                    PhysicalConstants.VisionConstants.kAprilTagFieldLayout,
                     config.defaultSingleTagStdDevs,
                     config.defaultMultiTagStdDevs)
                 );

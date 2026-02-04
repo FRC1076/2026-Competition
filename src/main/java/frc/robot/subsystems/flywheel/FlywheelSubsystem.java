@@ -78,7 +78,7 @@ public class FlywheelSubsystem extends SubsystemBase {
     }
 
     /** Run the wheel at the supplied velocity */
-    public Command applyVelocityPerSec(DoubleSupplier radPerSec) {
+    public Command runVelocityPerSec(DoubleSupplier radPerSec) {
         return Commands.runOnce(
             () -> io.setVelocityRadPerSec(radPerSec.getAsDouble()),
             this
@@ -92,5 +92,14 @@ public class FlywheelSubsystem extends SubsystemBase {
 
     public Command sysIdDynamic(Direction direction) {
         return sysId.dynamic(direction);
+    }
+
+    // Getters for data
+    public double getVelocityRadPerSec() {
+        return inputs.velocityRadiansPerSecond;
+    }
+
+    public double getLinearVelocityMPS() {
+        return inputs.velocityRadiansPerSecond * FlywheelConstants.angularToLinearVelocityConversionFactor;
     }
 }
