@@ -9,7 +9,6 @@ package lib.ballistic;
 
 import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
@@ -90,17 +89,16 @@ import org.littletonrobotics.junction.Logger;
     }
 
     public static CommonSOTMSolution getParameters(
+        Pose2d targetPose,
         Pose2d estimatedPose,
         ChassisSpeeds robotRelativeVelocity,
         ChassisSpeeds robotVelocity
     ) {
         if (latestParameters != null) {
-        return new CommonSOTMSolution(
-            new Pose3d(), latestParameters.hoodAngle, latestParameters.flywheelSpeed, timeOfFlightMap.get(1.0), latestParameters.turretAngle.getRadians());
+            return new CommonSOTMSolution(latestParameters.hoodAngle, latestParameters.turretAngle.getRadians(), 0);
         }
 
         // Calculate estimated pose while accounting for phase delay
-        ChassisSpeeds robotRelativeVelocity = RobotState.getInstance().getRobotVelocity();
         estimatedPose =
             estimatedPose.exp(
                 new Twist2d(
@@ -109,37 +107,34 @@ import org.littletonrobotics.junction.Logger;
                     robotRelativeVelocity.omegaRadiansPerSecond * phaseDelay));
 
         // Calculate distance from turret to target
-        Translation2d target =
-            AllianceFlipUtil.apply(FieldConstants.Hub.topCenterPoint.toTranslation2d());
-        Pose2d turretPosition = estimatedPose.transformBy(robotToTurret.toTransform2d());
-        double turretToTargetDistance = target.getDistance(turretPosition.getTranslation());
+        Translation2d target = estimatedPose.relativeTo(targetPose).getTranslation();
 
         // Calculate field relative turret velocity
         double robotAngle = estimatedPose.getRotation().getRadians();
         double turretVelocityX =
             robotVelocity.vxMetersPerSecond
                 + robotVelocity.omegaRadiansPerSecond
-                    * (robotToTurret.getY() * Math.cos(robotAngle)
-                        - robotToTurret.getX() * Math.sin(robotAngle));
+                    * (estimatedPose.getY() * Math.cos(robotAngle)
+                        - estimatedPose.getX() * Math.sin(robotAngle));
         double turretVelocityY =
             robotVelocity.vyMetersPerSecond
                 + robotVelocity.omegaRadiansPerSecond
-                    * (robotToTurret.getX() * Math.cos(robotAngle)
-                        - robotToTurret.getY() * Math.sin(robotAngle));
+                    * (estimatedPose.getX() * Math.cos(robotAngle)
+                        - estimatedPose.getY() * Math.sin(robotAngle));
 
         // Account for imparted velocity by robot (turret) to offset
         double timeOfFlight;
-        Pose2d lookaheadPose = turretPosition;
-        double lookaheadTurretToTargetDistance = turretToTargetDistance;
+        Pose2d lookaheadPose = estimatedPose;
+        double lookaheadTurretToTargetDistance = targetPose.getTranslation().getDistance(target);
         for (int i = 0; i < 20; i++) {
-        timeOfFlight = timeOfFlightMap.get(lookaheadTurretToTargetDistance);
-        double offsetX = turretVelocityX * timeOfFlight;
-        double offsetY = turretVelocityY * timeOfFlight;
-        lookaheadPose =
-            new Pose2d(
-                turretPosition.getTranslation().plus(new Translation2d(offsetX, offsetY)),
-                turretPosition.getRotation());
-        lookaheadTurretToTargetDistance = target.getDistance(lookaheadPose.getTranslation());
+            timeOfFlight = timeOfFlightMap.get(lookaheadTurretToTargetDistance);
+            double offsetX = turretVelocityX * timeOfFlight;
+            double offsetY = turretVelocityY * timeOfFlight;
+            lookaheadPose =
+                new Pose2d(
+                    estimatedPose.getTranslation().plus(new Translation2d(offsetX, offsetY)),
+                    estimatedPose.getRotation());
+            lookaheadTurretToTargetDistance = target.getDistance(lookaheadPose.getTranslation());
         }
 
         // Calculate parameters accounted for imparted velocity
@@ -168,7 +163,7 @@ import org.littletonrobotics.junction.Logger;
         Logger.recordOutput("ShotCalculator/LookaheadPose", lookaheadPose);
         Logger.recordOutput("ShotCalculator/TurretToTargetDistance", lookaheadTurretToTargetDistance);
 
-        return latestParameters;
+        return new CommonSOTMSolution(latestParameters.hoodAngle, latestParameters.turretAngle.getRadians(), timeOfFlightMap.get(lookaheadTurretToTargetDistance));
     }
 
     public void clearShootingParameters() {

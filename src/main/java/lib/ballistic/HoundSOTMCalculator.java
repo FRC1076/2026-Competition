@@ -4,6 +4,8 @@
 
 package lib.ballistic;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -49,12 +51,12 @@ public class HoundSOTMCalculator {
             if (Math.abs(newSol.flightTimeSeconds() - t) < timeTolerance) {
                 final double launchYawRad = effectiveTarget.relativeTo(shooterPose).getRotation().getZ();
 
+                Logger.recordOutput("Effective Auto-Aim Target", effectiveTarget);
                 return new CommonSOTMSolution(
-                        effectiveTarget,
-                        newSol.launchPitchRad(),
-                        newSol.launchSpeed(),
-                        newSol.flightTimeSeconds(),
-                        launchYawRad);
+                        sol.launchPitchRad(),
+                        launchYawRad,
+                        sol.flightTimeSeconds()
+                    );
             }
 
             sol = newSol;
@@ -63,12 +65,12 @@ public class HoundSOTMCalculator {
 
         final double launchYawRad = effectiveTarget.relativeTo(shooterPose).getRotation().getZ();
 
+        Logger.recordOutput("Effective Auto-Aim Target", effectiveTarget);
         return new CommonSOTMSolution(
-                effectiveTarget,
                 sol.launchPitchRad(),
-                sol.launchSpeed(),
-                sol.flightTimeSeconds(),
-                launchYawRad);
+                launchYawRad,
+                sol.flightTimeSeconds()
+            );
     }
 
     public record ShotSolution(
