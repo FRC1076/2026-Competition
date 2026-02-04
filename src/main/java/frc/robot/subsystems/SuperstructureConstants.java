@@ -32,7 +32,7 @@ public class SuperstructureConstants {
     public static final Pose3d kHubTarget = 
         Constants.GameConstants.teamColor == Alliance.Blue
             ? new Pose3d(PhysicalConstants.FieldConstants.Hub.topCenterPoint, Rotation3d.kZero)
-            : new Pose3d(PhysicalConstants.FieldConstants.Hub.oppTopCenterPoint, Rotation3d.kZero).relativeTo(null);
+            : new Pose3d(PhysicalConstants.FieldConstants.Hub.oppTopCenterPoint, Rotation3d.kZero);
     public static final Pose3d kLeftPassingTarget =
         Constants.GameConstants.teamColor == Alliance.Blue
             ? new Pose3d(new Translation3d(0, kLeftPassingTargetYCoordinate, 0), Rotation3d.kZero)
