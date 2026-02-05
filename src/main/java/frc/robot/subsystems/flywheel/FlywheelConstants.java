@@ -2,6 +2,7 @@ package frc.robot.subsystems.flywheel;
 
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import frc.robot.Constants.CANConstants;
@@ -22,6 +23,7 @@ public class FlywheelConstants {
 
     public static final InvertedValue kInverted = InvertedValue.CounterClockwise_Positive;
     public static final NeutralModeValue kNeutralMode = NeutralModeValue.Coast;
+    public static final MotorAlignmentValue kMotorAlignment = MotorAlignmentValue.Opposed;
 
     public static final double kP = 0;
     public static final double kI = 0;
