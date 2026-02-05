@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
@@ -41,7 +42,7 @@ public class Superstructure {
             return fuelManagement;
         }
 
-        public void setTurretState(FuelManagementStates newFuelManagement) {
+        public void setFuelManagementState(FuelManagementStates newFuelManagement) {
             fuelManagement = newFuelManagement;
         }
 
@@ -141,5 +142,48 @@ public class Superstructure {
             SuperstructureConstants.kAutoAimMaxIterations,
             SuperstructureConstants.kAutoAimTimeToleranceSeconds
         );
+    }
+
+    public Command applyFuelManagementStateAllParallel(FuelManagementStates state) {
+        m_superState.setFuelManagementState(state);
+
+        return Commands.parallel(
+            m_slapdown.applyPosition(state.slapdownRadians),
+            m_roller.applyVoltage(state.rollerVoltage),
+            m_spindexer.applyVoltage(state.spindexerVoltage),
+            m_kicker.applyVoltage(state.kickerVoltage)
+        );
+    }
+
+    public class SuperstructureCommandFactory{
+        private final Superstructure m_superstructure;
+
+        public SuperstructureCommandFactory(Superstructure superstructure){
+            this.m_superstructure = superstructure;
+        }
+
+        public Command applyIdleRetractedStates(){
+            return m_superstructure.applyFuelManagementStateAllParallel(FuelManagementStates.IDLE_RETRACTED);
+        }
+
+        public Command applyIdleExtendedStates(){
+            return m_superstructure.applyFuelManagementStateAllParallel(FuelManagementStates.IDLE_EXTENDED);
+        }
+
+        public Command applyIntakeFuelStates(){
+            return m_superstructure.applyFuelManagementStateAllParallel(FuelManagementStates.INTAKE_FUEL);
+        }
+
+        public Command applyIntakeIndexFuelStates(){
+            return m_superstructure.applyFuelManagementStateAllParallel(FuelManagementStates.INTAKE_INDEX_FUEL);
+        }
+
+        public Command applyIndexRetracted(){
+            return m_superstructure.applyFuelManagementStateAllParallel(FuelManagementStates.INDEX_FUEL_RETRACTED);
+        }
+
+        public Command applyIndexExtended(){
+            return m_superstructure.applyFuelManagementStateAllParallel(FuelManagementStates.INDEX_FUEL_EXTENDED);
+        }
     }
 }

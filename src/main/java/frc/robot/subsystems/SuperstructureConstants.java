@@ -17,15 +17,37 @@ public class SuperstructureConstants {
         POINT_DIRECTLY_BACK_FOR_PASSING;  
     }
 
+    public static double kSlapdownUpAngle = Math.PI/2;
+    public static double kSlapdownDownAngle = 0;
+    public static double kIntakeRollerVoltage = 6;
+    public static double kSpindexerIndexerVoltage = 12;
+    public static double kKickerIndexVoltage = 6;
     public static enum FuelManagementStates {
-        IDLE_EXTENDED,
-        IDLE_RETRACTED,
-        INDEX_FUEL_EXTENDED,
-        INDEX_FUEL_RETRACTED,
-        INTAKE_FUEL,
-        INTAKE_INDEX_FUEL;
-    }
+        IDLE_RETRACTED(kSlapdownUpAngle, 0, 0, 0),
+        IDLE_EXTENDED(kSlapdownDownAngle, 0, 0, 0),
+        INTAKE_FUEL(kSlapdownDownAngle, kIntakeRollerVoltage, 0, 0),
+        INTAKE_INDEX_FUEL(kSlapdownDownAngle, kIntakeRollerVoltage, kSpindexerIndexerVoltage, kKickerIndexVoltage),
+        INDEX_FUEL_RETRACTED(kSlapdownUpAngle, 0, kSpindexerIndexerVoltage, kKickerIndexVoltage),
+        INDEX_FUEL_EXTENDED(kSlapdownDownAngle, 0, kSpindexerIndexerVoltage, kKickerIndexVoltage);
 
+        public final double slapdownRadians;
+        public final double rollerVoltage;
+        public final double spindexerVoltage;
+        public final double kickerVoltage;
+
+        private FuelManagementStates(
+            double slapdownRadians,
+            double rollerVoltage,
+            double spindexerVoltage,
+            double kickerVoltage
+        ) {
+            this.slapdownRadians = slapdownRadians;
+            this.rollerVoltage = rollerVoltage;
+            this.spindexerVoltage = spindexerVoltage;
+            this.kickerVoltage = kickerVoltage;
+
+        }
+    }
     public static final double kLeftPassingTargetYCoordinate = 0.75 * PhysicalConstants.FieldConstants.fieldWidth;
     public static final double kRightPassingTargetYCoordinate = 0.25 * PhysicalConstants.FieldConstants.fieldWidth;
 
