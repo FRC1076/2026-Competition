@@ -1,13 +1,19 @@
 {
-  "robotWidth": 0.9,
-  "robotLength": 0.9,
+  "robotWidth": 0.876,
+  "robotLength": 0.851,
   "holonomicMode": true,
   "pathFolders": [
-    "Start at srt1",
-    "Start at srt2",
+    "Int1 Origin",
+    "Int3 Origin",
+    "Srt1 Origin",
+    "Srt2 Origin",
     "Start at srt3"
   ],
-  "autoFolders": [],
+  "autoFolders": [
+    "Center",
+    "Alliance Side + Center",
+    "Alliance Side"
+  ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 540.0,
@@ -32,5 +38,8 @@
   "brModuleY": -0.273,
   "bumperOffsetX": 0.0,
   "bumperOffsetY": 0.0,
-  "robotFeatures": []
+  "robotFeatures": [
+    "{\"name\":\"Climber\",\"type\":\"rounded_rect\",\"data\":{\"center\":{\"x\":-0.11,\"y\":-0.3},\"size\":{\"width\":0.03,\"length\":0.13},\"borderRadius\":0.03,\"strokeWidth\":0.02,\"filled\":true}}",
+    "{\"name\":\"Hopper\",\"type\":\"rounded_rect\",\"data\":{\"center\":{\"x\":0.53,\"y\":0.0},\"size\":{\"width\":0.6858,\"length\":0.2},\"borderRadius\":0.05,\"strokeWidth\":0.02,\"filled\":false}}"
+  ]
 }

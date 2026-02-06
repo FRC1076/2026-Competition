@@ -3,29 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.804743589743591,
-        "y": 5.593179487179486
+        "x": 3.58,
+        "y": 7.37
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.6522928413786664,
-        "y": 5.694699407286703
+        "x": 3.33,
+        "y": 7.37
+      },
+      "isLocked": false,
+      "linkedName": "Srt1"
+    },
+    {
+      "anchor": {
+        "x": 2.30527817403709,
+        "y": 7.379643366619116
+      },
+      "prevControl": {
+        "x": 2.55527817403709,
+        "y": 7.379643366619116
+      },
+      "nextControl": {
+        "x": 2.05527817403709,
+        "y": 7.379643366619116
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.095397435897437,
-        "y": 5.976910256410256
+        "x": 3.58,
+        "y": 7.37
       },
       "prevControl": {
-        "x": 0.7002468633527397,
-        "y": 6.04757965834811
+        "x": 3.83,
+        "y": 7.37
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Srt1"
     }
   ],
   "rotationTargets": [],
@@ -41,14 +57,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": -178.66778014613018
+    "velocity": 4.0,
+    "rotation": 180.0
   },
   "reversed": false,
-  "folder": "Start at srt1",
+  "folder": "Srt1 Origin",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

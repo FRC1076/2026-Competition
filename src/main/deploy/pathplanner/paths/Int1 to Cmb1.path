@@ -3,45 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.534450784593438,
-        "y": 4.093223965763196
+        "x": 0.67,
+        "y": 5.97
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.738561750315699,
-        "y": 4.351579704599637
+        "x": 1.6700000000000002,
+        "y": 5.97
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Int1"
     },
     {
       "anchor": {
-        "x": 2.525235378031383,
-        "y": 5.5811697574893016
+        "x": 1.2184308131241082,
+        "y": 4.6366476462196875
       },
       "prevControl": {
-        "x": 2.189917985462858,
-        "y": 5.365092832087478
-      },
-      "nextControl": {
-        "x": 2.904397389775425,
-        "y": 5.8254999459691
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 7.124145907473309,
-        "y": 5.729572953736655
-      },
-      "prevControl": {
-        "x": 6.101361670721748,
-        "y": 5.694985372492238
+        "x": 3.518430813124108,
+        "y": 4.6366476462196875
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Cmb1"
     }
   ],
   "rotationTargets": [],
@@ -61,10 +45,10 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Srt2 Origin",
+  "folder": "Int1 Origin",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": -178.66778014613018
   },
   "useDefaultConstraints": true
 }
