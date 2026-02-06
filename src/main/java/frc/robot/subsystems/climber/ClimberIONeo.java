@@ -1,6 +1,8 @@
 package frc.robot.subsystems.climber;
 
+import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.ControlType;
 
 import org.littletonrobotics.junction.Logger;
 
@@ -12,10 +14,14 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import frc.robot.subsystems.climber.ClimberConstants.HookConstants;
 
 public class ClimberIONeo implements ClimberIO {
     private final SparkMax m_motor;
     private final SparkMaxConfig m_motorConfig;
+
+    private final SparkMax m_hookMotor;
+    private final SparkMaxConfig m_hookMotorConfig;
 
     private final RelativeEncoder m_encoder;
 
@@ -23,14 +29,18 @@ public class ClimberIONeo implements ClimberIO {
     private final ElevatorFeedforward m_feedforward;
     private boolean PIDEnabled = false;
 
-    public ClimberIONeo() {
+    private final SparkClosedLoopController m_hookPIDController;
 
+    public ClimberIONeo() {
         m_motor = new SparkMax(ClimberConstants.kCANId, MotorType.kBrushless);
         m_motorConfig = new SparkMaxConfig();
 
+        m_hookMotor = new SparkMax(HookConstants.kCANId, MotorType.kBrushless);
+        m_hookMotorConfig = new SparkMaxConfig();
+
         m_motorConfig
             .inverted(ClimberConstants.kMotorInverted)
-            .smartCurrentLimit((int) ClimberConstants.kCurrentLimit)
+            .smartCurrentLimit(ClimberConstants.kCurrentLimit)
             .voltageCompensation(ClimberConstants.kVoltageCompensation);
         
         m_motorConfig.encoder
@@ -42,6 +52,22 @@ public class ClimberIONeo implements ClimberIO {
         m_encoder = m_motor.getEncoder();
 
         m_encoder.setPosition(0);
+
+        m_hookMotorConfig
+            .inverted(HookConstants.kMotorInverted)
+            .smartCurrentLimit(HookConstants.kCurrentLimit)
+            .voltageCompensation(HookConstants.kVoltageCompensation);
+
+        m_hookMotorConfig.encoder
+            .positionConversionFactor(HookConstants.kPositionConversionFactor)
+            .velocityConversionFactor(HookConstants.kVelocityConversionFactor);
+
+        m_hookMotorConfig.closedLoop
+            .p(HookConstants.kP)
+            .i(HookConstants.kI)
+            .d(HookConstants.kD);
+
+        m_hookMotor.configure(m_hookMotorConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
 
         m_profiledPidController = new ProfiledPIDController(
             ClimberConstants.kP,
@@ -56,6 +82,8 @@ public class ClimberIONeo implements ClimberIO {
             ClimberConstants.kV,
             ClimberConstants.kA
         );
+
+        m_hookPIDController = m_hookMotor.getClosedLoopController();
     }
 
     @Override
@@ -68,6 +96,16 @@ public class ClimberIONeo implements ClimberIO {
     public void setPosition(double positionMeters) {
         m_profiledPidController.setGoal(positionMeters);
         PIDEnabled = true;
+    }
+
+    @Override
+    public void setHookVoltage(double volts) {
+        m_hookMotor.setVoltage(volts);
+    }
+
+    @Override
+    public void setHookPosition(double positionRadians) {
+        m_hookPIDController.setSetpoint(positionRadians, ControlType.kPosition);
     }
 
     @Override
@@ -88,9 +126,5 @@ public class ClimberIONeo implements ClimberIO {
 
         Logger.recordOutput("Climber/PIDTargetRadians", m_profiledPidController.getGoal());
         Logger.recordOutput("Climber/PIDEnabled", PIDEnabled);
-    }
-
-    public void stop() {
-        this.setVoltage(0.0);
     }
 }

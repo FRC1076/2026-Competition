@@ -24,7 +24,7 @@ public class ClimberConstants{
     public static final boolean kMotorInverted = false;
 
     public static final double kVoltageCompensation = 12; 
-    public static final double kCurrentLimit = 40;
+    public static final int kCurrentLimit = 40;
 
     public static final double kMaxPositionMeters = 1;
     public static final double kMinPositionMeters = 0;
@@ -34,4 +34,22 @@ public class ClimberConstants{
 
     public static final double kPositionConversionFactor = ((2 * Math.PI * kDrumRadius) / kGearRatio);
     public static final double kVelocityConversionFactor = kPositionConversionFactor / 60.0;
+
+    public static class HookConstants {
+        public static final int kCANId = 52;
+        public static final CANBus kCANBus = CANConstants.kRioBus;
+
+        public static final boolean kMotorInverted = false;
+
+        public static final double kVoltageCompensation = 10; 
+        public static final int kCurrentLimit = 20;
+
+        public static final double kP = 0;
+        public static final double kI = 0;
+        public static final double kD = 0;
+
+        public static final double kGearRatio = 1;
+        public static final double kPositionConversionFactor = (2 * Math.PI) / kGearRatio;
+        public static final double kVelocityConversionFactor = kPositionConversionFactor / 60.0;
+    }
 }

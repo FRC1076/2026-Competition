@@ -80,6 +80,34 @@ public class ClimberSubsystem extends SubsystemBase {
         );
     }
 
+    /** Set the hook motor to run at a voltage */
+    public Command applyHookVoltage(double volts) {
+        return Commands.runOnce(
+            () -> io.setHookVoltage(volts)
+        );
+    }
+
+    /** Tell the hook motor to run at the supplied voltage */
+    public Command runHookVoltage(DoubleSupplier volts) {
+        return Commands.run(
+            () -> io.setHookVoltage(volts.getAsDouble())
+        );
+    }
+
+    /** Tell to hook to go to the position in radians */
+    public Command applyHookPosition(double radians) {
+        return Commands.runOnce(
+            () -> io.setHookPosition(radians)
+        );
+    }
+
+    /** Tell the hook to run at the supplied position in radians */
+    public Command applyHookPosition(DoubleSupplier radians) {
+        return Commands.run(
+            () -> io.setHookPosition(radians.getAsDouble())
+        );
+    }
+
     public Command sysIdQuasistatic(Direction direction) {
         return sysId.quasistatic(direction);
     }
@@ -90,7 +118,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
     public Command stop() {
         return Commands.runOnce(
-            () -> io.stop(),
+            () -> io.setVoltage(0),
             this
         );
     }   
