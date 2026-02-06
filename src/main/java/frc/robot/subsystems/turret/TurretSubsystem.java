@@ -59,7 +59,7 @@ public class TurretSubsystem extends SubsystemBase {
 
     /** Run the motor at a voltage with software stops enabled */
     public Command runVoltage(DoubleSupplier volts) {
-        return Commands.runOnce(
+        return Commands.run(
             () -> io.setVoltage(volts.getAsDouble()),
             this
         );
@@ -91,7 +91,7 @@ public class TurretSubsystem extends SubsystemBase {
 
     /** Repeatedly tell the motor to go to a specific position */
     public Command runPosition(DoubleSupplier radians) {
-        return Commands.runOnce(
+        return Commands.run(
             () -> io.setPosition(radians.getAsDouble()),
             this
         );
