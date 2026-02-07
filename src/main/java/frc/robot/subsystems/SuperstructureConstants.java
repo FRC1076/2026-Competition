@@ -52,37 +52,49 @@ public class SuperstructureConstants {
     public static double kSlapdownUpAngle = Math.PI/2;
     public static double kSlapdownDownAngle = 0;
     public static double kIntakeRollerVoltage = 6;
+    
+    public static enum IntakeStates {
+        /** list of opereational states of the intake and thier inputs */
+        RETRACTED(kSlapdownUpAngle,0),
+        EXTENDED(kSlapdownDownAngle, 0),
+        INTAKING(kSlapdownDownAngle, kIntakeRollerVoltage);
+
+        public final double kSlapdownAngle;
+        public final double kRollerVoltage;
+
+        /** Constructor for intake states */
+        private IntakeStates(
+            double slapdownAngle,
+            double rollerVoltage
+        ) {
+            this.kSlapdownAngle = slapdownAngle;
+            this.kRollerVoltage = rollerVoltage;
+        }
+    }
+
     public static double kSpindexerIndexerVoltage = 12;
     public static double kKickerIndexVoltage = 6;
-    /** sets operational states for the FuelManagmentStates */
-    public static enum FuelManagementStates {
-        IDLE_RETRACTED(kSlapdownUpAngle, 0, 0, 0),
-        IDLE_EXTENDED(kSlapdownDownAngle, 0, 0, 0),
-        INTAKE(kSlapdownDownAngle, kIntakeRollerVoltage, 0, 0),
-        INTAKE_INDEX(kSlapdownDownAngle, kIntakeRollerVoltage, kSpindexerIndexerVoltage, kKickerIndexVoltage),
-        INDEX_RETRACTED(kSlapdownUpAngle, 0, kSpindexerIndexerVoltage, kKickerIndexVoltage),
-        INDEX_EXTENDED(kSlapdownDownAngle, 0, kSpindexerIndexerVoltage, kKickerIndexVoltage);
+    
+    public static enum IndexStates {
+        /** list of all possible indexing states and their inputs */
+        IDLE(0,0),
+        INDEXING( kSpindexerIndexerVoltage , kKickerIndexVoltage);
 
-        /**  initializes variables for fuelmanagement constructor below */
-        public final double slapdownRadians;
-        public final double rollerVoltage;
-        public final double spindexerVoltage;
-        public final double kickerVoltage;
+        public final double kSpindexerVoltage;
+        public final double kKickerVoltage;
 
-        /** constructor for FuelManagmentStates */
-        private FuelManagementStates(
-            double slapdownRadians,
-            double rollerVoltage,
+        /** construcor for indexStates */
+        private IndexStates(
             double spindexerVoltage,
             double kickerVoltage
         ) {
-            this.slapdownRadians = slapdownRadians;
-            this.rollerVoltage = rollerVoltage;
-            this.spindexerVoltage = spindexerVoltage;
-            this.kickerVoltage = kickerVoltage;
-
+            this.kSpindexerVoltage = spindexerVoltage;
+            this.kKickerVoltage = kickerVoltage;
         }
     }
+    
+    
+
     public static final double kLeftPassingTargetYCoordinate = 0.75 * PhysicalConstants.FieldConstants.fieldWidth;
     public static final double kRightPassingTargetYCoordinate = 0.25 * PhysicalConstants.FieldConstants.fieldWidth;
 

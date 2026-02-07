@@ -3,7 +3,8 @@ package frc.robot.subsystems;
 import java.util.function.Supplier;
 
 import frc.robot.PhysicalConstants;
-import frc.robot.subsystems.SuperstructureConstants.FuelManagementStates;
+import frc.robot.subsystems.SuperstructureConstants.IndexStates;
+import frc.robot.subsystems.SuperstructureConstants.IntakeStates;
 import frc.robot.subsystems.SuperstructureConstants.TurretStates;
 import frc.robot.subsystems.flywheel.FlywheelSubsystem;
 import frc.robot.subsystems.hood.HoodSubsystem;
@@ -26,7 +27,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class Superstructure {
     public class MutableSuperState{
         private TurretStates turretState = TurretStates.IDLE;
-        private FuelManagementStates fuelManagement = FuelManagementStates.IDLE_RETRACTED;
+        private IntakeStates intake = IntakeStates.RETRACTED;
+        private IndexStates index = IndexStates.IDLE;
         
         /** Returns the state of the turret assembly */
         public TurretStates getTurretState() {
@@ -41,31 +43,44 @@ public class Superstructure {
             turretState = newTurretState;
         }
 
-        /** Returns the state of the part of robot that manages fuel. */
-        public FuelManagementStates getFuelManagement() {
-            return fuelManagement;
+        /** Returns the index state. */
+        public IndexStates getIndexState() {
+            return index;
         }
 
         /** Returns the previous fuel management state of the robot */
 
-        /** Sets the target state of part of the robot that manages fuel
+        /** Sets the Index state
          *  (note: this does not actually affect the physical robot, it only
          *   affects the variable in the code)
           */
-        public void setFuelManagementState(FuelManagementStates newFuelManagement) {
-            fuelManagement = newFuelManagement;
+        public void setIndexState(IndexStates newIndexState) {
+            index = newIndexState;
+        }
+
+        /** Returns the intake state. */
+        public IntakeStates getIntakeState() {
+            return intake;
+        }
+
+        /** Sets the Intake state
+         *  (note: this does not actually affect the physical robot, it only
+         *   affects the variable in the code)
+          */
+        public void setIntakeState(IntakeStates newIntakeState) {
+            intake = newIntakeState;
         }
 
         /** Default constructor. Sets all variables to IDLE */
         public MutableSuperState() {
             this.turretState = TurretStates.IDLE;
-            this.fuelManagement = FuelManagementStates.IDLE_RETRACTED;
+            this.index = IndexStates.IDLE;
         }
         
         /** Instantiates a MutableSuperState with the specified TurretState and FuelManagementeState */
-        public MutableSuperState(TurretStates turretState, FuelManagementStates fuelManagement) {
+        public MutableSuperState(TurretStates turretState, IndexStates index) {
             this.turretState = turretState;
-            this.fuelManagement = fuelManagement;
+            this.index = index;
         }
     }
     
@@ -160,16 +175,12 @@ public class Superstructure {
         return m_superState;
     }
 
-    /** Apply the passed in state to the slapdown, intake rollers, spindexer, and kicker,
-     *  all at the same time. */
-    public Command applyFuelManagementStateAllParallel(FuelManagementStates state) {
-        m_superState.setFuelManagementState(state);
+    public Command applyIndexStateAllParallel(IntakeStates state) {
+        m_superState.setIntakeState(state);
 
         return Commands.parallel(
-            m_slapdown.applyPosition(state.slapdownRadians),
-            m_roller.applyVoltage(state.rollerVoltage),
-            m_spindexer.applyVoltage(state.spindexerVoltage),
-            m_kicker.applyVoltage(state.kickerVoltage)
+            m_slapdown.applyPosition(state.kSlapdownAngle),
+           m_roller.applyVoltage(state.kRollerVoltage)
         );
     }
 
@@ -193,64 +204,8 @@ public class Superstructure {
     public class SuperstructureCommandFactory{
         private final Superstructure m_superstructure;
 
-        private final BidirectionalMap<FuelManagementStates, FuelManagementStates> m_toIndexingState; // Map from a fuel management state without indexing to indexing
-
         public SuperstructureCommandFactory(Superstructure superstructure){
             this.m_superstructure = superstructure;
-
-            this.m_toIndexingState = new BidirectionalMap<FuelManagementStates, FuelManagementStates>();
-
-            m_toIndexingState.put(FuelManagementStates.IDLE_RETRACTED, FuelManagementStates.INDEX_RETRACTED);
-            m_toIndexingState.put(FuelManagementStates.IDLE_EXTENDED, FuelManagementStates.INDEX_EXTENDED);
-            m_toIndexingState.put(FuelManagementStates.INTAKE, FuelManagementStates.INTAKE_INDEX);
-        }
-
-        /** Apply the IDLE_RETRACTED fuel management state */
-        public Command applyFuelManagementIdleRetracted(){
-            return m_superstructure.applyFuelManagementStateAllParallel(FuelManagementStates.IDLE_RETRACTED);
-        }
-
-        /** Apply the IDLE_EXTENDED fuel management state */
-        public Command applyFuelManagementIdleExtended(){
-            return m_superstructure.applyFuelManagementStateAllParallel(FuelManagementStates.IDLE_EXTENDED);
-        }
-
-        /** Apply the INTAKE fuel management state */
-        public Command applyFuelManagementIntake(){
-            return m_superstructure.applyFuelManagementStateAllParallel(FuelManagementStates.INTAKE);
-        }
-
-        /** Apply the INTAKE_INDEX fuel management state. Can be used for shooting. */
-        public Command applyFuelManagementIntakeIndex(){
-            return m_superstructure.applyFuelManagementStateAllParallel(FuelManagementStates.INTAKE_INDEX);
-        }
-
-        /** Apply the INDEX_RETRACTED fuel management state. Can be used for shooting */
-        public Command applyIndexRetracted(){
-            return m_superstructure.applyFuelManagementStateAllParallel(FuelManagementStates.INDEX_RETRACTED);
-        }
-
-        /** Apply the INDEX_EXTENDED fuel management state. Can be used for shooting. */
-        public Command applyIndexExtended(){
-            return m_superstructure.applyFuelManagementStateAllParallel(FuelManagementStates.INDEX_EXTENDED);
-        }
-
-        /** Start indexing fuel. */
-        public Command applyIndexFuelManagement() {
-            return m_superstructure.applyFuelManagementStateAllParallel(
-                m_toIndexingState.getByForwardKey(
-                    m_superstructure.getSuperState().getFuelManagement()
-                )
-            );
-        }
-
-        /** Stop indexing fuel. */
-        public Command stopIndexFuelManagement() {
-            return m_superstructure.applyFuelManagementStateAllParallel(
-                m_toIndexingState.getByInverseKey(
-                    m_superstructure.getSuperState().getFuelManagement()
-                )
-            );
         }
 
         /** Apply the IDLE turret state */
