@@ -36,7 +36,7 @@ public class FlywheelConstants {
     public static final double kMaxAcceleration = 20000;
     public static final double kMaxJerk = 1600000;
 
-    public static final double kSetpointToleranceRadPerSec = 25;
+    public static final double kSetpointToleranceRadPerSec = 30;
 
     public static final double angularToLinearVelocityConversionFactor = 0.1;
 

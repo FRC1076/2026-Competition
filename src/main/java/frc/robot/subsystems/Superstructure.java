@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 import frc.robot.PhysicalConstants;
@@ -16,7 +17,7 @@ import frc.robot.subsystems.turret.TurretSubsystem;
 
 import lib.ballistic.CommonShotSolution;
 import lib.ballistic.HoundSOTMCalculator;
-import lib.data.BidirectionalMap;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -137,7 +138,7 @@ public class Superstructure {
                     Commands.parallel(
                         m_flywheel.applyVelocity(flywheelTargetSpeedRadPerSec),
                         m_hood.applyPosition(m_shootingParams.launchPitchRad()),
-                        m_turret.applyPosition(m_shootingParams.launchYawRad() - m_robotPoseSupplier.get().getRotation().getRadians())
+                        m_turret.applyPosition(MathUtil.angleModulus(m_shootingParams.launchYawRad() - m_robotPoseSupplier.get().getRotation().getRadians()))
                     )
                 )
             );
@@ -160,7 +161,10 @@ public class Superstructure {
             target = SuperstructureConstants.kLeftPassingTarget;
         }
         
-        flywheelTargetSpeedRadPerSec = SuperstructureConstants.kDistanceToFlywheelSpeedMap.get(shooterPose.getTranslation().getDistance(target.getTranslation()));
+        flywheelTargetSpeedRadPerSec = 
+            SuperstructureConstants.kDistanceToFlywheelSpeedMap.get(shooterPose.getTranslation().getDistance(target.getTranslation()))
+            * m_superState.getTurretState().kAutoAimFlywheelPercentage;
+
         m_shootingParams = HoundSOTMCalculator.solveShootOnTheFly(
             shooterPose, 
             target,
@@ -175,12 +179,25 @@ public class Superstructure {
         return m_superState;
     }
 
-    public Command applyIndexStateAllParallel(IntakeStates state) {
+    public BooleanSupplier isReadyToShoot() {
+        return () -> m_flywheel.readyToShoot(flywheelTargetSpeedRadPerSec);
+    }
+
+    public Command applyIntakeStateAllParallel(IntakeStates state) {
         m_superState.setIntakeState(state);
 
         return Commands.parallel(
             m_slapdown.applyPosition(state.kSlapdownAngle),
            m_roller.applyVoltage(state.kRollerVoltage)
+        );
+    }
+
+    public Command applyIndexStateAllParallel(IndexStates state) {
+        m_superState.setIndexState(state);
+
+        return Commands.parallel(
+            m_spindexer.applyVoltage(state.kSpindexerVoltage),
+            m_kicker.applyVoltage(state.kKickerVoltage)
         );
     }
 
@@ -208,19 +225,24 @@ public class Superstructure {
             this.m_superstructure = superstructure;
         }
 
-        /** Apply the IDLE turret state */
-        public Command applyTurretStatesIdle(){
+        /** Apply the IDLE turret state. */
+        public Command applyTurretIdle(){
             return m_superstructure.applyTurretStateAllParallel(TurretStates.IDLE);
         }
 
         /** Apply the MANUAL turret state */
-        public Command applyTurretStatesManual(){
+        public Command applyTurretManualState(){
             return m_superstructure.applyTurretStateAllParallel(TurretStates.MANUAL);
         }
 
-        /** Apply the ATOUAIM turret state */
-        public Command applyTurretStatesAutoAim(){
-            return m_superstructure.setTurretState(TurretStates.AUTOAIM);
+        /** Apply the ATOUAIM_IDLE turret state (gets ready to shoot) */
+        public Command initiateAutoaim(){
+            return m_superstructure.setTurretState(TurretStates.AUTOAIM_IDLE);
+        }
+
+        /** Max out flywheel speed for shooting */
+        public Command shootWithAutoaim() {
+            return m_superstructure.setTurretState(TurretStates.AUTOAIM_SHOOT);
         }
 
         /** Apply the HUB_PREALIGNED_LOCATION turret state */
@@ -231,6 +253,61 @@ public class Superstructure {
         /** Apply the POINT_DIRECTLY_BACK_FOR_PASSING turret state */
         public Command applyTurretStatesPointDirectlyBackForPassing(){
             return m_superstructure.applyTurretStateAllParallel(TurretStates.POINT_DIRECTLY_BACK_FOR_PASSING);
-        }   
+        }
+
+        /** Apply the RETRACTED state for the intake */
+        public Command applyIntakeRetracted() {
+            return m_superstructure.applyIntakeStateAllParallel(IntakeStates.RETRACTED);
+        }
+
+        /** Apply the EXTENDED state for the intake */
+        public Command applyIntakeExtended() {
+            return m_superstructure.applyIntakeStateAllParallel(IntakeStates.EXTENDED);
+        }
+
+        /** Start intaking fuel */
+        public Command intake() {
+            return m_superstructure.applyIntakeStateAllParallel(IntakeStates.INTAKING);
+        }
+
+        /** Index fuel for shooting */
+        public Command startIndexing() {
+            return m_superstructure.applyIndexStateAllParallel(IndexStates.INDEXING);
+        }
+
+        /** Set the spindexer and kicker to idle */
+        public Command stopIndexing() {
+            return m_superstructure.applyIndexStateAllParallel(IndexStates.IDLE);
+        }
+
+        /** Shoot fuel. Either goes to AUTOAIM_SHOOT for turret,
+         *  or does nothing for turret depending on if AUTOAIM is active.  */
+        public Command shoot() {
+            return Commands.either(
+                Commands.sequence(
+                    shootWithAutoaim(),
+                    Commands.waitUntil(isReadyToShoot()),
+                    startIndexing()
+                ),
+                Commands.sequence(
+                    startIndexing()
+                ),
+                () -> m_superstructure.getSuperState().getTurretState().kIsAutoAim
+            );
+        }
+
+        /** Stop shooting fuel. Either goes to AUTOAIM_IDLE for turret or does nothing for turret,
+         *  or does nothing for turret, depending on if AUTOAIM is active.
+         */
+        public Command stopShooting() {
+            return Commands.either(
+                Commands.sequence(
+                    stopIndexing(),
+                    initiateAutoaim()
+                ), 
+                stopIndexing(), 
+                () -> m_superstructure.getSuperState().getTurretState().kIsAutoAim
+            );
+        }
     }
 }

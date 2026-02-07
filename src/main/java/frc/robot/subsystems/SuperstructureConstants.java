@@ -13,18 +13,20 @@ public class SuperstructureConstants {
 
     
     public static enum TurretStates {
-        /** list of possible operational states the turret can be set to */
+        /* list of possible operational states the turret can be set to */
         IDLE(0,0,0),
-        MANUAL(false),
-        AUTOAIM(true),
+        MANUAL(false, 0),
+        AUTOAIM_IDLE(true, 0.75),
+        AUTOAIM_SHOOT(true, 1),
         HUB_PREALIGNED_LOCATION(0,0,0),
         POINT_DIRECTLY_BACK_FOR_PASSING(0,0,0);  
 
-        /** numeric states of turret (initializes values)*/
         double kTurretAngleRadians;
         double kHoodAngleRadians;
         double kFlywheelRadPerSec;
+
         boolean kIsAutoAim;
+        double kAutoAimFlywheelPercentage;
         
         /** constructor for turret states */
         private TurretStates(
@@ -40,9 +42,11 @@ public class SuperstructureConstants {
         }
         /**  constructor for autoaim */
         private TurretStates(
-            boolean isAutoAim
+            boolean isAutoAim,
+            double autoAimFlywheelPercentage
         ) {
             this.kIsAutoAim = isAutoAim;
+            this.kAutoAimFlywheelPercentage = autoAimFlywheelPercentage;
             this.kTurretAngleRadians = 0;
             this.kHoodAngleRadians = 0;
             this.kFlywheelRadPerSec = 0;

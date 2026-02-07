@@ -15,4 +15,6 @@ public class RollerConstants {
 
     public static final InvertedValue kInverted = InvertedValue.CounterClockwise_Positive;
     public static final NeutralModeValue kNeutralMode = NeutralModeValue.Brake;
+
+    public static final double kGearRatio = 2;
 }

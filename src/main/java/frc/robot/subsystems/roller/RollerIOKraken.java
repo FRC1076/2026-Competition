@@ -36,6 +36,8 @@ public class RollerIOKraken implements RollerIO {
         m_motorConfig.MotorOutput.Inverted = RollerConstants.kInverted;
         m_motorConfig.MotorOutput.NeutralMode = RollerConstants.kNeutralMode;
 
+        m_motorConfig.Feedback.SensorToMechanismRatio = RollerConstants.kGearRatio;
+
         m_motor.getConfigurator().apply(m_motorConfig);
 
         m_voltageSignal = m_motor.getMotorVoltage();

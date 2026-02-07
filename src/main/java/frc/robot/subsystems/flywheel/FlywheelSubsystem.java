@@ -42,8 +42,8 @@ public class FlywheelSubsystem extends SubsystemBase {
 
     }
 
-    public boolean atSetpoint(double targetRadiansPerSecond) {
-        return Math.abs(inputs.velocityRadiansPerSecond - targetRadiansPerSecond) < FlywheelConstants.kSetpointToleranceRadPerSec;
+    public boolean readyToShoot(double minimumVelocityRPS) {
+        return (minimumVelocityRPS - inputs.velocityRadiansPerSecond) < FlywheelConstants.kSetpointToleranceRadPerSec;
     }
 
     @Override
