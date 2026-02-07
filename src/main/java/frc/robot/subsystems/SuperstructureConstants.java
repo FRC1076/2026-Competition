@@ -9,19 +9,47 @@ import frc.robot.Constants;
 import frc.robot.PhysicalConstants;
 
 public class SuperstructureConstants {
-    public static enum TurretStates {
-        IDLE,
-        MANUAL,
-        AUTOAIM,
-        HUB_PREALIGNED_LOCATION,
-        POINT_DIRECTLY_BACK_FOR_PASSING;  
-    }
 
+    
+    public static enum TurretStates {
+        /** list of possible operational states the turret can be set to */
+        IDLE(0,0,0),
+        MANUAL(0,0,0),
+        AUTOAIM(0,0,0),
+        HUB_PREALIGNED_LOCATION(0,0,0),
+        POINT_DIRECTLY_BACK_FOR_PASSING(0,0,0);  
+
+        /** numeric states of turret (initializes values)*/
+        double kTurretAngleRadians = 0;
+        double kHoodAngleRadians = 0;
+        double kFlywheelRadPerSec = 0;
+        boolean kIsAutoAim = true;
+        
+        /** constructor for turret states */
+        private TurretStates(
+            double kTurretAngleRadians,
+            double kHoodAngleRadians,
+            double kFlywheelRadPerSec
+        ) {
+            this.kTurretAngleRadians = kTurretAngleRadians;
+            this.kHoodAngleRadians = kHoodAngleRadians ;
+            this.kFlywheelRadPerSec = kFlywheelRadPerSec;
+
+        }
+        /**  constructor for autoaim */
+        private TurretStates(
+            boolean kIsAutoAim
+        ) {
+            this.kIsAutoAim = kIsAutoAim;
+        }
+    }
+    /** intitalizes numerical values for the FuelManagmentStates enum */
     public static double kSlapdownUpAngle = Math.PI/2;
     public static double kSlapdownDownAngle = 0;
     public static double kIntakeRollerVoltage = 6;
     public static double kSpindexerIndexerVoltage = 12;
     public static double kKickerIndexVoltage = 6;
+    /** sets operational states for the FuelManagmentStates */
     public static enum FuelManagementStates {
         IDLE_RETRACTED(kSlapdownUpAngle, 0, 0, 0),
         IDLE_EXTENDED(kSlapdownDownAngle, 0, 0, 0),
@@ -30,11 +58,13 @@ public class SuperstructureConstants {
         INDEX_FUEL_RETRACTED(kSlapdownUpAngle, 0, kSpindexerIndexerVoltage, kKickerIndexVoltage),
         INDEX_FUEL_EXTENDED(kSlapdownDownAngle, 0, kSpindexerIndexerVoltage, kKickerIndexVoltage);
 
+        /**  initializes variables for fuelmanagement constructor below */
         public final double slapdownRadians;
         public final double rollerVoltage;
         public final double spindexerVoltage;
         public final double kickerVoltage;
 
+        /** constructor for FuelManagmentStates */
         private FuelManagementStates(
             double slapdownRadians,
             double rollerVoltage,
@@ -70,7 +100,7 @@ public class SuperstructureConstants {
 
     public static final InterpolatingDoubleTreeMap kDistanceToFlywheelSpeedMap = new InterpolatingDoubleTreeMap();
     static {
-        // Distance in meters, speed in rad/sec
+        /**  Distance in meters, speed in rad/sec */
         kDistanceToFlywheelSpeedMap.put(1.0, 300.0);
         kDistanceToFlywheelSpeedMap.put(4.0, 500.0);
     }

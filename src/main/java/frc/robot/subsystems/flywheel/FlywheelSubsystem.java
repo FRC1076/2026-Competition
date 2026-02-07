@@ -70,7 +70,7 @@ public class FlywheelSubsystem extends SubsystemBase {
     }
 
     /** Tell the flywheel to run at the specified velocity */
-    public Command applyVelocityPerSec(double radPerSec) {
+    public Command applyVelocity(double radPerSec) {
         return Commands.runOnce(
             () -> io.setVelocityRadPerSec(radPerSec),
             this
@@ -78,7 +78,7 @@ public class FlywheelSubsystem extends SubsystemBase {
     }
 
     /** Run the wheel at the supplied velocity */
-    public Command runVelocityPerSec(DoubleSupplier radPerSec) {
+    public Command runVelocity(DoubleSupplier radPerSec) {
         return Commands.runOnce(
             () -> io.setVelocityRadPerSec(radPerSec.getAsDouble()),
             this

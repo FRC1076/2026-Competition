@@ -30,27 +30,39 @@ public class Superstructure {
         private TurretStates turretState = TurretStates.IDLE;
         private FuelManagementStates fuelManagement = FuelManagementStates.IDLE_RETRACTED;
         
+        /** Returns the state of the turret assembly */
         public TurretStates getTurretState() {
             return turretState;
         }
         
+        /** Sets the target state of the turret assembly
+         *  (note: this does not actually affect the physical robot, it only
+         *   affects the variable in the code)
+         */
         public void setTurretState(TurretStates newTurretState) {
             turretState = newTurretState;
         }
 
+        /** Returns the state of the part of robot that manages fuel. */
         public FuelManagementStates getFuelManagement() {
             return fuelManagement;
         }
 
+        /** Sets the target state of part of the robot that manages fuel
+         *  (note: this does not actually affect the physical robot, it only
+         *   affects the variable in the code)
+          */
         public void setFuelManagementState(FuelManagementStates newFuelManagement) {
             fuelManagement = newFuelManagement;
         }
 
+        /** Default constructor. Sets all variables to IDLE */
         public MutableSuperState() {
             this.turretState = TurretStates.IDLE;
             this.fuelManagement = FuelManagementStates.IDLE_RETRACTED;
         }
-
+        
+        /** Instantiates a MutableSuperState with the specified TurretState and FuelManagementeState */
         public MutableSuperState(TurretStates turretState, FuelManagementStates fuelManagement) {
             this.turretState = turretState;
             this.fuelManagement = fuelManagement;
@@ -101,13 +113,14 @@ public class Superstructure {
         m_shootingParams = new CommonShotSolution(0, 0, 0);
     }
 
+    /** Configure trigger bindings that are based upon the state of the robot. */
     public void configureStateBasedBindings() {
         new Trigger(() -> m_superState.getTurretState() == TurretStates.AUTOAIM)
             .whileTrue(
                 Commands.repeatingSequence(
                     Commands.runOnce(() -> updateShootingParams()),
                     Commands.parallel(
-                        m_flywheel.applyVelocityPerSec(flywheelTargetSpeedRadPerSec),
+                        m_flywheel.applyVelocity(flywheelTargetSpeedRadPerSec),
                         m_hood.applyPosition(m_shootingParams.launchPitchRad()),
                         m_turret.applyPosition(m_shootingParams.launchYawRad() - m_robotPoseSupplier.get().getRotation().getRadians())
                     )
@@ -115,6 +128,9 @@ public class Superstructure {
             );
     }
 
+    /** Update parameters saved to m_shootingParams and flywheelTargetRadiansPerSecond
+     *  based upon the current pose of the robot.
+     */
     private void updateShootingParams() {
         final Pose3d shooterPose = new Pose3d(m_robotPoseSupplier.get()).transformBy(PhysicalConstants.kBotRelativeTurretPose);
         final Pose3d target;
@@ -144,6 +160,8 @@ public class Superstructure {
         );
     }
 
+    /** Apply the passed in state to the slapdown, intake rollers, spindexer, and kicker,
+     *  all at the same time. */
     public Command applyFuelManagementStateAllParallel(FuelManagementStates state) {
         m_superState.setFuelManagementState(state);
 
@@ -155,6 +173,18 @@ public class Superstructure {
         );
     }
 
+    /** Apply the passed in state to the turret, hood, and flywheel, all at the same time. */
+    public Command applyTurretStatesAllParallel(TurretStates state){
+        m_superState.setTurretState(state);
+
+        return Commands.parallel(
+            m_turret.applyPosition(state.kTurretAngleRadians),
+            m_flywheel.applyVelocity(state.kFlywheelRadPerSec),
+            m_hood.applyPosition(state.kHoodAngleRadians)
+        );
+    }
+
+    /** Public Commands to be used to bind to triggers in RobotContainer */
     public class SuperstructureCommandFactory{
         private final Superstructure m_superstructure;
 
@@ -162,28 +192,58 @@ public class Superstructure {
             this.m_superstructure = superstructure;
         }
 
-        public Command applyIdleRetractedStates(){
+        /** Apply the IDLE_RETRACTED fuel management state */
+        public Command applyFuelManagementIdleRetracted(){
             return m_superstructure.applyFuelManagementStateAllParallel(FuelManagementStates.IDLE_RETRACTED);
         }
 
-        public Command applyIdleExtendedStates(){
+        /** Apply the IDLE_EXTENDED fuel management state */
+        public Command applyFuelManagementIdleExtended(){
             return m_superstructure.applyFuelManagementStateAllParallel(FuelManagementStates.IDLE_EXTENDED);
         }
 
-        public Command applyIntakeFuelStates(){
+        /** Apply the INTAKE fuel management state */
+        public Command applyFuelManagementIntake(){
             return m_superstructure.applyFuelManagementStateAllParallel(FuelManagementStates.INTAKE_FUEL);
         }
 
-        public Command applyIntakeIndexFuelStates(){
+        /** Apply the INTAKE_INDEX fuel management state. Can be used for shooting. */
+        public Command applyFuelManagementIntakeIndex(){
             return m_superstructure.applyFuelManagementStateAllParallel(FuelManagementStates.INTAKE_INDEX_FUEL);
         }
 
+        /** Apply the INDEX_RETRACTED fuel management state. Can be used for shooting */
         public Command applyIndexRetracted(){
             return m_superstructure.applyFuelManagementStateAllParallel(FuelManagementStates.INDEX_FUEL_RETRACTED);
         }
 
+        /** Apply the INDEX_EXTENDED fuel management state. Can be used for shooting. */
         public Command applyIndexExtended(){
             return m_superstructure.applyFuelManagementStateAllParallel(FuelManagementStates.INDEX_FUEL_EXTENDED);
         }
+
+        /** Apply the IDLE turret state */
+        public Command applyTurretStatesIdle(){
+            return m_superstructure.applyTurretStatesAllParallel(TurretStates.IDLE);
+        }
+
+        /** Apply the MANUAL turret state */
+        public Command applyTurretStatesManual(){
+            return m_superstructure.applyTurretStatesAllParallel(TurretStates.MANUAL);
+        }
+
+       /** Apply the ATOUAIM turret state */
+       public Command applyTurretStatesAutoAim(){
+            return m_superstructure.applyTurretStatesAllParallel(TurretStates.AUTOAIM);
+       }
+       /** Apply the HUB_PREALIGNED_LOCATION turret state */
+       public Command applyTurretStatesHubPreAlignedLocation(){
+            return m_superstructure.applyTurretStatesAllParallel(TurretStates.HUB_PREALIGNED_LOCATION);
+       }
+       /** Apply the POINT_DIRECTLY_BACK_FOR_PASSING turret state */
+       public Command applyTurretStatesPointDirectlyBackForPassing(){
+            return m_superstructure.applyTurretStatesAllParallel(TurretStates.POINT_DIRECTLY_BACK_FOR_PASSING);
+       }
+        
     }
 }
