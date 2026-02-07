@@ -58,10 +58,10 @@ public class SuperstructureConstants {
     public static enum FuelManagementStates {
         IDLE_RETRACTED(kSlapdownUpAngle, 0, 0, 0),
         IDLE_EXTENDED(kSlapdownDownAngle, 0, 0, 0),
-        INTAKE_FUEL(kSlapdownDownAngle, kIntakeRollerVoltage, 0, 0),
-        INTAKE_INDEX_FUEL(kSlapdownDownAngle, kIntakeRollerVoltage, kSpindexerIndexerVoltage, kKickerIndexVoltage),
-        INDEX_FUEL_RETRACTED(kSlapdownUpAngle, 0, kSpindexerIndexerVoltage, kKickerIndexVoltage),
-        INDEX_FUEL_EXTENDED(kSlapdownDownAngle, 0, kSpindexerIndexerVoltage, kKickerIndexVoltage);
+        INTAKE(kSlapdownDownAngle, kIntakeRollerVoltage, 0, 0),
+        INTAKE_INDEX(kSlapdownDownAngle, kIntakeRollerVoltage, kSpindexerIndexerVoltage, kKickerIndexVoltage),
+        INDEX_RETRACTED(kSlapdownUpAngle, 0, kSpindexerIndexerVoltage, kKickerIndexVoltage),
+        INDEX_EXTENDED(kSlapdownDownAngle, 0, kSpindexerIndexerVoltage, kKickerIndexVoltage);
 
         /**  initializes variables for fuelmanagement constructor below */
         public final double slapdownRadians;

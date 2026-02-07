@@ -2,12 +2,6 @@ package frc.robot.subsystems;
 
 import java.util.function.Supplier;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.PhysicalConstants;
 import frc.robot.subsystems.SuperstructureConstants.FuelManagementStates;
 import frc.robot.subsystems.SuperstructureConstants.TurretStates;
@@ -18,8 +12,17 @@ import frc.robot.subsystems.roller.RollerSubsystem;
 import frc.robot.subsystems.slapdown.SlapdownSubsystem;
 import frc.robot.subsystems.spindexer.SpindexerSubsystem;
 import frc.robot.subsystems.turret.TurretSubsystem;
+
 import lib.ballistic.CommonShotSolution;
 import lib.ballistic.HoundSOTMCalculator;
+import lib.utils.BidirectionalMap;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class Superstructure {
     public class MutableSuperState{
@@ -43,6 +46,8 @@ public class Superstructure {
         public FuelManagementStates getFuelManagement() {
             return fuelManagement;
         }
+
+        /** Returns the previous fuel management state of the robot */
 
         /** Sets the target state of part of the robot that manages fuel
          *  (note: this does not actually affect the physical robot, it only
@@ -152,6 +157,10 @@ public class Superstructure {
         );
     }
 
+    public MutableSuperState getSuperState() {
+        return m_superState;
+    }
+
     /** Apply the passed in state to the slapdown, intake rollers, spindexer, and kicker,
      *  all at the same time. */
     public Command applyFuelManagementStateAllParallel(FuelManagementStates state) {
@@ -185,8 +194,16 @@ public class Superstructure {
     public class SuperstructureCommandFactory{
         private final Superstructure m_superstructure;
 
+        private final BidirectionalMap<FuelManagementStates, FuelManagementStates> m_toIndexingState; // Map from a fuel management state without indexing to indexing
+
         public SuperstructureCommandFactory(Superstructure superstructure){
             this.m_superstructure = superstructure;
+
+            this.m_toIndexingState = new BidirectionalMap<FuelManagementStates, FuelManagementStates>();
+
+            m_toIndexingState.put(FuelManagementStates.IDLE_RETRACTED, FuelManagementStates.INDEX_RETRACTED);
+            m_toIndexingState.put(FuelManagementStates.IDLE_EXTENDED, FuelManagementStates.INDEX_EXTENDED);
+            m_toIndexingState.put(FuelManagementStates.INTAKE, FuelManagementStates.INTAKE_INDEX);
         }
 
         /** Apply the IDLE_RETRACTED fuel management state */
@@ -201,22 +218,40 @@ public class Superstructure {
 
         /** Apply the INTAKE fuel management state */
         public Command applyFuelManagementIntake(){
-            return m_superstructure.applyFuelManagementStateAllParallel(FuelManagementStates.INTAKE_FUEL);
+            return m_superstructure.applyFuelManagementStateAllParallel(FuelManagementStates.INTAKE);
         }
 
         /** Apply the INTAKE_INDEX fuel management state. Can be used for shooting. */
         public Command applyFuelManagementIntakeIndex(){
-            return m_superstructure.applyFuelManagementStateAllParallel(FuelManagementStates.INTAKE_INDEX_FUEL);
+            return m_superstructure.applyFuelManagementStateAllParallel(FuelManagementStates.INTAKE_INDEX);
         }
 
         /** Apply the INDEX_RETRACTED fuel management state. Can be used for shooting */
         public Command applyIndexRetracted(){
-            return m_superstructure.applyFuelManagementStateAllParallel(FuelManagementStates.INDEX_FUEL_RETRACTED);
+            return m_superstructure.applyFuelManagementStateAllParallel(FuelManagementStates.INDEX_RETRACTED);
         }
 
         /** Apply the INDEX_EXTENDED fuel management state. Can be used for shooting. */
         public Command applyIndexExtended(){
-            return m_superstructure.applyFuelManagementStateAllParallel(FuelManagementStates.INDEX_FUEL_EXTENDED);
+            return m_superstructure.applyFuelManagementStateAllParallel(FuelManagementStates.INDEX_EXTENDED);
+        }
+
+        /** Start indexing fuel. */
+        public Command applyIndexFuelManagement() {
+            return m_superstructure.applyFuelManagementStateAllParallel(
+                m_toIndexingState.getByForwardKey(
+                    m_superstructure.getSuperState().getFuelManagement()
+                )
+            );
+        }
+
+        /** Stop indexing fuel. */
+        public Command stopIndexFuelManagement() {
+            return m_superstructure.applyFuelManagementStateAllParallel(
+                m_toIndexingState.getByInverseKey(
+                    m_superstructure.getSuperState().getFuelManagement()
+                )
+            );
         }
 
         /** Apply the IDLE turret state */
@@ -229,18 +264,19 @@ public class Superstructure {
             return m_superstructure.applyTurretStateAllParallel(TurretStates.MANUAL);
         }
 
-       /** Apply the ATOUAIM turret state */
-       public Command applyTurretStatesAutoAim(){
+        /** Apply the ATOUAIM turret state */
+        public Command applyTurretStatesAutoAim(){
             return m_superstructure.setTurretState(TurretStates.AUTOAIM);
-       }
-       /** Apply the HUB_PREALIGNED_LOCATION turret state */
-       public Command applyTurretStatesHubPreAlignedLocation(){
+        }
+
+        /** Apply the HUB_PREALIGNED_LOCATION turret state */
+        public Command applyTurretStatesHubPreAlignedLocation(){
             return m_superstructure.applyTurretStateAllParallel(TurretStates.HUB_PREALIGNED_LOCATION);
-       }
-       /** Apply the POINT_DIRECTLY_BACK_FOR_PASSING turret state */
-       public Command applyTurretStatesPointDirectlyBackForPassing(){
+        }
+
+        /** Apply the POINT_DIRECTLY_BACK_FOR_PASSING turret state */
+        public Command applyTurretStatesPointDirectlyBackForPassing(){
             return m_superstructure.applyTurretStateAllParallel(TurretStates.POINT_DIRECTLY_BACK_FOR_PASSING);
-       }
-        
+        }   
     }
 }
