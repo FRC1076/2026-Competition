@@ -4,14 +4,10 @@ import java.util.function.Supplier;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants;
 import frc.robot.PhysicalConstants;
 import frc.robot.subsystems.SuperstructureConstants.FuelManagementStates;
 import frc.robot.subsystems.SuperstructureConstants.TurretStates;
@@ -135,11 +131,7 @@ public class Superstructure {
         final Pose3d shooterPose = new Pose3d(m_robotPoseSupplier.get()).transformBy(PhysicalConstants.kBotRelativeTurretPose);
         final Pose3d target;
         
-        final Pose3d shooterPoseAllianceColorCoordinates = shooterPose.relativeTo(
-            Constants.GameConstants.teamColor == Alliance.Blue
-                ? new Pose3d()
-                : new Pose3d(new Translation3d(PhysicalConstants.FieldConstants.fieldLength, PhysicalConstants.FieldConstants.fieldWidth, 0), new Rotation3d())
-        );
+        final Pose3d shooterPoseAllianceColorCoordinates = shooterPose.relativeTo(SuperstructureConstants.kAllianceOrigin);
 
         if (shooterPoseAllianceColorCoordinates.getX() <= PhysicalConstants.FieldConstants.LinesVertical.allianceZone) {
             target = SuperstructureConstants.kHubTarget;

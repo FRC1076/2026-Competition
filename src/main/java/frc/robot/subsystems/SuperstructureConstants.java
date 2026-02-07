@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
@@ -85,6 +86,12 @@ public class SuperstructureConstants {
     public static final double kLeftPassingTargetYCoordinate = 0.75 * PhysicalConstants.FieldConstants.fieldWidth;
     public static final double kRightPassingTargetYCoordinate = 0.25 * PhysicalConstants.FieldConstants.fieldWidth;
 
+    public static final Pose3d kAllianceOrigin = 
+        Constants.GameConstants.teamColor == Alliance.Blue
+            ? new Pose3d()
+            : new Pose3d(
+                new Translation3d(PhysicalConstants.FieldConstants.fieldLength, PhysicalConstants.FieldConstants.fieldWidth, 0),
+                new Rotation3d(Rotation2d.fromRadians(Math.PI)));
     public static final Pose3d kHubTarget = 
         Constants.GameConstants.teamColor == Alliance.Blue
             ? new Pose3d(PhysicalConstants.FieldConstants.Hub.topCenterPoint, Rotation3d.kZero)
