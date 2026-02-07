@@ -15,8 +15,7 @@ import frc.robot.subsystems.turret.TurretSubsystem;
 
 import lib.ballistic.CommonShotSolution;
 import lib.ballistic.HoundSOTMCalculator;
-import lib.utils.BidirectionalMap;
-
+import lib.data.BidirectionalMap;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
