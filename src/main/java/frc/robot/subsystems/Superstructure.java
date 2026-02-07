@@ -115,7 +115,7 @@ public class Superstructure {
 
     /** Configure trigger bindings that are based upon the state of the robot. */
     public void configureStateBasedBindings() {
-        new Trigger(() -> m_superState.getTurretState() == TurretStates.AUTOAIM)
+        new Trigger(() -> m_superState.getTurretState().kIsAutoAim)
             .whileTrue(
                 Commands.repeatingSequence(
                     Commands.runOnce(() -> updateShootingParams()),
@@ -174,7 +174,7 @@ public class Superstructure {
     }
 
     /** Apply the passed in state to the turret, hood, and flywheel, all at the same time. */
-    public Command applyTurretStatesAllParallel(TurretStates state){
+    public Command applyTurretStateAllParallel(TurretStates state){
         m_superState.setTurretState(state);
 
         return Commands.parallel(
@@ -182,6 +182,11 @@ public class Superstructure {
             m_flywheel.applyVelocity(state.kFlywheelRadPerSec),
             m_hood.applyPosition(state.kHoodAngleRadians)
         );
+    }
+
+    /** Sets the turret state to the desired item such so that a state-based trigger can take control */
+    public Command setTurretState(TurretStates state) {
+        return Commands.runOnce(() -> m_superState.setTurretState(state));
     }
 
     /** Public Commands to be used to bind to triggers in RobotContainer */
@@ -224,25 +229,25 @@ public class Superstructure {
 
         /** Apply the IDLE turret state */
         public Command applyTurretStatesIdle(){
-            return m_superstructure.applyTurretStatesAllParallel(TurretStates.IDLE);
+            return m_superstructure.applyTurretStateAllParallel(TurretStates.IDLE);
         }
 
         /** Apply the MANUAL turret state */
         public Command applyTurretStatesManual(){
-            return m_superstructure.applyTurretStatesAllParallel(TurretStates.MANUAL);
+            return m_superstructure.applyTurretStateAllParallel(TurretStates.MANUAL);
         }
 
        /** Apply the ATOUAIM turret state */
        public Command applyTurretStatesAutoAim(){
-            return m_superstructure.applyTurretStatesAllParallel(TurretStates.AUTOAIM);
+            return m_superstructure.setTurretState(TurretStates.AUTOAIM);
        }
        /** Apply the HUB_PREALIGNED_LOCATION turret state */
        public Command applyTurretStatesHubPreAlignedLocation(){
-            return m_superstructure.applyTurretStatesAllParallel(TurretStates.HUB_PREALIGNED_LOCATION);
+            return m_superstructure.applyTurretStateAllParallel(TurretStates.HUB_PREALIGNED_LOCATION);
        }
        /** Apply the POINT_DIRECTLY_BACK_FOR_PASSING turret state */
        public Command applyTurretStatesPointDirectlyBackForPassing(){
-            return m_superstructure.applyTurretStatesAllParallel(TurretStates.POINT_DIRECTLY_BACK_FOR_PASSING);
+            return m_superstructure.applyTurretStateAllParallel(TurretStates.POINT_DIRECTLY_BACK_FOR_PASSING);
        }
         
     }

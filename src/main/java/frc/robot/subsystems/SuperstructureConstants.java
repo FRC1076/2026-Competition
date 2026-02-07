@@ -14,33 +14,37 @@ public class SuperstructureConstants {
     public static enum TurretStates {
         /** list of possible operational states the turret can be set to */
         IDLE(0,0,0),
-        MANUAL(0,0,0),
-        AUTOAIM(0,0,0),
+        MANUAL(false),
+        AUTOAIM(true),
         HUB_PREALIGNED_LOCATION(0,0,0),
         POINT_DIRECTLY_BACK_FOR_PASSING(0,0,0);  
 
         /** numeric states of turret (initializes values)*/
-        double kTurretAngleRadians = 0;
-        double kHoodAngleRadians = 0;
-        double kFlywheelRadPerSec = 0;
-        boolean kIsAutoAim = true;
+        double kTurretAngleRadians;
+        double kHoodAngleRadians;
+        double kFlywheelRadPerSec;
+        boolean kIsAutoAim;
         
         /** constructor for turret states */
         private TurretStates(
-            double kTurretAngleRadians,
-            double kHoodAngleRadians,
-            double kFlywheelRadPerSec
+            double turretAngleRadians,
+            double hoodAngleRadians,
+            double flywheelRadPerSec
         ) {
-            this.kTurretAngleRadians = kTurretAngleRadians;
-            this.kHoodAngleRadians = kHoodAngleRadians ;
-            this.kFlywheelRadPerSec = kFlywheelRadPerSec;
+            this.kIsAutoAim = false;
+            this.kTurretAngleRadians = turretAngleRadians;
+            this.kHoodAngleRadians = hoodAngleRadians;
+            this.kFlywheelRadPerSec = flywheelRadPerSec;
 
         }
         /**  constructor for autoaim */
         private TurretStates(
-            boolean kIsAutoAim
+            boolean isAutoAim
         ) {
-            this.kIsAutoAim = kIsAutoAim;
+            this.kIsAutoAim = isAutoAim;
+            this.kTurretAngleRadians = 0;
+            this.kHoodAngleRadians = 0;
+            this.kFlywheelRadPerSec = 0;
         }
     }
     /** intitalizes numerical values for the FuelManagmentStates enum */
