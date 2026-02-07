@@ -19,7 +19,8 @@ public class SuperstructureConstants {
         AUTOAIM_IDLE(true, 0.75),
         AUTOAIM_SHOOT(true, 1),
         HUB_PREALIGNED_LOCATION(0,0,0),
-        POINT_DIRECTLY_BACK_FOR_PASSING(0,0,0);  
+        POINT_DIRECTLY_BACK_FOR_PASSING(0,0,0),
+        REVERSE(0,0, -100);  
 
         double kTurretAngleRadians;
         double kHoodAngleRadians;
@@ -61,7 +62,8 @@ public class SuperstructureConstants {
         /** list of opereational states of the intake and thier inputs */
         RETRACTED(kSlapdownUpAngle,0),
         EXTENDED(kSlapdownDownAngle, 0),
-        INTAKING(kSlapdownDownAngle, kIntakeRollerVoltage);
+        INTAKING(kSlapdownDownAngle, kIntakeRollerVoltage),
+        REVERSE(kSlapdownDownAngle, -kIntakeRollerVoltage);
 
         public final double kSlapdownAngle;
         public final double kRollerVoltage;
@@ -82,7 +84,8 @@ public class SuperstructureConstants {
     public static enum IndexStates {
         /** list of all possible indexing states and their inputs */
         IDLE(0,0),
-        INDEXING( kSpindexerIndexerVoltage , kKickerIndexVoltage);
+        INDEXING(kSpindexerIndexerVoltage, kKickerIndexVoltage),
+        REVERSE(-kSpindexerIndexerVoltage, -kKickerIndexVoltage);
 
         public final double kSpindexerVoltage;
         public final double kKickerVoltage;

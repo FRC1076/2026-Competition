@@ -212,6 +212,13 @@ public class Superstructure {
         );
     }
 
+    /** Apply the passed in state to the turret only. */
+    public Command applyTurretStateFlywheelOnly(TurretStates state) {
+        m_superState.setTurretState(state);
+
+        return m_flywheel.applyVelocity(state.kFlywheelRadPerSec);
+    }
+
     /** Sets the turret state to the desired item such so that a state-based trigger can take control */
     public Command setTurretState(TurretStates state) {
         return Commands.runOnce(() -> m_superState.setTurretState(state));
@@ -278,6 +285,14 @@ public class Superstructure {
         /** Set the spindexer and kicker to idle */
         public Command stopIndexing() {
             return m_superstructure.applyIndexStateAllParallel(IndexStates.IDLE);
+        }
+
+        public Command reverseEverything() {
+            return Commands.parallel(
+                m_superstructure.applyTurretStateFlywheelOnly(TurretStates.REVERSE),
+                m_superstructure.applyIndexStateAllParallel(IndexStates.REVERSE),
+                m_superstructure.applyIntakeStateAllParallel(IntakeStates.REVERSE)
+            );
         }
 
         /** Shoot fuel. Either goes to AUTOAIM_SHOOT for turret,
