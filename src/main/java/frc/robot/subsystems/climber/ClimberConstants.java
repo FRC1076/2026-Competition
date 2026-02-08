@@ -35,6 +35,9 @@ public class ClimberConstants{
     public static final double kPositionConversionFactor = ((2 * Math.PI * kDrumRadius) / kGearRatio);
     public static final double kVelocityConversionFactor = kPositionConversionFactor / 60.0;
 
+    public static final double kClimberUpPosition = 0.5;
+    public static final double kClimberDownPosition = 0;
+
     public static class HookConstants {
         public static final int kCANId = 52;
         public static final CANBus kCANBus = CANConstants.kRioBus;
@@ -51,5 +54,8 @@ public class ClimberConstants{
         public static final double kGearRatio = 1;
         public static final double kPositionConversionFactor = (2 * Math.PI) / kGearRatio;
         public static final double kVelocityConversionFactor = kPositionConversionFactor / 60.0;
+
+        public static final double kHookStowedPosition = 0;
+        public static final double kHookOutPosition = Math.PI;
     }
 }

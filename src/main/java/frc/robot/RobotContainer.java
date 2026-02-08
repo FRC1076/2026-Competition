@@ -12,6 +12,11 @@ import frc.robot.commands.drive.TeleopDriveCommand;
 import frc.robot.subsystems.Elastic;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.SuperstructureCommandFactory;
+import frc.robot.subsystems.climber.ClimberConstants;
+import frc.robot.subsystems.climber.ClimberIODisabled;
+import frc.robot.subsystems.climber.ClimberIONeo;
+import frc.robot.subsystems.climber.ClimberSubsystem;
+import frc.robot.subsystems.climber.ClimberConstants.HookConstants;
 import frc.robot.subsystems.drive.DriveIOHardware;
 import frc.robot.subsystems.drive.DriveIOSim;
 import frc.robot.subsystems.drive.DriveSubsystem;
@@ -73,6 +78,8 @@ public class RobotContainer {
     private final SpindexerSubsystem m_spindexer;
     private final KickerSubsystem m_kicker;
 
+    private final ClimberSubsystem m_climber;
+
     private final VisionLocalizationSystem m_vision;
 
     private final Superstructure m_superstructure;
@@ -109,6 +116,8 @@ public class RobotContainer {
             m_spindexer = new SpindexerSubsystem(new SpindexerIOKraken());
             m_kicker = new KickerSubsystem(new KickerIONeo());
 
+            m_climber = new ClimberSubsystem(new ClimberIONeo());
+
             for (PhotonConfig config : PhotonConfig.values()) {
                 PhotonCamera cam = new PhotonCamera(config.name);
                 m_vision.addCamera(new PhotonVisionLocalizer(
@@ -137,6 +146,8 @@ public class RobotContainer {
             m_slapdown = new SlapdownSubsystem(new SlapdownIODisabled());
             m_spindexer = new SpindexerSubsystem(new SpindexerIODisabled());
             m_kicker = new KickerSubsystem(new KickerIODisabled());
+
+            m_climber = new ClimberSubsystem(new ClimberIODisabled());
         }
 
         teleopDriveCommand = new TeleopDriveCommand(
@@ -209,6 +220,18 @@ public class RobotContainer {
 
         m_driverController.cross()
             .onTrue(superstructureCommands.applyTurretStatesHubPreAlignedLocation());
+
+        m_driverController.povUp()
+            .onTrue(m_climber.applyPosition(ClimberConstants.kClimberUpPosition));
+
+        m_driverController.povDown()
+            .onTrue(m_climber.applyPosition(ClimberConstants.kClimberDownPosition));
+
+        m_driverController.povLeft()
+            .onTrue(m_climber.applyHookPosition(HookConstants.kHookOutPosition));
+
+        m_driverController.povRight()
+            .onTrue(m_climber.applyHookPosition(HookConstants.kHookStowedPosition));
     }
 
     /** Bind triggers on operator controller to commands */
