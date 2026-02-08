@@ -82,6 +82,7 @@ public interface DriveIO {
     public abstract void resetPose(Pose2d pose);
     public abstract void resetHeading();
     public abstract Pose2d getPose();
+    public abstract ChassisSpeeds getChassisSpeeds();
     public abstract void setAllianceRotation(Rotation2d allianceRotation);
     public abstract void periodic();
     public abstract void setDriveStatorCurrentLimit(double currentLimit);

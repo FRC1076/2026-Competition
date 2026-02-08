@@ -4,7 +4,6 @@ import static edu.wpi.first.units.Units.Volts;
 
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 import lib.units.TalonFXUnitConverter;
 

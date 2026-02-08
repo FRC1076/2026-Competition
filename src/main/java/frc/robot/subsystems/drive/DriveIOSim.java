@@ -162,6 +162,11 @@ public class DriveIOSim extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
     }
 
     @Override
+    public ChassisSpeeds getChassisSpeeds() {
+        return super.getState().Speeds;
+    }
+
+    @Override
     public void setAllianceRotation(Rotation2d allianceRotation){
         setOperatorPerspectiveForward(allianceRotation);
     }

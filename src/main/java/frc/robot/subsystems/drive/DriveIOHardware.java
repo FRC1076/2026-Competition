@@ -169,6 +169,11 @@ public class DriveIOHardware extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
     }
 
     @Override
+    public ChassisSpeeds getChassisSpeeds() {
+        return super.getState().Speeds;
+    }
+
+    @Override
     public void setAllianceRotation(Rotation2d allianceRotation){
         setOperatorPerspectiveForward(allianceRotation);
     }

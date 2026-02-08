@@ -218,6 +218,11 @@ public class DriveSubsystem extends SubsystemBase {
         return io.getPose();
     }
 
+    @AutoLogOutput
+    public ChassisSpeeds getChassisSpeeds() {
+        return io.getChassisSpeeds();
+    }
+
     /** Returns the pose of the robot, but mirrored */
     public Pose2d getMirroredPose() {
         Pose2d pose = new Pose2d(

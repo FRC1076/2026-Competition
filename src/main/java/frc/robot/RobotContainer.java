@@ -10,6 +10,7 @@ import frc.robot.Constants.SystemConstants.RobotMode;
 import frc.robot.PhysicalConstants.VisionConstants.PhotonVision.PhotonConfig;
 import frc.robot.commands.drive.TeleopDriveCommand;
 import frc.robot.subsystems.Elastic;
+import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.drive.DriveIOHardware;
 import frc.robot.subsystems.drive.DriveIOSim;
 import frc.robot.subsystems.drive.DriveSubsystem;
@@ -72,6 +73,8 @@ public class RobotContainer {
     private final KickerSubsystem m_kicker;
 
     private final VisionLocalizationSystem m_vision;
+
+    private final Superstructure m_superstructure;
 
     private final Elastic m_elastic;
 
@@ -140,6 +143,18 @@ public class RobotContainer {
             () -> -m_driverController.getLeftY(),
             () -> -m_driverController.getLeftX(),
             () -> -m_driverController.getRightX()
+        );
+
+        m_superstructure = new Superstructure(
+            m_turret,
+            m_flywheel,
+            m_hood,
+            m_rollers,
+            m_slapdown,
+            m_spindexer,
+            m_kicker,
+            () -> m_drive.getPose(),
+            () -> m_drive.getChassisSpeeds()
         );
 
         // Configure the trigger bindings

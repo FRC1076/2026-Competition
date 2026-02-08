@@ -6,6 +6,7 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 
@@ -19,6 +20,7 @@ public class DriveIODisabled implements DriveIO {
     public void resetPose(Pose2d pose) {}
     public void resetHeading() {}
     public Pose2d getPose() {return new Pose2d();}
+    public ChassisSpeeds getChassisSpeeds() {return new ChassisSpeeds();}
     public void setAllianceRotation(Rotation2d allianceRotation) {}
     public void periodic() {}
     public void setDriveStatorCurrentLimit(double currentLimit) {}
