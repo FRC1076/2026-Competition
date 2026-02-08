@@ -44,6 +44,7 @@ import frc.robot.subsystems.turret.TurretConstants;
 import frc.robot.subsystems.turret.TurretIODisabled;
 import frc.robot.subsystems.turret.TurretIOKraken;
 import frc.robot.subsystems.turret.TurretSubsystem;
+import lib.extendedcommands.ToggleableTrigger;
 import lib.hardware.hid.SamuraiPS5Controller;
 import lib.hardware.hid.SamuraiXboxController;
 import lib.vision.PhotonVisionLocalizer;
@@ -215,7 +216,7 @@ public class RobotContainer {
             .onTrue(superstructureCommands.shoot())
             .onFalse(superstructureCommands.stopShooting());
 
-        m_driverController.circle()
+        m_driverController.square()
             .onTrue(superstructureCommands.applyIntakeRetracted());
 
         m_driverController.cross()
@@ -232,6 +233,11 @@ public class RobotContainer {
 
         m_driverController.povRight()
             .onTrue(m_climber.applyHookPosition(HookConstants.kHookStowedPosition));
+
+        // Trench mode!
+        new ToggleableTrigger(m_driverController.circle(), false).getToggledTrigger()
+            .onTrue(superstructureCommands.applyTurretIdle())
+            .onFalse(superstructureCommands.initiateAutoaim());
     }
 
     /** Bind triggers on operator controller to commands */
