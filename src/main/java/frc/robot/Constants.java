@@ -4,20 +4,8 @@
 
 package frc.robot;
 
-import org.photonvision.PhotonPoseEstimator.PoseStrategy;
-
 import com.ctre.phoenix6.CANBus;
 
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.Vector;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.numbers.N1;
-import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 /**
@@ -41,6 +29,7 @@ public final class Constants {
         public static final boolean kEnableSignalLogger = false;
         public static final boolean kEnableRTPriority = true;
         public static final boolean kLogOdometry = true;
+        public static final double kLoopPeriodMs = 20;
 
         public static enum RobotMode {
             REAL,
@@ -84,65 +73,5 @@ public final class Constants {
     public static class CANConstants {
         public static final CANBus kRioBus = new CANBus("rio");
         public static final CANBus kCANivoreBus = new CANBus("Default Name");
-    }
-
-    public static class VisionConstants {
-        public static final AprilTagFieldLayout kAprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
-
-        public static class PhotonVision {
-            public static final Vector<N3> kDefaultSingleTagStdDevs = VecBuilder.fill(1, 1, 2);
-            public static final Vector<N3> kDefaultMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 0.5);
-
-            public static enum PhotonConfig {
-                // TEST_CAMERA_ONE(
-                //     "TEST_CAMERA_1",
-                //     kDefaultMultiTagStdDevs,
-                //     kDefaultMultiTagStdDevs,
-                //     PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-                //     PoseStrategy.PNP_DISTANCE_TRIG_SOLVE,
-                //     8.5, 10.75, 3,
-                //     0, 0, 45
-                // );
-                ; // Single semicolon to allow for constructor below,
-                // empty for now as there are no camera
-
-                public final String name;
-                public final Transform3d offset;
-                public final Matrix<N3, N1> defaultSingleTagStdDevs;
-                public final Matrix<N3, N1> defaultMultiTagStdDevs;
-                public final PoseStrategy multiTagPoseStrategy;
-                public final PoseStrategy singleTagPoseStrategy;
-                private PhotonConfig(
-                    String name, 
-                    Matrix<N3, N1> defaultSingleTagStdDevs,
-                    Matrix<N3, N1> defaultMultiTagStdDevs,
-                    PoseStrategy multiTagPoseStrategy,
-                    PoseStrategy singleTagPoseStrategy,
-                    double xInch, double yInch, double zInch, 
-                    double rollDeg, double pitchDeg, double yawDeg
-                ) {
-                    this.name = name;
-                    this.offset = new Transform3d(
-                        Units.inchesToMeters(xInch),
-                        Units.inchesToMeters(yInch),
-                        Units.inchesToMeters(zInch),
-                        new Rotation3d(
-                            Units.degreesToRadians(rollDeg),
-                            Units.degreesToRadians(pitchDeg),
-                            Units.degreesToRadians(yawDeg)
-                        )
-                    );
-                    this.multiTagPoseStrategy = multiTagPoseStrategy;
-                    this.singleTagPoseStrategy = singleTagPoseStrategy;
-                    this.defaultMultiTagStdDevs = defaultMultiTagStdDevs;
-                    this.defaultSingleTagStdDevs = defaultSingleTagStdDevs;
-                }
-            }
-        }
-    }
-
-    public static class FieldConstants {
-        public static final double fieldWidthMeters = Units.inchesToMeters(317.7); // Distance from one edge of the field to the other
-        public static final double fieldLengthMeters = Units.inchesToMeters(651.2); // Distance in meters from one drive station to the other side
     }
 }

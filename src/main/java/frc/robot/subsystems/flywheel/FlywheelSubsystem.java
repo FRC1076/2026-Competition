@@ -42,8 +42,8 @@ public class FlywheelSubsystem extends SubsystemBase {
 
     }
 
-    public boolean atSetpoint(double targetRadiansPerSecond) {
-        return Math.abs(inputs.velocityRadiansPerSecond - targetRadiansPerSecond) < FlywheelConstants.kSetpointToleranceRadPerSec;
+    public boolean readyToShoot(double minimumVelocityRPS) {
+        return (minimumVelocityRPS - inputs.velocityRadiansPerSecond) < FlywheelConstants.kSetpointToleranceRadPerSec;
     }
 
     @Override
@@ -70,7 +70,7 @@ public class FlywheelSubsystem extends SubsystemBase {
     }
 
     /** Tell the flywheel to run at the specified velocity */
-    public Command applyVelocityPerSec(double radPerSec) {
+    public Command applyVelocity(double radPerSec) {
         return Commands.runOnce(
             () -> io.setVelocityRadPerSec(radPerSec),
             this
@@ -78,7 +78,7 @@ public class FlywheelSubsystem extends SubsystemBase {
     }
 
     /** Run the wheel at the supplied velocity */
-    public Command applyVelocityPerSec(DoubleSupplier radPerSec) {
+    public Command runVelocity(DoubleSupplier radPerSec) {
         return Commands.runOnce(
             () -> io.setVelocityRadPerSec(radPerSec.getAsDouble()),
             this
@@ -92,5 +92,14 @@ public class FlywheelSubsystem extends SubsystemBase {
 
     public Command sysIdDynamic(Direction direction) {
         return sysId.dynamic(direction);
+    }
+
+    // Getters for data
+    public double getVelocityRadPerSec() {
+        return inputs.velocityRadiansPerSecond;
+    }
+
+    public double getLinearVelocityMPS() {
+        return inputs.velocityRadiansPerSecond * FlywheelConstants.angularToLinearVelocityConversionFactor;
     }
 }
