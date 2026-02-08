@@ -98,6 +98,7 @@ public class Superstructure {
     private final Supplier<ChassisSpeeds> m_robotVelocitySupplier;
 
     private final MutableSuperState m_superState;
+    private final SuperstructureCommandFactory m_commandFactory;
 
     private CommonShotSolution m_shootingParams;
     private double flywheelTargetSpeedRadPerSec;
@@ -126,7 +127,14 @@ public class Superstructure {
 
         this.m_superState = new MutableSuperState();
 
+        this.m_commandFactory = new SuperstructureCommandFactory(this);
+
         m_shootingParams = new CommonShotSolution(0, 0, 0);
+    }
+
+    /** Get the Command factory */
+    public SuperstructureCommandFactory getCommandFactory() {
+        return m_commandFactory;
     }
 
     /** Configure trigger bindings that are based upon the state of the robot. */

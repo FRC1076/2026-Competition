@@ -11,6 +11,7 @@ import frc.robot.PhysicalConstants.VisionConstants.PhotonVision.PhotonConfig;
 import frc.robot.commands.drive.TeleopDriveCommand;
 import frc.robot.subsystems.Elastic;
 import frc.robot.subsystems.Superstructure;
+import frc.robot.subsystems.Superstructure.SuperstructureCommandFactory;
 import frc.robot.subsystems.drive.DriveIOHardware;
 import frc.robot.subsystems.drive.DriveIOSim;
 import frc.robot.subsystems.drive.DriveSubsystem;
@@ -180,6 +181,8 @@ public class RobotContainer {
 
     /** Bind triggers on driver controller to commands */
     private void configureDriverBindings() {
+        SuperstructureCommandFactory superstructureCommands = m_superstructure.getCommandFactory();
+
         m_drive.setDefaultCommand(teleopDriveCommand);
 
         m_driverController.L1().and(m_driverController.R1().negate())
@@ -194,8 +197,18 @@ public class RobotContainer {
             ));
 
         m_driverController.L2()
-            .onTrue(m_rollers.applyVoltage(8))
-            .onFalse(m_rollers.applyVoltage(0));
+            .onTrue(superstructureCommands.intake())
+            .onFalse(superstructureCommands.applyIntakeExtended());
+
+        m_driverController.R2()
+            .onTrue(superstructureCommands.shoot())
+            .onFalse(superstructureCommands.stopShooting());
+
+        m_driverController.circle()
+            .onTrue(superstructureCommands.applyIntakeRetracted());
+
+        m_driverController.cross()
+            .onTrue(superstructureCommands.applyTurretStatesHubPreAlignedLocation());
     }
 
     /** Bind triggers on operator controller to commands */
