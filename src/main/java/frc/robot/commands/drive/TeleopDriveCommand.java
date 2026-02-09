@@ -6,7 +6,6 @@ package frc.robot.commands.drive;
 
 import frc.robot.subsystems.drive.DriveSubsystem;
 
-import static edu.wpi.first.units.Units.Rotation;
 import static frc.robot.subsystems.drive.DriveConstants.DirectDriveConstants.headingConstraints;
 import static frc.robot.subsystems.drive.DriveConstants.DirectDriveConstants.translationConstraints;
 import static frc.robot.subsystems.drive.DriveConstants.DriverControlConstants.FPVClutchRotationFactor;
