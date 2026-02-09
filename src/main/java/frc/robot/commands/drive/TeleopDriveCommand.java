@@ -240,6 +240,21 @@ public class TeleopDriveCommand extends Command {
         return applyHeadingLock(() -> heading);
     }
 
+    /** Returns a command that applies a heading lock such that the front of the robot is always in the
+     *  direction of the movement of the robot.
+     */
+    public Command applySnakeMode() {
+        return applyHeadingLock(() -> {
+            double x = xSupplier.getAsDouble();
+            double y = ySupplier.getAsDouble();
+            if ((x * x) + (y * y) > 0.01) {
+                return new Rotation2d(x, y);
+            } else {
+                return m_drive.getHeading();
+            }
+        });
+    }
+
     /** Returns a command that applies a single clutch to the TeleopDriveCommand */
     public Command applySingleClutch(){
         return applyClutchFactor(singleClutchTranslationFactor, singleClutchRotationFactor);
