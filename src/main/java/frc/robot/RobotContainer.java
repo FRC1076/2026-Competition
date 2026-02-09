@@ -34,6 +34,7 @@ import frc.robot.subsystems.kicker.KickerSubsystem;
 import frc.robot.subsystems.roller.RollerIODisabled;
 import frc.robot.subsystems.roller.RollerIOKraken;
 import frc.robot.subsystems.roller.RollerSubsystem;
+import frc.robot.subsystems.slapdown.SlapdownConstants;
 import frc.robot.subsystems.slapdown.SlapdownIODisabled;
 import frc.robot.subsystems.slapdown.SlapdownIONeo;
 import frc.robot.subsystems.slapdown.SlapdownSubsystem;
@@ -44,6 +45,7 @@ import frc.robot.subsystems.turret.TurretConstants;
 import frc.robot.subsystems.turret.TurretIODisabled;
 import frc.robot.subsystems.turret.TurretIOKraken;
 import frc.robot.subsystems.turret.TurretSubsystem;
+import lib.extendedcommands.MultiToggleableTrigger;
 import lib.extendedcommands.ToggleableTrigger;
 import lib.hardware.hid.SamuraiPS5Controller;
 import lib.hardware.hid.SamuraiXboxController;
@@ -242,28 +244,30 @@ public class RobotContainer {
 
     /** Bind triggers on operator controller to commands */
     private void configureOperatorBindings() {
-        m_operatorController.leftActive()
+        SuperstructureCommandFactory superstructureCommands = m_superstructure.getCommandFactory();
+
+        MultiToggleableTrigger joystickTriggers = new MultiToggleableTrigger(m_operatorController.a(), m_operatorController.b(), m_operatorController.y());
+
+        m_operatorController.leftActive().and(joystickTriggers.getToggledTrigger(0))
             .whileTrue(m_turret.runVoltageUnrestricted(
                 () -> -m_operatorController.getLeftX() * TurretConstants.kMaxManualControlVolts))
             .onFalse(m_turret.applyVoltageUnrestricted(0));
 
-        m_operatorController.rightActive()
+        m_operatorController.rightActive().and(joystickTriggers.getToggledTrigger(0))
             .whileTrue(m_hood.runVoltageUnrestricted(
                 () -> -m_operatorController.getRightY() * HoodConstants.kMaxOperatorControlVolts))
             .onFalse(m_hood.applyVoltageUnrestricted(0)); 
 
-        m_operatorController.a()
-            .onTrue(m_flywheel.applyVoltage(0));
-        
-        m_operatorController.b()
-            .onTrue(m_flywheel.applyVoltage(6));
+        m_operatorController.leftActive().and(joystickTriggers.getToggledTrigger(1))
+            .whileTrue(m_slapdown.runVoltageUnrestricted(
+                () -> -m_operatorController.getLeftX() * SlapdownConstants.kMaxOperatorControlVolts))
+            .onFalse(m_slapdown.applyVoltageUnrestricted(0));
 
-        m_operatorController.x()
-            .onTrue(m_flywheel.applyVoltage(9));
-
-        m_operatorController.y()
-            .onTrue(m_flywheel.applyVoltage(12));
-    }
+        m_operatorController.leftActive().and(joystickTriggers.getToggledTrigger(2))
+            .whileTrue(m_climber.runVoltage(
+                () -> -m_operatorController.getLeftY() * ClimberConstants.kMaxOperatorControlVolts))
+            .onFalse(m_climber.applyVoltage(0));
+        }
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.

@@ -26,7 +26,7 @@ public class SlapdownConstants {
     public static final double kMinAngleRadians = -Math.PI / 4;
     public static final double kMaxAngleRadians = Math.PI / 2;
 
-    public static final double maxOperatorControlVolts = 1;
+    public static final double kMaxOperatorControlVolts = 1;
     public static final double kSmartCurrentLimit = 40.0;
 
     public static final boolean kMotorInverted = false;
