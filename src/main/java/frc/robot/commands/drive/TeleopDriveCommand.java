@@ -250,7 +250,7 @@ public class TeleopDriveCommand extends Command {
             if ((x * x) + (y * y) > 0.01) {
                 return new Rotation2d(x, y);
             } else {
-                return Rotation2d.fromRadians(omegaSupplier.getAsDouble());
+                return m_drive.getHeading();
             }
         });
     }
