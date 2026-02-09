@@ -6,6 +6,7 @@ package frc.robot.commands.drive;
 
 import frc.robot.subsystems.drive.DriveSubsystem;
 
+import static edu.wpi.first.units.Units.Rotation;
 import static frc.robot.subsystems.drive.DriveConstants.DirectDriveConstants.headingConstraints;
 import static frc.robot.subsystems.drive.DriveConstants.DirectDriveConstants.translationConstraints;
 import static frc.robot.subsystems.drive.DriveConstants.DriverControlConstants.FPVClutchRotationFactor;
@@ -238,6 +239,21 @@ public class TeleopDriveCommand extends Command {
     /** Returns a command that applies an arbitrary heading lock, based on a static heading */
     public Command applyHeadingLock(Rotation2d heading) {
         return applyHeadingLock(() -> heading);
+    }
+
+    /** Returns a command that applies a heading lock such that the front of the robot is always in the
+     *  direction of the movement of the robot.
+     */
+    public Command applySnakeMode() {
+        return applyHeadingLock(() -> {
+            double x = xSupplier.getAsDouble();
+            double y = ySupplier.getAsDouble();
+            if ((x * x) + (y * y) > 0.01) {
+                return new Rotation2d(x, y);
+            } else {
+                return Rotation2d.fromRadians(omegaSupplier.getAsDouble());
+            }
+        });
     }
 
     /** Returns a command that applies a single clutch to the TeleopDriveCommand */
