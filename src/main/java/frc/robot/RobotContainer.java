@@ -21,6 +21,7 @@ import frc.robot.subsystems.drive.DriveIOHardware;
 import frc.robot.subsystems.drive.DriveIOSim;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.TunerConstants;
+import frc.robot.subsystems.flywheel.FlywheelConstants;
 import frc.robot.subsystems.flywheel.FlywheelIODisabled;
 import frc.robot.subsystems.flywheel.FlywheelIOKraken;
 import frc.robot.subsystems.flywheel.FlywheelSubsystem;
@@ -249,25 +250,48 @@ public class RobotContainer {
         MultiToggleableTrigger joystickTriggers = new MultiToggleableTrigger(m_operatorController.a(), m_operatorController.b(), m_operatorController.y());
 
         m_operatorController.leftActive().and(joystickTriggers.getToggledTrigger(0))
-            .whileTrue(m_turret.runVoltageUnrestricted(
+            .onTrue(m_turret.runVoltageUnrestricted(
                 () -> -m_operatorController.getLeftX() * TurretConstants.kMaxManualControlVolts))
             .onFalse(m_turret.applyVoltageUnrestricted(0));
 
         m_operatorController.rightActive().and(joystickTriggers.getToggledTrigger(0))
-            .whileTrue(m_hood.runVoltageUnrestricted(
+            .onTrue(m_hood.runVoltageUnrestricted(
                 () -> -m_operatorController.getRightY() * HoodConstants.kMaxOperatorControlVolts))
             .onFalse(m_hood.applyVoltageUnrestricted(0)); 
 
         m_operatorController.leftActive().and(joystickTriggers.getToggledTrigger(1))
-            .whileTrue(m_slapdown.runVoltageUnrestricted(
+            .onTrue(m_slapdown.runVoltageUnrestricted(
                 () -> -m_operatorController.getLeftX() * SlapdownConstants.kMaxOperatorControlVolts))
             .onFalse(m_slapdown.applyVoltageUnrestricted(0));
 
         m_operatorController.leftActive().and(joystickTriggers.getToggledTrigger(2))
-            .whileTrue(m_climber.runVoltage(
+            .onTrue(m_climber.runVoltage(
                 () -> -m_operatorController.getLeftY() * ClimberConstants.kMaxOperatorControlVolts))
             .onFalse(m_climber.applyVoltage(0));
+        m_operatorController.rightActive().and(joystickTriggers.getToggledTrigger(2))
+            .onTrue(m_climber.runHookVoltage(
+                () -> -m_operatorController.getRightX() * HookConstants.kMaxOperatorControlVolts))
+            .onFalse(m_climber.applyHookVoltage(0));
+        
+        m_operatorController.povUp()
+            .onTrue(Commands.sequence(
+                superstructureCommands.startTurretManualControl(),
+                m_flywheel.applyVoltage(FlywheelConstants.kMaxManualControlVolts))
+            );
+        
+        m_operatorController.povLeft()
+            .onTrue(Commands.sequence(
+                superstructureCommands.startTurretManualControl(),
+                m_flywheel.applyVoltage(FlywheelConstants.kHighManualControlVolts))
+            );
+        
+        m_operatorController.povDown()
+            .onTrue(Commands.sequence(
+                superstructureCommands.startTurretManualControl(),
+                m_flywheel.applyVoltage(0))
+            );
         }
+
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.

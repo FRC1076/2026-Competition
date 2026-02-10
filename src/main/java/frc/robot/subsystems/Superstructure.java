@@ -260,6 +260,11 @@ public class Superstructure {
             return m_superstructure.setTurretState(TurretStates.AUTOAIM_SHOOT);
         }
 
+        /** Allow for manual control */
+        public Command startTurretManualControl() {
+            return m_superstructure.setTurretState(TurretStates.MANUAL);
+        }
+
         /** Apply the HUB_PREALIGNED_LOCATION turret state */
         public Command applyTurretStatesHubPreAlignedLocation(){
             return m_superstructure.applyTurretStateAllParallel(TurretStates.HUB_PREALIGNED_LOCATION);

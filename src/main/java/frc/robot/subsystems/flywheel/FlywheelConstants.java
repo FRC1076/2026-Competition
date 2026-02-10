@@ -41,5 +41,8 @@ public class FlywheelConstants {
     public static final double angularToLinearVelocityConversionFactor = 0.1;
 
     public static final boolean kEnableFOC = true;
+
+    public static final double kMaxManualControlVolts = 12;
+    public static final double kHighManualControlVolts = 9;
 }
 
