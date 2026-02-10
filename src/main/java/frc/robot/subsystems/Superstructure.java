@@ -191,19 +191,32 @@ public class Superstructure {
         return () -> m_flywheel.readyToShoot(flywheelTargetSpeedRadPerSec);
     }
 
-    public Command applyIntakeStateAllParallel(IntakeStates state) {
-        m_superState.setIntakeState(state);
+    /** Sets the intake state in the Super State. Does not affect the physical robot. */
+    public Command setIntakeState(IntakeStates state) {
+        return Commands.runOnce(() -> m_superState.setIntakeState(state));
+    }
 
+    /** Sets the index state in the Super State. Does not affect the physical robot. */
+    public Command setIndexState(IndexStates state) {
+        return Commands.runOnce(() -> m_superState.setIndexState(state));
+    }
+
+    /** Sets the turret state to the desired item such so that a state-based trigger can take control */
+    public Command setTurretState(TurretStates state) {
+        return Commands.runOnce(() -> m_superState.setTurretState(state));
+    }
+
+    public Command applyIntakeStateAllParallel(IntakeStates state) {
         return Commands.parallel(
+            setIntakeState(state),
             m_slapdown.applyPosition(state.kSlapdownAngle),
-           m_roller.applyVoltage(state.kRollerVoltage)
+            m_roller.applyVoltage(state.kRollerVoltage)
         );
     }
 
     public Command applyIndexStateAllParallel(IndexStates state) {
-        m_superState.setIndexState(state);
-
         return Commands.parallel(
+            setIndexState(state),
             m_spindexer.applyVoltage(state.kSpindexerVoltage),
             m_kicker.applyVoltage(state.kKickerVoltage)
         );
@@ -211,9 +224,8 @@ public class Superstructure {
 
     /** Apply the passed in state to the turret, hood, and flywheel, all at the same time. */
     public Command applyTurretStateAllParallel(TurretStates state){
-        m_superState.setTurretState(state);
-
         return Commands.parallel(
+            setTurretState(state),
             m_turret.applyPosition(state.kTurretAngleRadians),
             m_flywheel.applyVelocity(state.kFlywheelRadPerSec),
             m_hood.applyPosition(state.kHoodAngleRadians)
@@ -222,14 +234,10 @@ public class Superstructure {
 
     /** Apply the passed in state to the turret only. */
     public Command applyTurretStateFlywheelOnly(TurretStates state) {
-        m_superState.setTurretState(state);
-
-        return m_flywheel.applyVelocity(state.kFlywheelRadPerSec);
-    }
-
-    /** Sets the turret state to the desired item such so that a state-based trigger can take control */
-    public Command setTurretState(TurretStates state) {
-        return Commands.runOnce(() -> m_superState.setTurretState(state));
+        return Commands.parallel(
+            setTurretState(state),
+            m_flywheel.applyVelocity(state.kFlywheelRadPerSec)
+        );
     }
 
     /** Public Commands to be used to bind to triggers in RobotContainer */
