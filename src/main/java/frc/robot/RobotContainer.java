@@ -247,6 +247,7 @@ public class RobotContainer {
     private void configureOperatorBindings() {
         SuperstructureCommandFactory superstructureCommands = m_superstructure.getCommandFactory();
 
+        // The A, B, and Y buttons are used to toggle between controlling the turret/hood, slapdown, and climber with the joysticks.
         MultiToggleableTrigger joystickTriggers = new MultiToggleableTrigger(m_operatorController.a(), m_operatorController.b(), m_operatorController.y());
 
         m_operatorController.leftActive().and(joystickTriggers.getToggledTrigger(0))
@@ -268,6 +269,7 @@ public class RobotContainer {
             .onTrue(m_climber.runVoltage(
                 () -> -m_operatorController.getLeftY() * ClimberConstants.kMaxOperatorControlVolts))
             .onFalse(m_climber.applyVoltage(0));
+        
         m_operatorController.rightActive().and(joystickTriggers.getToggledTrigger(2))
             .onTrue(m_climber.runHookVoltage(
                 () -> -m_operatorController.getRightX() * HookConstants.kMaxOperatorControlVolts))
@@ -290,8 +292,31 @@ public class RobotContainer {
                 superstructureCommands.startTurretManualControl(),
                 m_flywheel.applyVoltage(0))
             );
-        }
+        
+        // Sets the rollers to do the opposite of their current state
+        m_operatorController.leftTrigger()
+            .onTrue(Commands.either(
+                m_rollers.applyVoltage(6),
+                m_rollers.applyVoltage(0),
+                () -> m_rollers.getVoltage() < 0.5
+            ));
 
+        // Turns the spindexer to the opposite of it's current state
+        m_operatorController.leftBumper()
+            .onTrue(Commands.either(
+                m_kicker.applyVoltage(12),
+                m_kicker.applyVoltage(0),
+                () -> m_kicker.getVoltage() < 0.5
+            ));
+        
+        // Turns the spindexer to the opposite of it's current state    
+        m_operatorController.rightBumper()
+            .onTrue(Commands.either(
+                m_spindexer.applyVoltage(12),
+                m_spindexer.applyVoltage(0),
+                () -> m_spindexer.getVoltage() < 0.5
+        ));
+    }
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.

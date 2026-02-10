@@ -38,4 +38,8 @@ public class RollerSubsystem  extends SubsystemBase {
     public Command stop() {
         return applyVoltage(0);
     }
+
+    public double getVoltage() {
+        return inputs.appliedVoltage;
+    }
 }

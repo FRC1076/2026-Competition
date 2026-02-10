@@ -36,5 +36,7 @@ public class SpindexerSubsystem extends SubsystemBase{
         );
     }
 
-
+    public double getVoltage() {
+        return inputs.appliedVoltage;
+    }
 }
