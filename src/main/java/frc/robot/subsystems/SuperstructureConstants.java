@@ -9,9 +9,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.Constants;
 import frc.robot.PhysicalConstants;
 
-public class SuperstructureConstants {
-
-    
+public class SuperstructureConstants {    
     public static enum TurretStates {
         /* list of possible operational states the turret can be set to */
         IDLE(0,0,0),
@@ -99,8 +97,8 @@ public class SuperstructureConstants {
             this.kKickerVoltage = kickerVoltage;
         }
     }
-    
-    
+
+    public static final double kTurretMoveSlapdownAngleLimitRad = Math.PI - 0.5;    
 
     public static final double kLeftPassingTargetYCoordinate = 0.75 * PhysicalConstants.FieldConstants.fieldWidth;
     public static final double kRightPassingTargetYCoordinate = 0.25 * PhysicalConstants.FieldConstants.fieldWidth;

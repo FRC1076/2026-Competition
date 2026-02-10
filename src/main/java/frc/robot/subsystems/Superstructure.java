@@ -146,7 +146,7 @@ public class Superstructure {
                     Commands.parallel(
                         m_flywheel.applyVelocity(flywheelTargetSpeedRadPerSec),
                         m_hood.applyPosition(m_shootingParams.launchPitchRad()),
-                        m_turret.applyPosition(MathUtil.angleModulus(m_shootingParams.launchYawRad() - m_robotPoseSupplier.get().getRotation().getRadians()))
+                        applyTurretPositionSafe(MathUtil.angleModulus(m_shootingParams.launchYawRad() - m_robotPoseSupplier.get().getRotation().getRadians()))
                     )
                 )
             );
@@ -187,8 +187,23 @@ public class Superstructure {
         return m_superState;
     }
 
+    /** Returns whether or not the flywheel is within the tolerance of the target shooting state */
     public BooleanSupplier isReadyToShoot() {
         return () -> m_flywheel.readyToShoot(flywheelTargetSpeedRadPerSec);
+    }
+
+    /** Returns whether or not the slapdown is too high to move the turret */
+    public BooleanSupplier safeToMoveTurret() {
+        return () -> m_slapdown.getSlapdownAngleRadians() < SuperstructureConstants.kTurretMoveSlapdownAngleLimitRad;
+    }
+
+    /** Applies the target state to the turret if it is safe to do so. If unsafe, does nothing. */
+    public Command applyTurretPositionSafe(double radians) {
+        return Commands.either(
+            m_turret.applyPosition(radians),
+            Commands.none(),
+            safeToMoveTurret()
+        );
     }
 
     /** Sets the intake state in the Super State. Does not affect the physical robot. */
@@ -223,10 +238,10 @@ public class Superstructure {
     }
 
     /** Apply the passed in state to the turret, hood, and flywheel, all at the same time. */
-    public Command applyTurretStateAllParallel(TurretStates state){
+    public Command applyTurretStateAllParallel(TurretStates state) {
         return Commands.parallel(
             setTurretState(state),
-            m_turret.applyPosition(state.kTurretAngleRadians),
+            applyTurretPositionSafe(state.kTurretAngleRadians),
             m_flywheel.applyVelocity(state.kFlywheelRadPerSec),
             m_hood.applyPosition(state.kHoodAngleRadians)
         );

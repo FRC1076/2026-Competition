@@ -44,6 +44,10 @@ public class SlapdownSubsystem extends SubsystemBase{
         );
     }
 
+    public double getSlapdownAngleRadians() {
+        return inputs.angleRadians;
+    }
+
     @Override
     public void periodic() {
         if (softwareStopsEnabled) {
