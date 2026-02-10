@@ -17,6 +17,7 @@ import frc.robot.subsystems.turret.TurretSubsystem;
 
 import lib.ballistic.CommonShotSolution;
 import lib.ballistic.HoundSOTMCalculator;
+import lib.ballistic.MechAdvSOTMCalculator;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -158,21 +159,27 @@ public class Superstructure {
     private void updateShootingParams() {
         final Pose3d shooterPose = new Pose3d(m_robotPoseSupplier.get()).transformBy(PhysicalConstants.kBotRelativeTurretPose);
         final Pose3d target;
+        final boolean targetIsHub;
         
         final Pose3d shooterPoseAllianceColorCoordinates = shooterPose.relativeTo(SuperstructureConstants.kAllianceOrigin);
 
         if (shooterPoseAllianceColorCoordinates.getX() <= PhysicalConstants.FieldConstants.LinesVertical.allianceZone) {
             target = SuperstructureConstants.kHubTarget;
+            targetIsHub = true;
         } else if (shooterPose.getY() <= PhysicalConstants.FieldConstants.LinesHorizontal.center) {
             target = SuperstructureConstants.kRightPassingTarget;
+            targetIsHub = false;
         } else {
             target = SuperstructureConstants.kLeftPassingTarget;
+            targetIsHub = false;
         }
         
         flywheelTargetSpeedRadPerSec = 
             SuperstructureConstants.kDistanceToFlywheelSpeedMap.get(shooterPose.getTranslation().getDistance(target.getTranslation()))
             * m_superState.getTurretState().kAutoAimFlywheelPercentage;
 
+        
+        /* TechHOUNDs option. Commented out to test Mechanical Advantage's option. * /
         m_shootingParams = HoundSOTMCalculator.solveShootOnTheFly(
             shooterPose, 
             target,
@@ -180,6 +187,15 @@ public class Superstructure {
             m_flywheel.getLinearVelocityMPS(),
             SuperstructureConstants.kAutoAimMaxIterations,
             SuperstructureConstants.kAutoAimTimeToleranceSeconds
+        ); */
+
+        /* Mechanical Advantage option */
+        m_shootingParams = MechAdvSOTMCalculator.calculate(
+            shooterPose.toPose2d(),
+            target.toPose2d(),
+            m_robotVelocitySupplier.get(),
+            m_robotPoseSupplier.get().getRotation(),
+            targetIsHub
         );
     }
 

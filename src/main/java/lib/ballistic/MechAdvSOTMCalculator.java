@@ -49,6 +49,8 @@ import org.littletonrobotics.junction.Logger;
     private static double phaseDelay;
     private static final InterpolatingTreeMap<Double, Rotation2d> shotHoodAngleMap =
         new InterpolatingTreeMap<>(InverseInterpolator.forDouble(), Rotation2d::interpolate);
+    private static final InterpolatingTreeMap<Double, Rotation2d> shotHoodAngleMapNonHub =
+        new InterpolatingTreeMap<>(InverseInterpolator.forDouble(), Rotation2d::interpolate); // Map of hood heights for non-hub targets
     private static final InterpolatingDoubleTreeMap shotFlywheelSpeedMap =
         new InterpolatingDoubleTreeMap();
     private static final InterpolatingDoubleTreeMap timeOfFlightMap =
@@ -70,6 +72,17 @@ import org.littletonrobotics.junction.Logger;
         shotHoodAngleMap.put(5.57, Rotation2d.fromDegrees(32.0));
         shotHoodAngleMap.put(5.60, Rotation2d.fromDegrees(35.0));
 
+        shotHoodAngleMapNonHub.put(1.34, Rotation2d.fromDegrees(19.0));
+        shotHoodAngleMapNonHub.put(1.78, Rotation2d.fromDegrees(19.0));
+        shotHoodAngleMapNonHub.put(2.17, Rotation2d.fromDegrees(24.0));
+        shotHoodAngleMapNonHub.put(2.81, Rotation2d.fromDegrees(27.0));
+        shotHoodAngleMapNonHub.put(3.82, Rotation2d.fromDegrees(29.0));
+        shotHoodAngleMapNonHub.put(4.09, Rotation2d.fromDegrees(30.0));
+        shotHoodAngleMapNonHub.put(4.40, Rotation2d.fromDegrees(31.0));
+        shotHoodAngleMapNonHub.put(4.77, Rotation2d.fromDegrees(32.0));
+        shotHoodAngleMapNonHub.put(5.57, Rotation2d.fromDegrees(32.0));
+        shotHoodAngleMapNonHub.put(5.60, Rotation2d.fromDegrees(35.0));
+
         shotFlywheelSpeedMap.put(1.34, 210.0);
         shotFlywheelSpeedMap.put(1.78, 220.0);
         shotFlywheelSpeedMap.put(2.17, 220.0);
@@ -89,10 +102,11 @@ import org.littletonrobotics.junction.Logger;
     }
 
     public static CommonShotSolution calculate(
-        Pose2d targetPose,
         Pose2d estimatedPose,
+        Pose2d targetPose,
         ChassisSpeeds robotRelativeVelocity,
-        ChassisSpeeds robotVelocity
+        Rotation2d robotHeading,
+        boolean targetIsHub
     ) {
         if (latestParameters != null) {
             return new CommonShotSolution(latestParameters.hoodAngle, latestParameters.turretAngle.getRadians(), 0);
@@ -108,6 +122,9 @@ import org.littletonrobotics.junction.Logger;
 
         // Calculate distance from turret to target
         Translation2d target = estimatedPose.relativeTo(targetPose).getTranslation();
+
+        // Calculate field-relative robot velocity
+        ChassisSpeeds robotVelocity = ChassisSpeeds.fromRobotRelativeSpeeds(robotRelativeVelocity, robotHeading);
 
         // Calculate field relative turret velocity
         double robotAngle = estimatedPose.getRotation().getRadians();
@@ -139,7 +156,9 @@ import org.littletonrobotics.junction.Logger;
 
         // Calculate parameters accounted for imparted velocity
         turretAngle = target.minus(lookaheadPose.getTranslation()).getAngle();
-        hoodAngle = shotHoodAngleMap.get(lookaheadTurretToTargetDistance).getRadians();
+        hoodAngle = targetIsHub
+            ? shotHoodAngleMap.get(lookaheadTurretToTargetDistance).getRadians()
+            : shotHoodAngleMapNonHub.get(lookaheadTurretToTargetDistance).getRadians();
         if (lastTurretAngle == null) lastTurretAngle = turretAngle;
         if (Double.isNaN(lastHoodAngle)) lastHoodAngle = hoodAngle;
         turretVelocity =
