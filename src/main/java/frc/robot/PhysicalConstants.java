@@ -17,7 +17,10 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 
 public class PhysicalConstants {
-    public static final Transform3d kBotRelativeTurretPose = new Transform3d();
+    public static final Transform3d kBotRelativeTurretPose = new Transform3d(
+        new Translation3d(Units.inchesToMeters(-5), Units.inchesToMeters(5.5), Units.inchesToMeters(11.929)),
+        new Rotation3d()
+    );
 
     public static class VisionConstants {
         public static final AprilTagFieldLayout kAprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
