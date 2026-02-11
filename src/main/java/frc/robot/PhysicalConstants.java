@@ -27,17 +27,42 @@ public class PhysicalConstants {
             public static final Vector<N3> kDefaultMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 0.5);
 
             public static enum PhotonConfig {
-                // TEST_CAMERA_ONE(
-                //     "TEST_CAMERA_1",
-                //     kDefaultMultiTagStdDevs,
-                //     kDefaultMultiTagStdDevs,
-                //     PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-                //     PoseStrategy.PNP_DISTANCE_TRIG_SOLVE,
-                //     8.5, 10.75, 3,
-                //     0, 0, 45
-                // );
-                ; // Single semicolon to allow for constructor below,
-                // empty for now as there are no camera
+                FRONT_LEFT(
+                    "FRONT_LEFT",
+                    kDefaultSingleTagStdDevs,
+                    kDefaultMultiTagStdDevs,
+                    PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+                    PoseStrategy.PNP_DISTANCE_TRIG_SOLVE,
+                    12.560835, 12.411879, 19.229705,
+                    0, 20, 45
+                ),
+                FRONT_RIGHT(
+                    "FRONT_RIGHT",
+                    kDefaultSingleTagStdDevs,
+                    kDefaultMultiTagStdDevs,
+                    PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+                    PoseStrategy.PNP_DISTANCE_TRIG_SOLVE,
+                    12.561091, -13.411623, 19.2290705,
+                    0, 20, -45
+                ),
+                REAR_RIGHT(
+                    "REAR_RIGHT",
+                    kDefaultSingleTagStdDevs,
+                    kDefaultMultiTagStdDevs,
+                    PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+                    PoseStrategy.PNP_DISTANCE_TRIG_SOLVE,
+                    -12.537499, -13.411967, 19.229364,
+                    0, 20, -135
+                ),
+                REAR_LEFT(
+                    "FRONT_LEFT",
+                    kDefaultSingleTagStdDevs,
+                    kDefaultMultiTagStdDevs,
+                    PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+                    PoseStrategy.PNP_DISTANCE_TRIG_SOLVE,
+                    -12.810731, 12.810475, 10.479360,
+                    0, 20, 135
+                );
 
                 public final String name;
                 public final Transform3d offset;
