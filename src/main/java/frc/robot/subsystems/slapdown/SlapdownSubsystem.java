@@ -20,8 +20,6 @@ public class SlapdownSubsystem extends SubsystemBase{
     private final SlapdownIOInputsAutoLogged inputs = new SlapdownIOInputsAutoLogged();
     private final SysIdRoutine sysId;
 
-    private boolean softwareStopsEnabled = true;
-
     public SlapdownSubsystem(SlapdownIO io) {
         this.io = io;
 
@@ -50,24 +48,12 @@ public class SlapdownSubsystem extends SubsystemBase{
 
     @Override
     public void periodic() {
-        if (softwareStopsEnabled) {
-            if (inputs.angleRadians >= SlapdownConstants.kMaxAngleRadians && inputs.appliedVoltage > 0) {
-                io.setVoltage(0);
-            } else if (inputs.angleRadians <= SlapdownConstants.kMinAngleRadians && inputs.appliedVoltage < 0) {
-                io.setVoltage(0);
-            }
-        }
-
         io.updateInputs(inputs);
         Logger.processInputs("Slapdown", inputs);
-
-        Logger.recordOutput("Slapdown/SoftwareStopsEnabled", softwareStopsEnabled);
     }
 
     /** Set the voltage applied to the motor with software stops enabled */
     public Command applyVoltage(double volts) {
-        softwareStopsEnabled = true;
-
         return Commands.runOnce(
             () -> io.setVoltage(volts),
             this
@@ -76,8 +62,6 @@ public class SlapdownSubsystem extends SubsystemBase{
 
     /** Run the motor at the supplied voltage with software stops enabled */
     public Command runVoltage(DoubleSupplier volts) {
-        softwareStopsEnabled = true;
-
         return Commands.run(
             () -> io.setVoltage(volts.getAsDouble()),
             this
@@ -86,28 +70,22 @@ public class SlapdownSubsystem extends SubsystemBase{
 
     /** Set the motor to the specified voltage with software stops enabled */
     public Command applyVoltageUnrestricted(double volts) {
-        softwareStopsEnabled = false;
-        
         return Commands.runOnce(
-            () -> io.setVoltage(volts),
+            () -> io.setVoltageNoSoftStops(volts),
             this
         );
     }
 
     /** Run the motor at the supplied voltage with software stops disabled */
-    public Command runVoltageUnrestricted(DoubleSupplier volts) {
-        softwareStopsEnabled = false;
-        
+    public Command runVoltageUnrestricted(DoubleSupplier volts) {       
         return Commands.run(
-            () -> io.setVoltage(volts.getAsDouble()),
+            () -> io.setVoltageNoSoftStops(volts.getAsDouble()),
             this
         );
     }
 
     /** Tell the slapdown to go to the specified position */
     public Command applyPosition(double radians) {
-        softwareStopsEnabled = true;
-
         return Commands.runOnce(
             () -> io.setPosition(MathUtil.clamp(radians, SlapdownConstants.kMinAngleRadians, SlapdownConstants.kMaxAngleRadians)),
             this
@@ -116,8 +94,6 @@ public class SlapdownSubsystem extends SubsystemBase{
 
     /** Run the slapdown to the supplied position */
     public Command runPosition(DoubleSupplier radians) {
-        softwareStopsEnabled = true;
-
         return Commands.run(
             () -> io.setPosition(MathUtil.clamp(radians.getAsDouble(), SlapdownConstants.kMinAngleRadians, SlapdownConstants.kMaxAngleRadians)),
             this

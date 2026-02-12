@@ -18,6 +18,8 @@ public interface SlapdownIO {
 
     public abstract void setVoltage(double volts);
 
+    public abstract void setVoltageNoSoftStops(double volts);
+
     public abstract void setPosition(double radians);
 
     public abstract void updateInputs(SlapdownIOInputs inputs);

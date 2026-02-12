@@ -10,9 +10,13 @@ public class SlapdownIODisabled implements SlapdownIO {
     }
 
     @Override
+    public void setVoltageNoSoftStops(double volts) {
+        setVoltage(volts);
+    }
+
+    @Override
     public void setPosition(double radians) {
         positionTarget = radians;
-        
     }
 
     @Override

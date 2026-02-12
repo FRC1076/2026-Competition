@@ -37,7 +37,7 @@ import frc.robot.subsystems.roller.RollerIOKraken;
 import frc.robot.subsystems.roller.RollerSubsystem;
 import frc.robot.subsystems.slapdown.SlapdownConstants;
 import frc.robot.subsystems.slapdown.SlapdownIODisabled;
-import frc.robot.subsystems.slapdown.SlapdownIONeo;
+import frc.robot.subsystems.slapdown.SlapdownIOKraken;
 import frc.robot.subsystems.slapdown.SlapdownSubsystem;
 import frc.robot.subsystems.spindexer.SpindexerIODisabled;
 import frc.robot.subsystems.spindexer.SpindexerIOKraken;
@@ -116,7 +116,7 @@ public class RobotContainer {
             m_hood = new HoodSubsystem(new HoodIONeo());
 
             m_rollers = new RollerSubsystem(new RollerIOKraken());
-            m_slapdown = new SlapdownSubsystem(new SlapdownIONeo());
+            m_slapdown = new SlapdownSubsystem(new SlapdownIOKraken());
             m_spindexer = new SpindexerSubsystem(new SpindexerIOKraken());
             m_kicker = new KickerSubsystem(new KickerIONeo());
 

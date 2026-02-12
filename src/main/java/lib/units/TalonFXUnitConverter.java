@@ -77,9 +77,14 @@ public class TalonFXUnitConverter {
         return SIUnits * conversionFactor;
     }
 
-    /** Returns the input value as kS does not depend on error */
+    /** Returns the input value */
     public double fromSIkS(double SIUnits) {
         return SIUnits;
+    }
+
+    /** Returns the input value as kG in native units of output per unit */
+    public double fromSIkG(double SIUnits) {
+        return SIUnits * conversionFactor;
     }
 
     /** Returns kV constant from SI units to native units of output per rotation per second */
