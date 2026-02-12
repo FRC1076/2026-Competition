@@ -53,6 +53,13 @@ public class ClimberConstants{
         public static final double kI = 0;
         public static final double kD = 0;
 
+        public static final double kS = 0;
+        public static final double kV = 0;
+        public static final double kA = 0;
+
+        public static final double kCruiseVelocity = Math.PI;
+        public static final double kMaxAccel = Math.PI;
+
         public static final double kGearRatio = 1;
         public static final double kPositionConversionFactor = (2 * Math.PI) / kGearRatio;
         public static final double kVelocityConversionFactor = kPositionConversionFactor / 60.0;
