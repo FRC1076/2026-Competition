@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.SystemConstants;
 import frc.robot.Constants.SystemConstants.RobotMode;
 
+import org.littletonrobotics.junction.AutoLogOutputManager;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -69,6 +70,8 @@ public class Robot extends LoggedRobot {
             Logger.setReplaySource(new WPILOGReader(logPath)); // Read replay log
             Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim"))); // Save outputs to a new log
         }
+
+        AutoLogOutputManager.addPackage("lib");
 
         Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may be added.
 

@@ -46,6 +46,7 @@ import frc.robot.subsystems.turret.TurretConstants;
 import frc.robot.subsystems.turret.TurretIODisabled;
 import frc.robot.subsystems.turret.TurretIOKraken;
 import frc.robot.subsystems.turret.TurretSubsystem;
+import frc.robot.utils.ShiftUtil;
 import lib.extendedcommands.MultiToggleableTrigger;
 import lib.extendedcommands.ToggleableTrigger;
 import lib.hardware.hid.SamuraiPS5Controller;
@@ -53,6 +54,7 @@ import lib.hardware.hid.SamuraiXboxController;
 import lib.vision.PhotonVisionLocalizer;
 import lib.vision.VisionLocalizationSystem;
 
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.photonvision.PhotonCamera;
 
 import edu.wpi.first.wpilibj.RobotBase;
@@ -326,6 +328,24 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         // An example command will be run in autonomous
         return Commands.none();
+    }
+
+    /** Returns the amount of time left in the shift */
+    @AutoLogOutput(key = "Match/ShiftTime", unit="second")
+    public int getShiftTime() {
+        return ShiftUtil.getSecondsRemainingInShift();
+    }
+
+    /** Returns if the our hub is active */
+    @AutoLogOutput(key = "Match/OurHubActive")
+    public boolean isOurHubActive() {
+        return ShiftUtil.isOurAllianceActive();
+    }
+
+    /** Returns if blue alliance won auto */
+    @AutoLogOutput(key = "Match/Auton Winner Color Hex")
+    public String getAutonWinnerColorHex() {
+        return ShiftUtil.autonWinnerColorHex();
     }
 
     /** Command to raise thread priority */
