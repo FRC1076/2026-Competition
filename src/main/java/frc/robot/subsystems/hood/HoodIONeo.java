@@ -8,6 +8,7 @@ import org.littletonrobotics.junction.Logger;
 
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
+import com.revrobotics.spark.FeedbackSensor;
 import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.config.SparkMaxConfig;
@@ -34,6 +35,10 @@ public class HoodIONeo implements HoodIO {
             .idleMode(IdleMode.kBrake)
             .smartCurrentLimit((int) HoodConstants.kSmartCurrentLimit);
 
+        m_leadMotorConfig.encoder
+            .positionConversionFactor(HoodConstants.kPositionRelEncoderConversionFactor)
+            .velocityConversionFactor(HoodConstants.kVelocityRelEncoderConversionFactor);
+
         m_leadMotorConfig.absoluteEncoder
             .setSparkMaxDataPortConfig()
             .inverted(true)
@@ -44,7 +49,8 @@ public class HoodIONeo implements HoodIO {
         m_leadMotorConfig.closedLoop
             .p(HoodConstants.kP)
             .i(HoodConstants.kI)
-            .d(HoodConstants.kD);
+            .d(HoodConstants.kD)
+            .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
         
         m_leadMotorConfig.closedLoop.feedForward
             .kS(HoodConstants.kS)
