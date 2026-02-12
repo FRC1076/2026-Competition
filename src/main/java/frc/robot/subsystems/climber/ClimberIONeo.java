@@ -86,23 +86,27 @@ public class ClimberIONeo implements ClimberIO {
         m_hookPIDController = m_hookMotor.getClosedLoopController();
     }
 
+    /** Sets the voltage for the climber motor */
     @Override
     public void setVoltage(double volts) {
         PIDEnabled = false;
         m_motor.setVoltage(volts);
     }
 
+    /** Sets the goal position for climber's PID controller in meters */
     @Override
     public void setPosition(double positionMeters) {
         m_profiledPidController.setGoal(positionMeters);
         PIDEnabled = true;
     }
 
+    /** Sets the voltage for the hook motor */
     @Override
     public void setHookVoltage(double volts) {
         m_hookMotor.setVoltage(volts);
     }
 
+    /** Sets the setpoint for the hook PID controller */
     @Override
     public void setHookPosition(double positionRadians) {
         m_hookPIDController.setSetpoint(positionRadians, ControlType.kPosition);

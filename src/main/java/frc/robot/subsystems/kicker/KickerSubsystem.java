@@ -22,7 +22,7 @@ public class KickerSubsystem extends SubsystemBase {
         io.updateInputs(inputs);
         Logger.processInputs("Kicker", inputs);
     }
-
+    /** set the motors to specific voltage */
     public Command applyVoltage(double volts) {
         return Commands.runOnce(
             () -> io.setVoltage(volts),
@@ -30,6 +30,7 @@ public class KickerSubsystem extends SubsystemBase {
         );
     }
 
+    /** Run the Kicker motor at supplied voltage */
     public Command runVoltage(DoubleSupplier volts) {
         return Commands.run(
             () -> io.setVoltage(volts.getAsDouble()),
@@ -37,10 +38,12 @@ public class KickerSubsystem extends SubsystemBase {
         );
     }
 
+    /** Stop the Kickre's motor */
     public Command stop() {
         return applyVoltage(0);
     }
 
+    /** returns current voltage */
     public double getVoltage() {
         return inputs.appliedVoltage;
     }

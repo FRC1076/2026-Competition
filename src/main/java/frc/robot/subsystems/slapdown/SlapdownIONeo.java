@@ -61,6 +61,7 @@ public class SlapdownIONeo implements SlapdownIO {
         );
     }
 
+    /**Sets slapdown motor's voltage */
     @Override
     public void setVoltage(double volts) {
         m_motor.setVoltage(volts);

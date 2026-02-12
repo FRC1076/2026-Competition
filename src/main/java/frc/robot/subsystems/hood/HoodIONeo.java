@@ -66,12 +66,14 @@ public class HoodIONeo implements HoodIO {
         );
     }
 
+    /** sets Hood's motor voltage */
     @Override
     public void setVoltage(double volts) {
         pidEnabled = false;
         m_leadMotor.setVoltage(volts);
     }
 
+    /**Sets the setpoint of Hood PID Controller*/
     @Override
     public void setPosition(double radians) {
         pidEnabled = true;

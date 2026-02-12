@@ -56,7 +56,7 @@ public class ClimberSubsystem extends SubsystemBase {
         );
     }
 
-    /** Run the motor at the supplied voltage */
+    /** Run the climber motor at the supplied voltage */
     public Command runVoltage(DoubleSupplier volts) {
         return Commands.run(
             () -> io.setVoltage(volts.getAsDouble()),
@@ -116,10 +116,11 @@ public class ClimberSubsystem extends SubsystemBase {
         return sysId.dynamic(direction);
     }
 
+    /** Stops the climber's motors */
     public Command stop() {
-        return Commands.runOnce(
-            () -> io.setVoltage(0),
-            this
+        return Commands.sequence(
+            Commands.runOnce(() -> io.setVoltage(0), this),
+            Commands.runOnce(() -> io.setHookVoltage(0))
         );
     }   
 }

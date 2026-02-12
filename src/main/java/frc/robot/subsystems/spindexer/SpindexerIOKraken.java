@@ -53,6 +53,7 @@ public class SpindexerIOKraken implements SpindexerIO {
 
     }
 
+    /**Sets the voltage for the Spindexer's motor */
     @Override
     public void setVoltage(double volts) {
         m_motor.setVoltage(volts);

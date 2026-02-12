@@ -30,12 +30,13 @@ public class KickerIONeo implements KickerIO{
 
         m_encoder = m_motor.getEncoder();
     }
-
+    /** Sets the voltage for Kicker's motor */
     @Override 
     public void setVoltage(double volts) {
         m_motor.setVoltage(volts);
     }
 
+    /** Apply voltage to kicker's motor */
     @Override 
     public void updateInputs(KickerIOInputs inputs) {
         inputs.appliedVoltage = m_motor.getAppliedOutput() * m_motor.getBusVoltage();
