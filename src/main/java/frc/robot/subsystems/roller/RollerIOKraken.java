@@ -46,11 +46,13 @@ public class RollerIOKraken implements RollerIO {
         m_temperatureSignal = m_motor.getDeviceTemp();
     }
 
+    /** Sets the voltage for roller's motor */
     @Override
     public void setVoltage(double volts) {
         m_motor.setVoltage(volts);
     }
 
+    
     @Override
     public void updateInputs(RollerIOInputs inputs) {
         StatusSignal.refreshAll(

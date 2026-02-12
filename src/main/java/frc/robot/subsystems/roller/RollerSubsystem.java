@@ -20,7 +20,7 @@ public class RollerSubsystem  extends SubsystemBase {
         io.updateInputs(inputs);
         Logger.processInputs("Roller", inputs);
     }
-
+    /** Set the motor to the specific voltage */
     public Command applyVoltage(double volts) {
         return Commands.runOnce(
             () -> io.setVoltage(volts),
@@ -28,6 +28,7 @@ public class RollerSubsystem  extends SubsystemBase {
         );
     }
 
+    /** Run the Roller motor at supplied voltage */
     public Command runVoltage(DoubleSupplier volts) {
         return Commands.run(
             () -> io.setVoltage(volts.getAsDouble()),
@@ -35,10 +36,12 @@ public class RollerSubsystem  extends SubsystemBase {
         );
     }
 
+    /** Stop the roller's motors */
     public Command stop() {
         return applyVoltage(0);
     }
 
+    /** Gets the roller motor's voltage */
     public double getVoltage() {
         return inputs.appliedVoltage;
     }

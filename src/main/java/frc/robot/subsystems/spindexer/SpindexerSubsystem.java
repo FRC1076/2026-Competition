@@ -22,6 +22,7 @@ public class SpindexerSubsystem extends SubsystemBase{
         Logger.processInputs("Spindexer", inputs);
     }
 
+    /**Set the motor to specific voltage */
     public Command applyVoltage(double volts) {
         return Commands.runOnce(
             () -> io.setVoltage(volts),
@@ -29,6 +30,7 @@ public class SpindexerSubsystem extends SubsystemBase{
         );
     }
 
+    /** Run motors at the specific voltage */
     public Command runVoltage(DoubleSupplier volts) {
         return Commands.run(
             () -> io.setVoltage(volts.getAsDouble()),
@@ -36,6 +38,7 @@ public class SpindexerSubsystem extends SubsystemBase{
         );
     }
 
+    /** Gets motor's current voltage */
     public double getVoltage() {
         return inputs.appliedVoltage;
     }

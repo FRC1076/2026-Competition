@@ -95,33 +95,25 @@ public class TurretIOKraken implements TurretIO {
             .withEnableFOC(TurretConstants.kEnableFOC);
     }
 
+    /** Sets the voltage for the turret's motor */
     @Override
     public void setVoltage(double volts) {
         m_voltageRequest.Output = volts;
         m_motor.setControl(m_voltageRequest);
     }
 
+    /** Sets the voltage of the turret's motor, ignoring software stops */
     @Override
     public void setVoltageNoSoftStops(double volts) {
         m_voltageRequestNoSoftStops.Output = volts;
         m_motor.setControl(m_voltageRequestNoSoftStops);
     }
 
+    /**Sets the target position of the turret motor */
     @Override
     public void setPosition(double positionRadians) {
         m_positionRequest.Position = m_unitConverter.fromSIPos(positionRadians);
         m_motor.setControl(m_positionRequest);
-    }
-
-    @Override
-    public void setSoftwareStops(boolean enabled) {
-        if (m_motorConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable == enabled) {
-            return;
-        }
-
-        m_motorConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = enabled;
-        m_motorConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = enabled;
-        m_motor.getConfigurator().apply(m_motorConfig.SoftwareLimitSwitch);
     }
 
     @Override
