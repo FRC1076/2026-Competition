@@ -16,7 +16,7 @@ import frc.robot.subsystems.spindexer.SpindexerSubsystem;
 import frc.robot.subsystems.turret.TurretSubsystem;
 
 import lib.ballistic.CommonShotSolution;
-import lib.ballistic.HoundSOTMCalculator;
+// import lib.ballistic.HoundSOTMCalculator;
 import lib.ballistic.MechAdvSOTMCalculator;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -145,7 +145,7 @@ public class Superstructure {
                 Commands.repeatingSequence(
                     Commands.runOnce(() -> updateShootingParams()),
                     Commands.parallel(
-                        m_flywheel.applyVelocity(flywheelTargetSpeedRadPerSec),
+                        m_flywheel.applyVelocity(m_shootingParams.launchSpeedRadPerSec()),
                         m_hood.applyPosition(m_shootingParams.launchPitchRad()),
                         applyTurretPositionSafe(MathUtil.angleModulus(m_shootingParams.launchYawRad() - m_robotPoseSupplier.get().getRotation().getRadians()))
                     )
@@ -173,10 +173,6 @@ public class Superstructure {
             target = SuperstructureConstants.kLeftPassingTarget;
             targetIsHub = false;
         }
-        
-        flywheelTargetSpeedRadPerSec = 
-            SuperstructureConstants.kDistanceToFlywheelSpeedMap.get(shooterPose.getTranslation().getDistance(target.getTranslation()))
-            * m_superState.getTurretState().kAutoAimFlywheelPercentage;
 
         
         /* TechHOUNDs option. Commented out to test Mechanical Advantage's option. * /

@@ -182,7 +182,7 @@ import org.littletonrobotics.junction.Logger;
         Logger.recordOutput("ShotCalculator/LookaheadPose", lookaheadPose);
         Logger.recordOutput("ShotCalculator/TurretToTargetDistance", lookaheadTurretToTargetDistance);
 
-        return new CommonShotSolution(latestParameters.hoodAngle, latestParameters.turretAngle.getRadians(), timeOfFlightMap.get(lookaheadTurretToTargetDistance));
+        return new CommonShotSolution(latestParameters.hoodAngle, latestParameters.turretAngle.getRadians(), latestParameters.flywheelSpeed);
     }
 
     public void clearShootingParameters() {
