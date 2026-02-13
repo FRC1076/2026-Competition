@@ -8,7 +8,6 @@ import java.util.function.DoubleSupplier;
 
 import org.littletonrobotics.junction.Logger;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -41,6 +40,14 @@ public class HoodSubsystem extends SubsystemBase {
         );
     }
 
+    public void setSoftwareStop(boolean enabled) {
+        applySoftwareStop = enabled;
+    }
+
+    public Command applySoftwareStop(boolean enabled) {
+        return Commands.runOnce(() -> setSoftwareStop(enabled));
+    }
+
     @Override
     public void periodic() {
         io.periodic();
@@ -56,61 +63,49 @@ public class HoodSubsystem extends SubsystemBase {
 
     /** Set the motor to a voltage with software stops enabled */
     public Command applyVoltage(double volts) {
-        applySoftwareStop = true;
-
-        return Commands.runOnce(
-            () -> io.setVoltage(volts),
-            this
+        return Commands.sequence(
+            applySoftwareStop(true),
+            Commands.runOnce(() -> io.setVoltage(volts), this)
         );
     }
 
     /** Run the motor at the supplied voltage with software stops enabled */
     public Command runVoltage(DoubleSupplier volts) {
-        applySoftwareStop = true;
-
-        return Commands.run(
-            () -> io.setVoltage(volts.getAsDouble()),
-            this
+        return Commands.sequence(
+            applySoftwareStop(true),
+            Commands.run(() -> io.setVoltage(volts.getAsDouble()), this)
         );
     }
 
     /** Set the motor to a voltage with software stops disabled */
     public Command applyVoltageUnrestricted(double volts) {
-        applySoftwareStop = false;
-
-        return Commands.runOnce(
-            () -> io.setVoltage(volts), 
-            this
+        return Commands.sequence(
+            applySoftwareStop(false),
+            Commands.runOnce(() -> io.setVoltage(volts), this)
         );
     }
 
     /** Run the motor at the supplied voltage with software stops disabled */
     public Command runVoltageUnrestricted(DoubleSupplier volts) {
-        applySoftwareStop = false;
-
-        return Commands.run(
-            () -> io.setVoltage(volts.getAsDouble()), 
-            this
+        return Commands.sequence(
+            applySoftwareStop(false),
+            Commands.run(() -> io.setVoltage(volts.getAsDouble()), this)
         );
     }
 
     /** Apply a position to the hood */
     public Command applyPosition(double radians) {
-        applySoftwareStop = true;
-
-        return Commands.runOnce(
-            () -> io.setPosition(MathUtil.clamp(radians, HoodConstants.kMinHoodAngleRadians, HoodConstants.kMaxHoodAngleRadians)), 
-            this
+        return Commands.sequence(
+            applySoftwareStop(true),
+            Commands.runOnce(() -> io.setPosition(radians), this)
         );
     }
 
     /** Repeatedly tell the hood to go to a position based on the supplier */
     public Command runPosition(DoubleSupplier radians) {
-        applySoftwareStop = true;
-
-        return Commands.run(
-            () -> io.setPosition(MathUtil.clamp(radians.getAsDouble(), HoodConstants.kMinHoodAngleRadians, HoodConstants.kMaxHoodAngleRadians)), 
-            this
+        return Commands.sequence(
+            applySoftwareStop(true),
+            Commands.run(() -> io.setPosition(radians.getAsDouble()), this)
         );
     }
 
