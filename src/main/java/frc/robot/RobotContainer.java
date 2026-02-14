@@ -228,16 +228,20 @@ public class RobotContainer {
             .onTrue(superstructureCommands.applyTurretStatesHubPreAlignedLocation());
 
         m_driverController.povUp()
-            .onTrue(m_climber.applyPosition(ClimberConstants.kClimberUpPosition));
+            .onTrue(m_hood.applyVoltageUnrestricted(4))
+            .onFalse(m_hood.applyVoltageUnrestricted(0));
 
         m_driverController.povDown()
-            .onTrue(m_climber.applyPosition(ClimberConstants.kClimberDownPosition));
+            .onTrue(m_hood.applyVoltageUnrestricted(-4))
+            .onFalse(m_hood.applyVoltageUnrestricted(0));
 
         m_driverController.povLeft()
-            .onTrue(m_climber.applyHookPosition(HookConstants.kHookOutPosition));
+            .onTrue(m_climber.applyHookVoltage(4))
+            .onFalse(m_climber.applyHookVoltage(0));
 
         m_driverController.povRight()
-            .onTrue(m_climber.applyHookPosition(HookConstants.kHookStowedPosition));
+            .onTrue(m_climber.applyHookVoltage(-4))
+            .onFalse(m_climber.applyHookVoltage(0));
 
         // Trench mode!
         new ToggleableTrigger(m_driverController.circle(), false).getToggledTrigger()
@@ -253,27 +257,35 @@ public class RobotContainer {
         MultiToggleableTrigger joystickTriggers = new MultiToggleableTrigger(m_operatorController.a(), m_operatorController.b(), m_operatorController.y());
 
         m_operatorController.leftActive().and(joystickTriggers.getToggledTrigger(0))
-            .onTrue(m_turret.runVoltageUnrestricted(
-                () -> -m_operatorController.getLeftX() * TurretConstants.kMaxManualControlVolts))
+            .whileTrue(
+                Commands.sequence(
+                    superstructureCommands.applyTurretManualState(),
+                    m_turret.runVoltageUnrestricted(
+                        () -> -m_operatorController.getLeftX() * TurretConstants.kMaxManualControlVolts)
+                )
+            )
             .onFalse(m_turret.applyVoltageUnrestricted(0));
 
         m_operatorController.rightActive().and(joystickTriggers.getToggledTrigger(0))
-            .onTrue(m_hood.runVoltageUnrestricted(
-                () -> -m_operatorController.getRightY() * HoodConstants.kMaxOperatorControlVolts))
+            .whileTrue(Commands.parallel(
+                    superstructureCommands.applyTurretManualState(),
+                    m_hood.runVoltageUnrestricted(
+                        () -> -m_operatorController.getRightY() * HoodConstants.kMaxOperatorControlVolts)
+                ))
             .onFalse(m_hood.applyVoltageUnrestricted(0)); 
 
         m_operatorController.leftActive().and(joystickTriggers.getToggledTrigger(1))
-            .onTrue(m_slapdown.runVoltageUnrestricted(
+            .whileTrue(m_slapdown.runVoltageUnrestricted(
                 () -> -m_operatorController.getLeftX() * SlapdownConstants.kMaxOperatorControlVolts))
             .onFalse(m_slapdown.applyVoltageUnrestricted(0));
 
         m_operatorController.leftActive().and(joystickTriggers.getToggledTrigger(2))
-            .onTrue(m_climber.runVoltage(
+            .whileTrue(m_climber.runVoltage(
                 () -> -m_operatorController.getLeftY() * ClimberConstants.kMaxOperatorControlVolts))
             .onFalse(m_climber.applyVoltage(0));
         
         m_operatorController.rightActive().and(joystickTriggers.getToggledTrigger(2))
-            .onTrue(m_climber.runHookVoltage(
+            .whileTrue(m_climber.runHookVoltage(
                 () -> -m_operatorController.getRightX() * HookConstants.kMaxOperatorControlVolts))
             .onFalse(m_climber.applyHookVoltage(0));
         

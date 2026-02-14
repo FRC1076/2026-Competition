@@ -13,7 +13,7 @@ public class SpindexerConstants {
     public static final int kSupplyCurrentLimit = 40;
     public static final int kStatorCurrentLimit = 50;
 
-    public static final InvertedValue kInverted = InvertedValue.Clockwise_Positive;
+    public static final InvertedValue kInverted = InvertedValue.CounterClockwise_Positive;
     public static final NeutralModeValue kNeutralMode = NeutralModeValue.Brake;
 
     public static final double kGearRatio = 1;

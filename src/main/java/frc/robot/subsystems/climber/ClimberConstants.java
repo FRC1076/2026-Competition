@@ -6,7 +6,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import frc.robot.Constants.CANConstants;
 
 public class ClimberConstants{
-    public static final int kCANId = 51;
+    public static final int kCANId = 52;
     public static final CANBus kCANBus = CANConstants.kRioBus;
 
     // PID
@@ -41,7 +41,7 @@ public class ClimberConstants{
     public static final double kMaxOperatorControlVolts = 1;
 
     public static class HookConstants {
-        public static final int kCANId = 52;
+        public static final int kCANId = 51;
         public static final CANBus kCANBus = CANConstants.kRioBus;
 
         public static final boolean kMotorInverted = false;

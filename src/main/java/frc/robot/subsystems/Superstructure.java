@@ -282,7 +282,7 @@ public class Superstructure {
 
         /** Apply the MANUAL turret state */
         public Command applyTurretManualState(){
-            return m_superstructure.applyTurretStateAllParallel(TurretStates.MANUAL);
+            return m_superstructure.setTurretState(TurretStates.MANUAL);
         }
 
         /** Apply the ATOUAIM_IDLE turret state (gets ready to shoot) */
@@ -353,6 +353,7 @@ public class Superstructure {
                     startIndexing()
                 ),
                 Commands.sequence(
+                    m_flywheel.applyVoltage(9),
                     startIndexing()
                 ),
                 () -> m_superstructure.getSuperState().getTurretState().kIsAutoAim

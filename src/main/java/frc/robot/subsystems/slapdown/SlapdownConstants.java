@@ -8,7 +8,7 @@ import frc.robot.Constants.CANConstants;
 
 public class SlapdownConstants {
     public static final int kCANId = 42;
-    public static final CANBus kCANBus = CANConstants.kRioBus;
+    public static final CANBus kCANBus = CANConstants.kCANivoreBus;
 
     public static final double kSupplyCurrentLimit = 40;
     public static final double kStatorCurrentLimit = 40;

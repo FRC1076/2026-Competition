@@ -10,7 +10,7 @@ public class KickerConstants {
     public static final double kVoltageCompensation = 10.5;
     public static final int kCurrentLimitAmps = 20;
 
-    public static final boolean kInverted = false;
+    public static final boolean kInverted = true;
     public static final IdleMode kIdleMode = IdleMode.kBrake;
 
     // Velocity conversion factor

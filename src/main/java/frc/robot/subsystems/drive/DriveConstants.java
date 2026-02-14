@@ -16,8 +16,8 @@ public class DriveConstants {
         public static final double doubleClutchRotationFactor = 0.35;
         public static final double FPVClutchTranslationFactor = 0.1;
         public static final double FPVClutchRotationFactor = 0.1;
-        public static final double maxTranslationSpeedMPS = 4.0; // 5.0 is default
-        public static final double maxRotationSpeedRadPerSec = 4.0; // 5.0 is default
+        public static final double maxTranslationSpeedMPS = 6.0; // 5.0 is default
+        public static final double maxRotationSpeedRadPerSec = 8.0; // 5.0 is default
     }
 
     public static class PathPlannerConstants {

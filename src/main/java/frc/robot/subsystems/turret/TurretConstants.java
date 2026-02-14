@@ -17,7 +17,7 @@ public class TurretConstants {
     public static final double kSupplyCurrentLimitAmps = 30;
 
     // Manual control
-    public static final double kMaxManualControlVolts = 1;
+    public static final double kMaxManualControlVolts = 1.5;
 
     // If inverted and brake mode
     public static final InvertedValue kInvertedValue = InvertedValue.Clockwise_Positive;
@@ -44,8 +44,8 @@ public class TurretConstants {
     public static final boolean kEnableFOC = true;
 
     // Software stops
-    public static final double kMaxPositionRad = Math.PI / 2;
-    public static final double kMinPositionRad = -Math.PI / 2;
+    public static final double kMaxPositionRad = Math.PI;
+    public static final double kMinPositionRad = -Math.PI;
 
     // SysId
     public static final double kSysIdRampRate = 1;

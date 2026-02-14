@@ -25,7 +25,7 @@ public class MultiToggleableTrigger {
         for (int i = 0; i < baseTriggers.length; i++) {
             final int index = i;
             baseTriggers[index].onTrue(
-                Commands.runOnce(() -> toggleInternalState(index))
+                Commands.runOnce(() -> selectTrueIndex(index))
             );
         }
     }
@@ -34,8 +34,11 @@ public class MultiToggleableTrigger {
         return new Trigger(() -> internalStates[index]);
     }
 
-    private void toggleInternalState(int index) {
-        internalStates[index] = !internalStates[index];
+    private void selectTrueIndex(int index) {
+        for (int i = 0; i < internalStates.length; i++) {
+            internalStates[i] = false;
+        }
+        internalStates[index] = true;
     }
 
     public boolean getState(int index) {

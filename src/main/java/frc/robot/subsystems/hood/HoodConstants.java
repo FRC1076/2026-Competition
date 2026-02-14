@@ -9,7 +9,7 @@ public class HoodConstants {
     public static final double kMaxOperatorControlVolts = 5;
 
     // Inverted
-    public static final boolean kMotorInverted = false;
+    public static final boolean kMotorInverted = true;
 
     // Software stops and PID tolerance
     public static final double kMaxHoodAngleRadians = 2;
