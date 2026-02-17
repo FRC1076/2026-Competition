@@ -353,7 +353,6 @@ public class Superstructure {
                     startIndexing()
                 ),
                 Commands.sequence(
-                    m_flywheel.applyVoltage(9),
                     startIndexing()
                 ),
                 () -> m_superstructure.getSuperState().getTurretState().kIsAutoAim

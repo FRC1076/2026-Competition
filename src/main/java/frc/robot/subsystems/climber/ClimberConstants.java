@@ -38,13 +38,13 @@ public class ClimberConstants{
     public static final double kClimberUpPosition = 0.5;
     public static final double kClimberDownPosition = 0;
 
-    public static final double kMaxOperatorControlVolts = 1;
+    public static final double kMaxOperatorControlVolts = 6;
 
     public static class HookConstants {
         public static final int kCANId = 51;
         public static final CANBus kCANBus = CANConstants.kRioBus;
 
-        public static final boolean kMotorInverted = false;
+        public static final boolean kMotorInverted = true;
 
         public static final double kVoltageCompensation = 10; 
         public static final int kCurrentLimit = 20;
@@ -67,7 +67,6 @@ public class ClimberConstants{
         public static final double kHookStowedPosition = 0;
         public static final double kHookOutPosition = Math.PI;
 
-        public static final double kMaxOperatorControlVolts = 1;
-        public static final double kApplyVoltageUnrestricted = 12;
+        public static final double kMaxOperatorControlVolts = 2;
     }
 }

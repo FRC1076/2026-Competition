@@ -16,7 +16,7 @@ import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
 
 import com.ctre.phoenix6.controls.Follower;
-import com.ctre.phoenix6.controls.MotionMagicVelocityTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VoltageOut;
 
 public class FlywheelIOKraken implements FlywheelIO {
@@ -32,7 +32,7 @@ public class FlywheelIOKraken implements FlywheelIO {
     // Control requests
     private final VoltageOut m_voltageRequest;
     // private final MotionMagicVelocityVoltage m_velocityRequest;
-    private final MotionMagicVelocityTorqueCurrentFOC m_velocityRequest;
+    private final VelocityTorqueCurrentFOC m_velocityRequest;
 
     // Voltage, velocity, current, and temperature status signals
     private final StatusSignal<Voltage> m_leadVoltageSignal;
@@ -98,7 +98,7 @@ public class FlywheelIOKraken implements FlywheelIO {
         m_voltageRequest = new VoltageOut(0)
             .withEnableFOC(FlywheelConstants.kEnableFOC)
             .withOverrideBrakeDurNeutral(true);
-        m_velocityRequest = new MotionMagicVelocityTorqueCurrentFOC(0);
+        m_velocityRequest = new VelocityTorqueCurrentFOC(0);
     }
 
     @Override

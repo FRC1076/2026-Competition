@@ -20,6 +20,7 @@ import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 import com.ctre.phoenix6.SignalLogger;
+import com.revrobotics.util.StatusLogger;
 
 
 /**
@@ -76,6 +77,10 @@ public class Robot extends LoggedRobot {
         Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may be added.
 
         SignalLogger.enableAutoLogging(SystemConstants.kEnableSignalLogger);
+
+        if(!SystemConstants.kEnableStatusLogger) {
+            StatusLogger.disableAutoLogging();
+        }
 
         // Enable the switchable channel
         final PowerDistribution pdh = new PowerDistribution();

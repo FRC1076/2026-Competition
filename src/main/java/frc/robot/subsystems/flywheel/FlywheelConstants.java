@@ -25,12 +25,12 @@ public class FlywheelConstants {
     public static final NeutralModeValue kNeutralMode = NeutralModeValue.Coast;
     public static final MotorAlignmentValue kMotorAlignment = MotorAlignmentValue.Opposed;
 
-    public static final double kP = 0;
+    public static final double kP = 3;
     public static final double kI = 0;
     public static final double kD = 0;
 
     public static final double kS = 0;
-    public static final double kV = 0;
+    public static final double kV = (1.0/53.0);
     public static final double kA = 0;
 
     public static final double kMaxAcceleration = 20000;
@@ -43,6 +43,7 @@ public class FlywheelConstants {
     public static final boolean kEnableFOC = true;
 
     public static final double kMaxManualControlVolts = 12;
-    public static final double kHighManualControlVolts = 9;
+    public static final double kHighManualControlVolts = 6;
+    public static final double kLowManualControlVolts = 3;
 }
 

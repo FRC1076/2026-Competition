@@ -52,7 +52,7 @@ public class TurretIOKraken implements TurretIO {
         m_motorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
         // Offset from internal absolute encoder
-        m_motorConfig.Feedback.FeedbackRotorOffset = m_unitConverter.fromSIPos(TurretConstants.kEncoderOffsetRad);
+        m_motorConfig.Feedback.FeedbackRotorOffset = TurretConstants.kEncoderOffsetRot;
         m_motorConfig.Feedback.SensorToMechanismRatio = TurretConstants.kGearRatio;
 
         // Closed loop
@@ -70,9 +70,9 @@ public class TurretIOKraken implements TurretIO {
 
         // Software Stops
         m_motorConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = m_unitConverter.fromSIPos(TurretConstants.kMaxPositionRad);
-        m_motorConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+        m_motorConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = false;
         m_motorConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = m_unitConverter.fromSIPos(TurretConstants.kMinPositionRad);
-        m_motorConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+        m_motorConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = false;
 
         // Apply configs
         m_motor.getConfigurator().apply(m_motorConfig);

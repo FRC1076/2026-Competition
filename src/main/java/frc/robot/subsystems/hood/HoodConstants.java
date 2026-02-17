@@ -6,14 +6,14 @@ public class HoodConstants {
 
     // Voltage and current limits
     public static final double kSmartCurrentLimit = 10;
-    public static final double kMaxOperatorControlVolts = 5;
+    public static final double kMaxOperatorControlVolts = 3;
 
     // Inverted
-    public static final boolean kMotorInverted = true;
+    public static final boolean kMotorInverted = false;
 
     // Software stops and PID tolerance
     public static final double kMaxHoodAngleRadians = 2;
-    public static final double kMinHoodAngleRadians = 0;
+    public static final double kMinHoodAngleRadians = -2;
     public static final double hoodAngleToleranceRadians = 0.1;
     
     // Absolute encoder stuff
@@ -28,7 +28,7 @@ public class HoodConstants {
     public static final double kVelocityRelEncoderConversionFactor = kPositionRelEncoderConversionFactor / 60;
 
     // PID
-    public static final double kP = 0;
+    public static final double kP = 60;
     public static final double kI = 0;
     public static final double kD = 0;
     public static final double kMaxVelocityRadPerSec = Math.PI;

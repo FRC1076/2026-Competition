@@ -19,8 +19,9 @@ public class SlapdownConstants {
     public static final boolean kUseFOC = true;
 
     public static final double kGearRatio = 25;
+    public static final double kRotorOffsetRot = -0.241699 + 0.014648 + 0.013916;
 
-    public static final double kP = 0;
+    public static final double kP = 1.5;
     public static final double kI = 0;
     public static final double kD = 0;
 
@@ -34,8 +35,8 @@ public class SlapdownConstants {
     public static final double kMaxJerkRadPerSec3 = 100 * Math.PI;
 
     public static final double kAngleToleranceRadians = 0.1;
-    public static final double kMinAngleRadians = -Math.PI / 4;
-    public static final double kMaxAngleRadians = Math.PI / 2;
+    public static final double kMinAngleRadians = 0;
+    public static final double kMaxAngleRadians = 5.5;
 
     public static final double kMaxOperatorControlVolts = 1;
 

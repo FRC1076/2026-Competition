@@ -227,13 +227,14 @@ public class RobotContainer {
         m_driverController.cross()
             .onTrue(superstructureCommands.applyTurretStatesHubPreAlignedLocation());
 
+            /*
         m_driverController.povUp()
             .onTrue(m_hood.applyVoltageUnrestricted(4))
             .onFalse(m_hood.applyVoltageUnrestricted(0));
 
         m_driverController.povDown()
             .onTrue(m_hood.applyVoltageUnrestricted(-4))
-            .onFalse(m_hood.applyVoltageUnrestricted(0));
+            .onFalse(m_hood.applyVoltageUnrestricted(0)); 
 
         m_driverController.povLeft()
             .onTrue(m_climber.applyHookVoltage(4))
@@ -241,12 +242,24 @@ public class RobotContainer {
 
         m_driverController.povRight()
             .onTrue(m_climber.applyHookVoltage(-4))
-            .onFalse(m_climber.applyHookVoltage(0));
+            .onFalse(m_climber.applyHookVoltage(0)); */
 
         // Trench mode!
         new ToggleableTrigger(m_driverController.circle(), false).getToggledTrigger()
             .onTrue(superstructureCommands.applyTurretIdle())
             .onFalse(superstructureCommands.initiateAutoaim());
+
+        m_driverController.povUp()
+            .onTrue(m_hood.applyPosition(-0.1));
+
+        m_driverController.povDown()
+            .onTrue(m_hood.applyPosition(-0.3));
+        
+        m_driverController.povLeft()
+            .onTrue(m_turret.applyPosition(1));
+
+        m_driverController.povRight()
+            .onTrue(m_turret.applyPosition(-1));
     }
 
     /** Bind triggers on operator controller to commands */
@@ -298,7 +311,13 @@ public class RobotContainer {
         m_operatorController.povLeft()
             .onTrue(Commands.sequence(
                 superstructureCommands.startTurretManualControl(),
-                m_flywheel.applyVoltage(FlywheelConstants.kHighManualControlVolts))
+                m_flywheel.applyVelocity(200))
+            );
+
+        m_operatorController.povRight()
+            .onTrue(Commands.sequence(
+                superstructureCommands.startTurretManualControl(),
+                m_flywheel.applyVelocity(400))
             );
         
         m_operatorController.povDown()

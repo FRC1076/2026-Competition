@@ -7,13 +7,12 @@ public interface SlapdownIO {
     public static class SlapdownIOInputs {
         public double appliedVoltage = 0;
         public double currentAmps = 0;
+        public double angleRadians = 0;
+
         public double velocityRadiansPerSecond = 0;
         public double motorTempDegC = 0;
-        public double position = 0;
 
         public double motorCurrent = 0;
-
-        public double angleRadians = 0;
     }
 
     public abstract void setVoltage(double volts);

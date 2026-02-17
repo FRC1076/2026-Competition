@@ -48,6 +48,7 @@ public class SlapdownIOKraken implements SlapdownIO {
         m_motorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
 
         m_motorConfig.Feedback.SensorToMechanismRatio = SlapdownConstants.kGearRatio;
+        m_motorConfig.Feedback.FeedbackRotorOffset = SlapdownConstants.kRotorOffsetRot;
 
         m_motorConfig.MotorOutput.Inverted = SlapdownConstants.kInverted;
         m_motorConfig.MotorOutput.NeutralMode = SlapdownConstants.kNeutralMode;
@@ -119,7 +120,7 @@ public class SlapdownIOKraken implements SlapdownIO {
 
         inputs.appliedVoltage = m_voltageSignal.getValue().in(Volts);
         inputs.currentAmps = m_currentSignal.getValueAsDouble();
-        inputs.position = m_unitConverter.toSIPos(m_positionSignal.getValueAsDouble());
+        inputs.angleRadians = m_unitConverter.toSIPos(m_positionSignal.getValueAsDouble());
         inputs.velocityRadiansPerSecond = m_unitConverter.toSIVel(m_velocitySignal.getValueAsDouble());
         inputs.motorTempDegC = m_temperatureSignal.getValueAsDouble();
     }

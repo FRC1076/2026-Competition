@@ -11,8 +11,6 @@ public interface TurretIO {
 
         public double motorPositionRad = 0;
         public double motorVelocityRadPerSec = 0;
-
-        public double throughBorePositionRad = 0;
     }
 
     public abstract void setVoltage(double volts);

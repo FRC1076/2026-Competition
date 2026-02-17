@@ -7,11 +7,13 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import org.littletonrobotics.junction.Logger;
 
 import com.revrobotics.PersistMode;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.FeedbackSensor;
 import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.LimitSwitchConfig.Behavior;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.math.MathUtil;
@@ -20,7 +22,7 @@ public class HoodIONeo implements HoodIO {
     private final SparkMax m_leadMotor;
 
     private final SparkMaxConfig m_leadMotorConfig;
-    private final SparkAbsoluteEncoder m_absoluteEncoder;
+    private final RelativeEncoder m_absoluteEncoder;
 
     private final SparkClosedLoopController m_closedLoopController;
 
@@ -39,18 +41,26 @@ public class HoodIONeo implements HoodIO {
             .positionConversionFactor(HoodConstants.kPositionRelEncoderConversionFactor)
             .velocityConversionFactor(HoodConstants.kVelocityRelEncoderConversionFactor);
 
+            /*
         m_leadMotorConfig.absoluteEncoder
             .setSparkMaxDataPortConfig()
             .inverted(true)
             .positionConversionFactor(HoodConstants.kPositionConversionFactor)
             .velocityConversionFactor(HoodConstants.kVelocityConversionFactor)
-            .zeroOffset(HoodConstants.kZeroOffsetRadians / (2*Math.PI));
+            .zeroOffset(HoodConstants.kZeroOffsetRadians / (2*Math.PI)); */
+
+        m_leadMotorConfig.alternateEncoder
+            .setSparkMaxDataPortConfig()
+            .countsPerRevolution(8192)
+            .inverted(true)
+            .positionConversionFactor(HoodConstants.kPositionConversionFactor)
+            .velocityConversionFactor(HoodConstants.kVelocityConversionFactor);
 
         m_leadMotorConfig.closedLoop
             .p(HoodConstants.kP)
             .i(HoodConstants.kI)
             .d(HoodConstants.kD)
-            .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
+            .feedbackSensor(FeedbackSensor.kPrimaryEncoder);
         
         m_leadMotorConfig.closedLoop.feedForward
             .kS(HoodConstants.kS)
@@ -61,15 +71,21 @@ public class HoodIONeo implements HoodIO {
 
         m_leadMotorConfig.closedLoop.maxMotion
             .cruiseVelocity(HoodConstants.kCruiseVelocity)
-            .maxAcceleration(HoodConstants.kMaxAccel);
+            .maxAcceleration(HoodConstants.kMaxAccel)
+            .allowedProfileError(0.01);
 
         m_leadMotorConfig.softLimit
             .forwardSoftLimitEnabled(false)
-            .reverseSoftLimitEnabled(false); 
+            .reverseSoftLimitEnabled(false);
 
-        m_leadMotor.configure(m_leadMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+            /*
+        m_leadMotorConfig.limitSwitch
+            .forwardLimitSwitchTriggerBehavior(Behavior.kKeepMovingMotor)
+            .reverseLimitSwitchTriggerBehavior(Behavior.kKeepMovingMotor); */
 
-        m_absoluteEncoder = m_leadMotor.getAbsoluteEncoder();
+        m_leadMotor.configure(m_leadMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters); 
+
+        m_absoluteEncoder = m_leadMotor.getEncoder();
 
         m_closedLoopController = m_leadMotor.getClosedLoopController();
     }
