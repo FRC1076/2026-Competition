@@ -41,4 +41,7 @@ public class HoodConstants {
     public static final double kA = 0;
 
     public static final double kCosRatio = 1.0/(2.0*Math.PI);
+
+    public static final double kCruiseVelocity = Math.PI;
+    public static final double kMaxAccel = Math.PI;
 }

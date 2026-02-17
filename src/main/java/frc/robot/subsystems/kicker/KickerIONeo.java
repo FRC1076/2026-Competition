@@ -5,6 +5,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.LimitSwitchConfig.Behavior;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 public class KickerIONeo implements KickerIO{
@@ -25,6 +26,10 @@ public class KickerIONeo implements KickerIO{
 
         m_motorConfig.encoder
             .velocityConversionFactor(KickerConstants.kVelocityConversionFactor);
+
+        m_motorConfig.limitSwitch
+            .forwardLimitSwitchTriggerBehavior(Behavior.kKeepMovingMotor)
+            .reverseLimitSwitchTriggerBehavior(Behavior.kKeepMovingMotor); 
 
         m_motor.configure(m_motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 

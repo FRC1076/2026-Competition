@@ -11,6 +11,7 @@ import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.LimitSwitchConfig.Behavior;
 
 import frc.robot.subsystems.climber.ClimberConstants.HookConstants;
 
@@ -55,6 +56,10 @@ public class ClimberIONeo implements ClimberIO {
         m_motorConfig.closedLoop.maxMotion
             .cruiseVelocity(ClimberConstants.kProfileConstraints.maxVelocity)
             .maxAcceleration(ClimberConstants.kProfileConstraints.maxAcceleration);
+
+        m_motorConfig.limitSwitch
+            .forwardLimitSwitchTriggerBehavior(Behavior.kKeepMovingMotor)
+            .reverseLimitSwitchTriggerBehavior(Behavior.kKeepMovingMotor);
         
         m_motor.configure(m_motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         
@@ -85,8 +90,12 @@ public class ClimberIONeo implements ClimberIO {
         m_hookMotorConfig.closedLoop.maxMotion
             .cruiseVelocity(HookConstants.kCruiseVelocity)
             .maxAcceleration(HookConstants.kMaxAccel);
+            
+         m_hookMotorConfig.limitSwitch
+            .forwardLimitSwitchTriggerBehavior(Behavior.kKeepMovingMotor)
+            .reverseLimitSwitchTriggerBehavior(Behavior.kKeepMovingMotor);
 
-        m_hookMotor.configure(m_hookMotorConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
+        m_hookMotor.configure(m_hookMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         m_hookEncoder = m_hookMotor.getEncoder();
         m_hookEncoder.setPosition(HookConstants.kHookStowedPosition);
