@@ -12,7 +12,6 @@ import com.revrobotics.spark.FeedbackSensor;
 import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.spark.config.LimitSwitchConfig.Behavior;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.math.MathUtil;
@@ -64,9 +63,9 @@ public class HoodIONeo implements HoodIO {
             .cruiseVelocity(HoodConstants.kCruiseVelocity)
             .maxAcceleration(HoodConstants.kMaxAccel);
 
-        m_leadMotorConfig.limitSwitch
-            .forwardLimitSwitchTriggerBehavior(Behavior.kKeepMovingMotor)
-            .reverseLimitSwitchTriggerBehavior(Behavior.kKeepMovingMotor); 
+        m_leadMotorConfig.softLimit
+            .forwardSoftLimitEnabled(false)
+            .reverseSoftLimitEnabled(false); 
 
         m_leadMotor.configure(m_leadMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
