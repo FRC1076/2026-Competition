@@ -213,6 +213,9 @@ public class RobotContainer {
                 m_drive.resetHeading()
             ));
 
+        new ToggleableTrigger(m_driverController.touchpad(), false).getToggledTrigger()
+            .whileTrue(teleopDriveCommand.applySnakeMode());
+
         m_driverController.L2()
             .onTrue(superstructureCommands.intake())
             .onFalse(superstructureCommands.applyIntakeExtended());
