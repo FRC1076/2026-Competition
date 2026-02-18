@@ -158,6 +158,7 @@ public class Superstructure {
      */
     private void updateShootingParams() {
         final Pose3d shooterPose = new Pose3d(m_robotPoseSupplier.get()).transformBy(PhysicalConstants.kBotRelativeTurretPose);
+        final ChassisSpeeds robotVelocity = m_robotVelocitySupplier.get();
         final Pose3d target;
         final boolean targetIsHub;
         
@@ -174,6 +175,13 @@ public class Superstructure {
             targetIsHub = false;
         }
 
+        // Translate the chassis speeds
+        final ChassisSpeeds turretVelocity = new ChassisSpeeds(
+            robotVelocity.vxMetersPerSecond - (robotVelocity.omegaRadiansPerSecond * PhysicalConstants.kBotRelativeTurretPose.getY()),
+            robotVelocity.vyMetersPerSecond + (robotVelocity.omegaRadiansPerSecond * PhysicalConstants.kBotRelativeTurretPose.getX()),
+            robotVelocity.omegaRadiansPerSecond
+        );
+
         
         /* TechHOUNDs option. Commented out to test Mechanical Advantage's option. * /
         m_shootingParams = HoundSOTMCalculator.solveShootOnTheFly(
@@ -189,7 +197,7 @@ public class Superstructure {
         m_shootingParams = MechAdvSOTMCalculator.calculate(
             shooterPose.toPose2d(),
             target.toPose2d(),
-            m_robotVelocitySupplier.get(),
+            turretVelocity,
             m_robotPoseSupplier.get().getRotation(),
             targetIsHub
         );

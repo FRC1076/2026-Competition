@@ -41,9 +41,7 @@ import org.littletonrobotics.junction.Logger;
         double hoodVelocity,
         double flywheelSpeed) {}
 
-    // Cache parameters
-    private static ShootingParameters latestParameters = null;
-
+    
     private static double minDistance;
     private static double maxDistance;
     private static double phaseDelay;
@@ -102,46 +100,33 @@ import org.littletonrobotics.junction.Logger;
     }
 
     public static CommonShotSolution calculate(
-        Pose2d estimatedPose,
+        Pose2d turretPose,
         Pose2d targetPose,
-        ChassisSpeeds robotRelativeVelocity,
+        ChassisSpeeds robotRelativeTurretVelocity,
         Rotation2d robotHeading,
         boolean targetIsHub
     ) {
-        if (latestParameters != null) {
-            return new CommonShotSolution(latestParameters.hoodAngle, latestParameters.turretAngle.getRadians(), 0);
-        }
-
         // Calculate estimated pose while accounting for phase delay
-        estimatedPose =
-            estimatedPose.exp(
+        turretPose =
+            turretPose.exp(
                 new Twist2d(
-                    robotRelativeVelocity.vxMetersPerSecond * phaseDelay,
-                    robotRelativeVelocity.vyMetersPerSecond * phaseDelay,
-                    robotRelativeVelocity.omegaRadiansPerSecond * phaseDelay));
+                    robotRelativeTurretVelocity.vxMetersPerSecond * phaseDelay,
+                    robotRelativeTurretVelocity.vyMetersPerSecond * phaseDelay,
+                    robotRelativeTurretVelocity.omegaRadiansPerSecond * phaseDelay));
 
         // Calculate distance from turret to target
-        Translation2d target = estimatedPose.relativeTo(targetPose).getTranslation();
+        Translation2d target = turretPose.relativeTo(targetPose).getTranslation();
 
         // Calculate field-relative robot velocity
-        ChassisSpeeds robotVelocity = ChassisSpeeds.fromRobotRelativeSpeeds(robotRelativeVelocity, robotHeading);
+        ChassisSpeeds fieldRelativeTurretVelocity = ChassisSpeeds.fromRobotRelativeSpeeds(robotRelativeTurretVelocity, robotHeading);
 
         // Calculate field relative turret velocity
-        double robotAngle = estimatedPose.getRotation().getRadians();
-        double turretVelocityX =
-            robotVelocity.vxMetersPerSecond
-                + robotVelocity.omegaRadiansPerSecond
-                    * (estimatedPose.getY() * Math.cos(robotAngle)
-                        - estimatedPose.getX() * Math.sin(robotAngle));
-        double turretVelocityY =
-            robotVelocity.vyMetersPerSecond
-                + robotVelocity.omegaRadiansPerSecond
-                    * (estimatedPose.getX() * Math.cos(robotAngle)
-                        - estimatedPose.getY() * Math.sin(robotAngle));
+        double turretVelocityX = fieldRelativeTurretVelocity.vxMetersPerSecond;
+        double turretVelocityY = fieldRelativeTurretVelocity.vyMetersPerSecond;
 
         // Account for imparted velocity by robot (turret) to offset
         double timeOfFlight;
-        Pose2d lookaheadPose = estimatedPose;
+        Pose2d lookaheadPose = turretPose;
         double lookaheadTurretToTargetDistance = targetPose.getTranslation().getDistance(target);
         for (int i = 0; i < 20; i++) {
             timeOfFlight = timeOfFlightMap.get(lookaheadTurretToTargetDistance);
@@ -149,8 +134,8 @@ import org.littletonrobotics.junction.Logger;
             double offsetY = turretVelocityY * timeOfFlight;
             lookaheadPose =
                 new Pose2d(
-                    estimatedPose.getTranslation().plus(new Translation2d(offsetX, offsetY)),
-                    estimatedPose.getRotation());
+                    turretPose.getTranslation().plus(new Translation2d(offsetX, offsetY)),
+                    turretPose.getRotation());
             lookaheadTurretToTargetDistance = target.getDistance(lookaheadPose.getTranslation());
         }
 
@@ -168,7 +153,7 @@ import org.littletonrobotics.junction.Logger;
             hoodAngleFilter.calculate((hoodAngle - lastHoodAngle) / (SystemConstants.kLoopPeriodMs / 1000));
         lastTurretAngle = turretAngle;
         lastHoodAngle = hoodAngle;
-        latestParameters =
+        ShootingParameters latestParameters =
             new ShootingParameters(
                 lookaheadTurretToTargetDistance >= minDistance
                     && lookaheadTurretToTargetDistance <= maxDistance,
@@ -183,9 +168,5 @@ import org.littletonrobotics.junction.Logger;
         Logger.recordOutput("ShotCalculator/TurretToTargetDistance", lookaheadTurretToTargetDistance);
 
         return new CommonShotSolution(latestParameters.hoodAngle, latestParameters.turretAngle.getRadians(), latestParameters.flywheelSpeed);
-    }
-
-    public void clearShootingParameters() {
-        latestParameters = null;
     }
 }
