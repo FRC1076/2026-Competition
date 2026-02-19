@@ -27,9 +27,6 @@ public class TurretConstants {
     public static final double kEncoderOffsetRot = -0.218262;
     public static final double kGearRatio = 10;
 
-    // Starting turret position
-    public static final double kStartingPositionOffsetRad = -Math.PI/4.0;
-
     // Closed loop configs
     public static final double kP = 80;
     public static final double kI = 0;

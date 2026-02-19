@@ -69,9 +69,9 @@ public class TurretIOKraken implements TurretIO {
         m_motorConfig.MotionMagic.MotionMagicJerk = m_unitConverter.fromSIJerk(TurretConstants.kMaxJerkRadPerSec3);
 
         // Software Stops
-        m_motorConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = m_unitConverter.fromSIPos(getPosWithStartOffset(TurretConstants.kMaxPositionRad));
+        m_motorConfig.SoftwareLimitSwitch.ForwardSoftLimitThreshold = m_unitConverter.fromSIPos(TurretConstants.kMaxPositionRad);
         m_motorConfig.SoftwareLimitSwitch.ForwardSoftLimitEnable = false;
-        m_motorConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = m_unitConverter.fromSIPos(getPosWithStartOffset(TurretConstants.kMinPositionRad));
+        m_motorConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = m_unitConverter.fromSIPos(TurretConstants.kMinPositionRad);
         m_motorConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = false;
 
         // Apply configs
@@ -95,11 +95,6 @@ public class TurretIOKraken implements TurretIO {
             .withEnableFOC(TurretConstants.kEnableFOC);
     }
 
-    /** Returns the turret position with an offset to account for not pointing forward to start */
-    public double getPosWithStartOffset(double positionWithoutOffset) {
-        return positionWithoutOffset + TurretConstants.kStartingPositionOffsetRad;
-    }
-
     /** Sets the voltage for the turret's motor */
     @Override
     public void setVoltage(double volts) {
@@ -117,7 +112,7 @@ public class TurretIOKraken implements TurretIO {
     /**Sets the target position of the turret motor */
     @Override
     public void setPosition(double positionRadians) {
-        m_positionRequest.Position = m_unitConverter.fromSIPos(getPosWithStartOffset(positionRadians)) + TurretConstants.kStartingPositionOffsetRad;
+        m_positionRequest.Position = m_unitConverter.fromSIPos(positionRadians);
         m_motor.setControl(m_positionRequest);
     }
 
@@ -133,7 +128,7 @@ public class TurretIOKraken implements TurretIO {
         
         inputs.motorAppliedVoltage = m_voltageSignal.getValueAsDouble();
         inputs.motorCurrentAmps = m_currentSignal.getValueAsDouble();
-        inputs.motorPositionRad = getPosWithStartOffset(m_unitConverter.toSIPos(m_motorPositionSignal.getValueAsDouble()));
+        inputs.motorPositionRad = m_unitConverter.toSIPos(m_motorPositionSignal.getValueAsDouble());
         inputs.motorVelocityRadPerSec = m_unitConverter.toSIVel(m_velocitySignal.getValueAsDouble());
         inputs.motorTempDegC = m_temperatureSignal.getValueAsDouble();
     }
