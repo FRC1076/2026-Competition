@@ -103,7 +103,7 @@ public class SlapdownIOKraken implements SlapdownIO {
 
     @Override
     public void setPosition(double positionRadians) {
-        m_positionRequest.withPosition(positionRadians);
+        m_positionRequest.withPosition(m_unitConverter.fromSIPos(positionRadians));
         m_motor.setControl(m_positionRequest);
     }
 

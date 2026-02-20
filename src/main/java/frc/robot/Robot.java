@@ -38,10 +38,6 @@ public class Robot extends LoggedRobot {
      * initialization code.
      */
     public Robot() {
-        // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
-        // autonomous chooser on the dashboard.
-        m_robotContainer = new RobotContainer();
-
         // Configure AdvantageKit. This must be done BEFORE any other instatiation
         Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
         Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
@@ -81,6 +77,10 @@ public class Robot extends LoggedRobot {
         if(!SystemConstants.kEnableStatusLogger) {
             StatusLogger.disableAutoLogging();
         }
+
+        // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
+        // autonomous chooser on the dashboard.
+        m_robotContainer = new RobotContainer();
 
         // Enable the switchable channel
         final PowerDistribution pdh = new PowerDistribution();

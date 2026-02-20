@@ -6,7 +6,6 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
@@ -58,12 +57,13 @@ public class RollerIOKraken implements RollerIO {
         StatusSignal.refreshAll(
             m_voltageSignal,
             m_currentSignal,
-            m_temperatureSignal
+            m_temperatureSignal,
+            m_velocitySignal
         );
 
         inputs.appliedVoltage = m_voltageSignal.getValue().in(Volts);
         inputs.currentAmps = m_currentSignal.getValueAsDouble();
-        inputs.velocityRadPerSec = Units.rotationsPerMinuteToRadiansPerSecond(m_velocitySignal.getValueAsDouble());
+        inputs.velocityRadPerSec = m_velocitySignal.getValueAsDouble() * Math.PI * 2;
         inputs.motorTempDegC = m_temperatureSignal.getValueAsDouble();
     }
 }

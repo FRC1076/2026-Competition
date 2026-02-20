@@ -135,7 +135,7 @@ public class ClimberIONeo implements ClimberIO {
 
         inputs.hookAppliedVoltage = m_hookMotor.getAppliedOutput() * m_hookMotor.getBusVoltage();
         inputs.hookCurrentAmps = m_hookMotor.getOutputCurrent();
-        inputs.hookPositionRadians = m_hookEncoder.getVelocity();
+        inputs.hookPositionRadians = m_hookEncoder.getPosition();
 
         Logger.recordOutput("Climber/PIDTargetRadians", m_climbClosedLoopController.getSetpoint());
     }

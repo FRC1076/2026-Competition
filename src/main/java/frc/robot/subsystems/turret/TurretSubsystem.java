@@ -75,7 +75,7 @@ public class TurretSubsystem extends SubsystemBase {
 
     /** Run the motor at a voltage with software stops disabled */
     public Command runVoltageUnrestricted(DoubleSupplier volts) {
-        return Commands.runOnce(
+        return Commands.run(
             () -> io.setVoltageNoSoftStops(volts.getAsDouble()), 
             this
         );
