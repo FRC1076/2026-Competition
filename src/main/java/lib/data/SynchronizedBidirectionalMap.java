@@ -19,10 +19,10 @@ public class SynchronizedBidirectionalMap<K, V> {
     /** Associates the specified value with the specified key. */
     public synchronized void put(K key, V value) {
         if (forwardMap.containsKey(key)) {
-            inverseMap.remove(value);
+            inverseMap.remove(forwardMap.remove(key));
         }
         if (inverseMap.containsKey(value)) {
-            forwardMap.remove(key);
+            forwardMap.remove(inverseMap.remove(value));
         }
         
         forwardMap.put(key, value);
@@ -51,19 +51,19 @@ public class SynchronizedBidirectionalMap<K, V> {
 
     /** Removes the mapping for the specified key. */
     public synchronized void removeByForwardKey(K key) {
-        V value = forwardMap.remove(key);
-
-        if (value != null) {
-            inverseMap.remove(value);
+        boolean remove = forwardMap.containsKey(key);
+        
+        if (remove) {
+            inverseMap.remove(forwardMap.remove(key));
         }
     }
 
     /** Removes mapping for the specified value. */
     public synchronized void removeByInverseKey(V value) {
-        K key = inverseMap.remove(value);
-
-        if (key != null) {
-            forwardMap.remove(key);
+        boolean remove = inverseMap.containsKey(value);
+        
+        if (remove) {
+            forwardMap.remove(inverseMap.remove(value));
         }
     }
 }
