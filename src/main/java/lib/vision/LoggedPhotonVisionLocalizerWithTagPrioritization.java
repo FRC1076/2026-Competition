@@ -1,0 +1,265 @@
+// Copyright (c) FRC 1076 PiHi Samurai
+// You may use, distribute, and modify this software under the terms of
+// the license found in the root directory of this project
+
+package lib.vision;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Supplier;
+
+import org.littletonrobotics.junction.Logger;
+import org.photonvision.EstimatedRobotPose;
+import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+import org.photonvision.targeting.PhotonPipelineResult;
+
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
+
+public class LoggedPhotonVisionLocalizerWithTagPrioritization implements CameraLocalizer {
+    public static class PhotonVisionInputs {
+        public boolean cameraConnected = false;
+        public boolean estimatePresent = false;
+        public int tagsDetected = 0;
+        public int[] fiducialIDs = new int[]{};
+        public Pose3d pose = new Pose3d();
+        public Matrix<N3,N1> stddevs = VecBuilder.fill(0, 0, 0);
+        public String strategy = "NULL";
+
+        public void log(String key) {
+            Logger.recordOutput(key, cameraConnected);
+            Logger.recordOutput(key, estimatePresent);
+            Logger.recordOutput(key, tagsDetected);
+            Logger.recordOutput(key, fiducialIDs);
+            Logger.recordOutput(key, pose);
+            Logger.recordOutput(key, stddevs);
+            Logger.recordOutput(key, strategy);
+        }
+    }
+        
+
+    private static final Matrix<N3, N1> maxStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+    private final PhotonCamera camera;
+    private final PhotonPoseEstimator poseEstimator;
+    private PoseStrategy primaryStrategy;
+    private PoseStrategy multiTagFallbackStrategy;
+    private final Supplier<Rotation2d> headingSupplier;
+    private final Matrix<N3, N1> defaultSingleStdDevs;
+    private final Matrix<N3, N1> defaultMultiStdDevs;
+    private final int[] priorityTags;
+    private final double priorityTagStdDevMultiplier; // Less than one
+
+    private final PhotonVisionInputs inputs = new PhotonVisionInputs();
+
+    /** @param priorityTagStdDevMultiplier Multiply the standard deviations for prioritized tags by this. Probably should be less than one.
+     */
+    public LoggedPhotonVisionLocalizerWithTagPrioritization(
+        PhotonCamera camera, 
+        Transform3d offset,
+        PhotonPoseEstimator.PoseStrategy primaryStrategy,
+        PhotonPoseEstimator.PoseStrategy multiTagFallbackStrategy,
+        Supplier<Rotation2d> headingSupplier,
+        AprilTagFieldLayout fieldLayout,
+        Matrix<N3, N1> defaultSingleStdDevs,
+        Matrix<N3, N1> defaultMultiStdDevs,
+        int[] priorityTags,
+        double priorityTagStdDevMultiplier
+    ) {
+        this.camera = camera;
+        this.poseEstimator = new PhotonPoseEstimator(fieldLayout, offset);
+        this.primaryStrategy = primaryStrategy;
+        this.multiTagFallbackStrategy = multiTagFallbackStrategy;
+        this.headingSupplier = headingSupplier;
+        this.defaultSingleStdDevs = defaultSingleStdDevs;
+        this.defaultMultiStdDevs = defaultMultiStdDevs;
+        this.priorityTags = priorityTags;
+        this.priorityTagStdDevMultiplier = priorityTagStdDevMultiplier;
+
+        checkStrategies();
+    }
+
+    /**
+     * Calculates the standard deviations for the pose estimate based on how many tags are visible and how far they are
+     */
+    private Matrix<N3, N1> calculateStdDevs(EstimatedRobotPose est) {
+        var stdDevs = defaultSingleStdDevs;
+        int priorityTagCount = 0; 
+        int numTargets = 0;
+        double avgDist = 0;
+        var targets = est.targetsUsed;
+        for (var tgt : targets) {
+            var tagPose = poseEstimator.getFieldTags().getTagPose(tgt.getFiducialId());
+            if (tagPose.isEmpty()) {continue;}
+            for (int id : priorityTags) {
+                if (id == tgt.getFiducialId()){
+                    priorityTagCount++;
+                    break;
+                }
+            }
+            numTargets++;
+            avgDist +=
+                tagPose
+                    .get()
+                    .toPose2d()
+                    .getTranslation()
+                    .getDistance(est.estimatedPose.toPose2d().getTranslation());
+        }
+        if (numTargets == 0) {
+            return maxStdDevs; //No targets detected, resort to maximum std devs
+        }
+
+        // One or more tags visible, run the full heuristic.
+
+        // Decrease std devs if multiple targets are visible
+        avgDist /= numTargets;
+        if (numTargets > 1) {
+            stdDevs = defaultMultiStdDevs;
+        }
+
+        // Increase std devs based on (average) distance
+        if (numTargets == 1 && avgDist > 4){
+            //Distance greater than 4 meters, and only one tag detected, resort to maximum std devs
+            stdDevs = maxStdDevs;
+        } else {
+            stdDevs = stdDevs.times(1 + (avgDist * avgDist / 30));
+        }
+
+        if (priorityTagCount > 0) {
+            double priorityMultiplier = 1 - ((1 - priorityTagStdDevMultiplier) * ((double)priorityTagCount/(double)numTargets));
+            if (priorityMultiplier < 1) {
+                stdDevs = stdDevs.times(priorityMultiplier);
+            }
+        }
+
+        return stdDevs;
+    }
+
+    private Optional<EstimatedRobotPose> getEstimate(PhotonPipelineResult result) {
+        boolean hasTargets = result.hasTargets();
+        
+        if (hasTargets == false) {
+            return Optional.empty();
+        }
+
+        if (primaryStrategy == PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR && result.multitagResult.isPresent()) {
+            return poseEstimator.estimateCoprocMultiTagPose(result);
+        } else if (multiTagFallbackStrategy == PoseStrategy.PNP_DISTANCE_TRIG_SOLVE) {
+            return poseEstimator.estimatePnpDistanceTrigSolvePose(result);
+        } else if (multiTagFallbackStrategy == PoseStrategy.LOWEST_AMBIGUITY) {
+            return poseEstimator.estimateLowestAmbiguityPose(result);
+        } else if (multiTagFallbackStrategy == PoseStrategy.AVERAGE_BEST_TARGETS) {
+            return poseEstimator.estimateAverageBestTargetsPose(result);
+        } else if (multiTagFallbackStrategy == PoseStrategy.CLOSEST_TO_CAMERA_HEIGHT) {
+            return poseEstimator.estimateClosestToCameraHeightPose(result);
+        }
+
+        return Optional.empty(); // something went wrong
+    } 
+
+    /**
+     * Gets the pose estimate from the camera
+     * @return The pose estimate, or Optional.empty() if no estimate is available
+     */
+    public Optional<CommonPoseEstimate> getPoseEstimate() {
+
+        inputs.cameraConnected = camera.isConnected();
+        inputs.estimatePresent = false;
+        inputs.tagsDetected = 0;
+
+        poseEstimator.addHeadingData(Timer.getFPGATimestamp(), headingSupplier.get());
+        List<PhotonPipelineResult> results = camera.getAllUnreadResults();
+        Optional<EstimatedRobotPose> visionEst = Optional.empty();
+        
+        for (var res : results) {
+            visionEst = getEstimate(res);
+        }
+
+        Optional<CommonPoseEstimate> result = visionEst.map(
+            (EstimatedRobotPose estimate) -> {
+                var stddevs = calculateStdDevs(estimate);
+                inputs.tagsDetected = estimate.targetsUsed.size();
+                inputs.fiducialIDs = estimate.targetsUsed.stream().mapToInt((tgt) -> tgt.getFiducialId()).toArray();
+                inputs.pose = estimate.estimatedPose;
+                inputs.stddevs = stddevs;
+                inputs.strategy = estimate.strategy.name();
+                return new CommonPoseEstimate(
+                    estimate.estimatedPose.toPose2d(),
+                    estimate.timestampSeconds,
+                    stddevs
+                );
+            }
+        );
+
+        // inputs.log("PhotonVision/" + getName());
+
+        return result;
+    }
+
+    public String getName() {
+        return camera.getName();
+    }
+
+    @Override
+    public void setPoseStrategy(PoseStrategy strategy) {
+        primaryStrategy = strategy;
+        checkStrategies();
+    }
+
+    @Override
+    public void setFallbackPoseStrategy(PoseStrategy strategy) {
+        multiTagFallbackStrategy = strategy;
+        checkStrategies();
+    }
+
+    /** Check that the chosen pose strategies are supported in this class */
+    private void checkStrategies() {
+        // Check that selected pose strategies are supported
+        if (primaryStrategy == PoseStrategy.CLOSEST_TO_LAST_POSE ||
+            primaryStrategy == PoseStrategy.CLOSEST_TO_REFERENCE_POSE ||
+            primaryStrategy == PoseStrategy.CONSTRAINED_SOLVEPNP ||
+            primaryStrategy == PoseStrategy.MULTI_TAG_PNP_ON_RIO
+        ) {
+            DriverStation.reportWarning("The selected primary pose strategy, " + primaryStrategy.toString() + ", is not supported. Using lowest ambiguity", false);
+            primaryStrategy = PoseStrategy.LOWEST_AMBIGUITY;
+            multiTagFallbackStrategy = PoseStrategy.LOWEST_AMBIGUITY;
+        }
+
+        if (multiTagFallbackStrategy == PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR ||
+            multiTagFallbackStrategy == PoseStrategy.MULTI_TAG_PNP_ON_RIO
+        ) {
+            if (primaryStrategy != PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR) {
+                DriverStation.reportWarning("Cannot use a multi-tag strategy as multi-tag fallback strategy! Using primary strategy, " + primaryStrategy.toString(), false);
+            } else {
+                DriverStation.reportWarning("Cannot use a multi-tag strategy as multi-tag fallback strategy! Using lowest ambiguity", false);
+            }
+        } else if (multiTagFallbackStrategy == PoseStrategy.CLOSEST_TO_LAST_POSE ||
+            multiTagFallbackStrategy == PoseStrategy.CLOSEST_TO_REFERENCE_POSE ||
+            multiTagFallbackStrategy == PoseStrategy.CONSTRAINED_SOLVEPNP ||
+            multiTagFallbackStrategy == PoseStrategy.AVERAGE_BEST_TARGETS
+        ) {
+            if (primaryStrategy != PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR) {
+                DriverStation.reportWarning("The selected multi-tag fallback strategy, " + multiTagFallbackStrategy.toString() + ", is not supported. Using primary strategy, " + primaryStrategy.toString(), false);
+            } else {
+                DriverStation.reportWarning("Cannot use a multi-tag strategy as multi-tag fallback strategy! Using lowest ambiguity", false);
+                multiTagFallbackStrategy = PoseStrategy.LOWEST_AMBIGUITY;
+            }
+        }
+
+        if (primaryStrategy != PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR &&
+            primaryStrategy != multiTagFallbackStrategy
+        ) {
+            DriverStation.reportWarning("Must use multi-tag on co-processor as primary strategy for the multi-tag fallback strategy to be different. Setting to primary strategy, " + primaryStrategy.toString(), false);
+            multiTagFallbackStrategy = primaryStrategy;
+        }
+    }
+}

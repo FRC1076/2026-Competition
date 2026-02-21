@@ -28,6 +28,10 @@ public class PhysicalConstants {
 
     public static class VisionConstants {
         public static final AprilTagFieldLayout kAprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded);
+        public static final int[] kHubTags = {
+            2, 3, 4, 5, 8, 9, 10, 11, // Red Alliance
+            18, 19, 20, 21, 24, 25, 26, 27 // Blue Alliance
+        };
 
         public static class PhotonVision {
             public static final Vector<N3> kDefaultSingleTagStdDevs = VecBuilder.fill(1, 1, 2);
