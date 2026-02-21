@@ -22,7 +22,6 @@ import frc.robot.subsystems.turret.TurretSubsystem;
 import lib.ballistic.CommonShotSolution;
 // import lib.ballistic.HoundSOTMCalculator;
 import lib.ballistic.MechAdvSOTMCalculator;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -146,13 +145,11 @@ public class Superstructure {
     public void configureStateBasedBindings() {
         new Trigger(() -> m_superState.getTurretState().kIsAutoAim)
             .whileTrue(
-                Commands.repeatingSequence(
-                    Commands.runOnce(() -> updateShootingParams()),
-                    Commands.parallel(
-                        m_flywheel.applyVelocity(m_shootingParams.launchSpeedRadPerSec()),
-                        m_hood.applyPosition(m_shootingParams.launchPitchRad()),
-                        applyTurretPositionSafe(MathUtil.angleModulus(m_shootingParams.launchYawRad() - m_robotPoseSupplier.get().getRotation().getRadians()))
-                    )
+                Commands.parallel(
+                    Commands.run(() -> updateShootingParams()),
+                    m_flywheel.runVelocity(() -> m_shootingParams.launchSpeedRadPerSec()),
+                    m_hood.runPosition(() -> m_shootingParams.launchPitchRad()),
+                    m_turret.runPosition(() -> m_shootingParams.launchYawRad()/*/ + m_robotPoseSupplier.get().getRotation().getRadians()*/)
                 )
             );
     }

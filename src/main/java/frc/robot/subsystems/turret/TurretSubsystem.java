@@ -55,8 +55,10 @@ public class TurretSubsystem extends SubsystemBase {
 
     public double desaturateTurretPosition(double targetPos) {
         return ((targetPos - TurretConstants.kMinPositionRad)
-            % TurretConstants.kAngleRange + TurretConstants.kMinPositionRad)
-            % TurretConstants.kAngleRange + TurretConstants.kMinPositionRad;
+            % TurretConstants.kAngleRange
+            + TurretConstants.kAngleRange)
+            % TurretConstants.kAngleRange
+            + TurretConstants.kMinPositionRad;
     }
 
     /** Apply a voltage to the motor with software stops enabled */
@@ -95,6 +97,14 @@ public class TurretSubsystem extends SubsystemBase {
     public Command applyPosition(double radians) {
         return Commands.runOnce(
             () -> io.setPosition(desaturateTurretPosition(radians)),
+            this
+        );
+    }
+
+    /** Tell the motor to go to the supplie position ONCE */
+    public Command applyPosition(DoubleSupplier radians) {
+        return Commands.runOnce(
+            () -> io.setPosition(desaturateTurretPosition(radians.getAsDouble())),
             this
         );
     }

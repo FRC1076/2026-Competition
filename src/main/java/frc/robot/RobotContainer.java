@@ -11,6 +11,7 @@ package frc.robot;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.SystemConstants;
 import frc.robot.Constants.SystemConstants.RobotMode;
+import frc.robot.PhysicalConstants.VisionConstants;
 import frc.robot.PhysicalConstants.VisionConstants.PhotonVision.PhotonConfig;
 import frc.robot.commands.drive.TeleopDriveCommand;
 import frc.robot.subsystems.Elastic;
@@ -54,7 +55,9 @@ import lib.extendedcommands.MultiToggleableTrigger;
 import lib.extendedcommands.ToggleableTrigger;
 import lib.hardware.hid.SamuraiPS5Controller;
 import lib.hardware.hid.SamuraiXboxController;
+import lib.vision.LoggedPhotonVisionLocalizerWithTagPrioritization;
 import lib.vision.PhotonVisionLocalizer;
+import lib.vision.PhotonVisionLocalizerWithTagPrioritization;
 import lib.vision.VisionLocalizationSystem;
 
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -129,15 +132,17 @@ public class RobotContainer {
 
             for (PhotonConfig config : PhotonConfig.values()) {
                 PhotonCamera cam = new PhotonCamera(config.name);
-                m_vision.addCamera(new PhotonVisionLocalizer(
+                m_vision.addCamera(new PhotonVisionLocalizerWithTagPrioritization(
                     cam,
                     config.offset,
                     config.multiTagPoseStrategy,
                     config.singleTagPoseStrategy,
                     () -> m_drive.getPose().getRotation(),
                     PhysicalConstants.VisionConstants.kAprilTagFieldLayout,
-                    config.defaultSingleTagStdDevs,
-                    config.defaultMultiTagStdDevs)
+                    config.defaultSingleTagStdDevs.times(2),
+                    config.defaultMultiTagStdDevs.times(2),
+                    VisionConstants.kHubTags,
+                    0.5)
                 );
             }
         } else {

@@ -33,17 +33,17 @@ public class LoggedPhotonVisionLocalizer implements CameraLocalizer {
         public int tagsDetected = 0;
         public int[] fiducialIDs = new int[]{};
         public Pose3d pose = new Pose3d();
-        public Matrix<N3,N1> stddevs = VecBuilder.fill(0, 0, 0);
+        public double[] stddevs = new double[1];
         public String strategy = "NULL";
 
         public void log(String key) {
-            Logger.recordOutput(key, cameraConnected);
-            Logger.recordOutput(key, estimatePresent);
-            Logger.recordOutput(key, tagsDetected);
-            Logger.recordOutput(key, fiducialIDs);
-            Logger.recordOutput(key, pose);
-            Logger.recordOutput(key, stddevs);
-            Logger.recordOutput(key, strategy);
+            Logger.recordOutput(key + "/cameraConnected", cameraConnected);
+            Logger.recordOutput(key + "/estimatePresent", estimatePresent);
+            Logger.recordOutput(key + "/tagsDetected", tagsDetected);
+            Logger.recordOutput(key + "/fidicialIDs", fiducialIDs);
+            Logger.recordOutput(key + "/pose", pose);
+            Logger.recordOutput(key + "/stddevs", stddevs);
+            Logger.recordOutput(key + "/strategy", strategy);
         }
     }
         
@@ -166,7 +166,7 @@ public class LoggedPhotonVisionLocalizer implements CameraLocalizer {
                 inputs.tagsDetected = estimate.targetsUsed.size();
                 inputs.fiducialIDs = estimate.targetsUsed.stream().mapToInt((tgt) -> tgt.getFiducialId()).toArray();
                 inputs.pose = estimate.estimatedPose;
-                inputs.stddevs = stddevs;
+                inputs.stddevs = stddevs.getData();
                 inputs.strategy = estimate.strategy.name();
                 return new CommonPoseEstimate(
                     estimate.estimatedPose.toPose2d(),

@@ -63,27 +63,27 @@ import org.littletonrobotics.junction.Logger;
         maxDistance = 5.60;
         phaseDelay = 0.03;
 
-        shotHoodAngleMap.put(1.34, Rotation2d.fromDegrees(19.0));
-        shotHoodAngleMap.put(1.78, Rotation2d.fromDegrees(19.0));
-        shotHoodAngleMap.put(2.17, Rotation2d.fromDegrees(24.0));
-        shotHoodAngleMap.put(2.81, Rotation2d.fromDegrees(27.0));
-        shotHoodAngleMap.put(3.82, Rotation2d.fromDegrees(29.0));
-        shotHoodAngleMap.put(4.09, Rotation2d.fromDegrees(30.0));
-        shotHoodAngleMap.put(4.40, Rotation2d.fromDegrees(31.0));
-        shotHoodAngleMap.put(4.77, Rotation2d.fromDegrees(32.0));
-        shotHoodAngleMap.put(5.57, Rotation2d.fromDegrees(32.0));
-        shotHoodAngleMap.put(5.60, Rotation2d.fromDegrees(35.0));
+        shotHoodAngleMap.put(1.34, Rotation2d.fromDegrees(0.0));
+        shotHoodAngleMap.put(1.78, Rotation2d.fromDegrees(1.0));
+        shotHoodAngleMap.put(2.17, Rotation2d.fromDegrees(2.0));
+        shotHoodAngleMap.put(2.81, Rotation2d.fromDegrees(3.0));
+        shotHoodAngleMap.put(3.82, Rotation2d.fromDegrees(4.0));
+        shotHoodAngleMap.put(4.09, Rotation2d.fromDegrees(5.0));
+        shotHoodAngleMap.put(4.40, Rotation2d.fromDegrees(6.0));
+        shotHoodAngleMap.put(4.77, Rotation2d.fromDegrees(7.0));
+        shotHoodAngleMap.put(5.57, Rotation2d.fromDegrees(8.0));
+        shotHoodAngleMap.put(5.60, Rotation2d.fromDegrees(9.0));
 
-        shotHoodAngleMapNonHub.put(1.34, Rotation2d.fromDegrees(19.0));
-        shotHoodAngleMapNonHub.put(1.78, Rotation2d.fromDegrees(19.0));
-        shotHoodAngleMapNonHub.put(2.17, Rotation2d.fromDegrees(24.0));
-        shotHoodAngleMapNonHub.put(2.81, Rotation2d.fromDegrees(27.0));
-        shotHoodAngleMapNonHub.put(3.82, Rotation2d.fromDegrees(29.0));
-        shotHoodAngleMapNonHub.put(4.09, Rotation2d.fromDegrees(30.0));
-        shotHoodAngleMapNonHub.put(4.40, Rotation2d.fromDegrees(31.0));
-        shotHoodAngleMapNonHub.put(4.77, Rotation2d.fromDegrees(32.0));
-        shotHoodAngleMapNonHub.put(5.57, Rotation2d.fromDegrees(32.0));
-        shotHoodAngleMapNonHub.put(5.60, Rotation2d.fromDegrees(35.0));
+        shotHoodAngleMapNonHub.put(1.34, Rotation2d.fromDegrees(0.0));
+        shotHoodAngleMapNonHub.put(1.78, Rotation2d.fromDegrees(1.0));
+        shotHoodAngleMapNonHub.put(2.17, Rotation2d.fromDegrees(2.0));
+        shotHoodAngleMapNonHub.put(2.81, Rotation2d.fromDegrees(4.0));
+        shotHoodAngleMapNonHub.put(3.82, Rotation2d.fromDegrees(5.0));
+        shotHoodAngleMapNonHub.put(4.09, Rotation2d.fromDegrees(6.0));
+        shotHoodAngleMapNonHub.put(4.40, Rotation2d.fromDegrees(7.0));
+        shotHoodAngleMapNonHub.put(4.77, Rotation2d.fromDegrees(8.0));
+        shotHoodAngleMapNonHub.put(5.57, Rotation2d.fromDegrees(9.0));
+        shotHoodAngleMapNonHub.put(5.60, Rotation2d.fromDegrees(10.0));
 
         shotFlywheelSpeedMap.put(1.34, 210.0);
         shotFlywheelSpeedMap.put(1.78, 220.0);
@@ -138,13 +138,14 @@ import org.littletonrobotics.junction.Logger;
             double offsetY = turretVelocityY * timeOfFlight;
             lookaheadPose =
                 new Pose2d(
-                    turretPose.getTranslation().plus(new Translation2d(offsetX, offsetY)),
+                    turretPose.getTranslation().minus(new Translation2d(offsetX, offsetY)),
                     turretPose.getRotation());
             lookaheadTurretToTargetDistance = target.getDistance(lookaheadPose.getTranslation());
         }
 
         // Calculate parameters accounted for imparted velocity
         turretAngle = target.minus(lookaheadPose.getTranslation()).getAngle();
+        System.out.println(turretAngle.getRadians());
         hoodAngle = targetIsHub
             ? shotHoodAngleMap.get(lookaheadTurretToTargetDistance).getRadians()
             : shotHoodAngleMapNonHub.get(lookaheadTurretToTargetDistance).getRadians();
@@ -152,7 +153,7 @@ import org.littletonrobotics.junction.Logger;
         if (Double.isNaN(lastHoodAngle)) lastHoodAngle = hoodAngle;
         turretVelocity =
             turretAngleFilter.calculate(
-                turretAngle.minus(lastTurretAngle).getRadians() / (SystemConstants.kLoopPeriodMs / 1000));
+                turretAngle.plus(lastTurretAngle).getRadians() / (SystemConstants.kLoopPeriodMs / 1000));
         hoodVelocity =
             hoodAngleFilter.calculate((hoodAngle - lastHoodAngle) / (SystemConstants.kLoopPeriodMs / 1000));
         lastTurretAngle = turretAngle;
@@ -170,6 +171,10 @@ import org.littletonrobotics.junction.Logger;
         // Log calculated values
         Logger.recordOutput("ShotCalculator/LookaheadPose", lookaheadPose);
         Logger.recordOutput("ShotCalculator/TurretToTargetDistance", lookaheadTurretToTargetDistance);
+
+        Logger.recordOutput("ShotCalculator/HoodAngle", latestParameters.hoodAngle);
+        Logger.recordOutput("ShotCalculator/TurretAngle", latestParameters.turretAngle.getRadians());
+        Logger.recordOutput("ShotCalculator/FlywheelSpeed", latestParameters.flywheelSpeed);
 
         return new CommonShotSolution(latestParameters.hoodAngle, latestParameters.turretAngle.getRadians(), latestParameters.flywheelSpeed);
     }

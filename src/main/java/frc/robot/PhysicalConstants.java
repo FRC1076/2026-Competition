@@ -34,14 +34,14 @@ public class PhysicalConstants {
         };
 
         public static class PhotonVision {
-            public static final Vector<N3> kDefaultSingleTagStdDevs = VecBuilder.fill(1, 1, 2);
-            public static final Vector<N3> kDefaultMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 0.5);
+            public static final Vector<N3> kDefaultSingleTagStdDevs = VecBuilder.fill(2, 2, 2);
+            public static final Vector<N3> kDefaultMultiTagStdDevs = VecBuilder.fill(1, 1, 1);
 
             public static enum PhotonConfig {
                 FRONT_LEFT(
                     "FRONT_LEFT",
-                    kDefaultSingleTagStdDevs,
-                    kDefaultMultiTagStdDevs,
+                    kDefaultSingleTagStdDevs.times(2),
+                    kDefaultMultiTagStdDevs.times(2),
                     PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
                     PoseStrategy.PNP_DISTANCE_TRIG_SOLVE,
                     12.560835, 12.411879, 19.229705,
@@ -49,8 +49,8 @@ public class PhysicalConstants {
                 ),
                 FRONT_RIGHT(
                     "FRONT_RIGHT",
-                    kDefaultSingleTagStdDevs,
-                    kDefaultMultiTagStdDevs,
+                    kDefaultSingleTagStdDevs.times(2),
+                    kDefaultMultiTagStdDevs.times(2),
                     PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
                     PoseStrategy.PNP_DISTANCE_TRIG_SOLVE,
                     12.561091, -13.411623, 19.2290705,

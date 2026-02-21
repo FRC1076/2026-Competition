@@ -18,7 +18,6 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.numbers.N1;
@@ -26,24 +25,18 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 
-public class LoggedPhotonVisionLocalizerWithTagPrioritization implements CameraLocalizer {
+public class PhotonVisionLocalizerWithTagPrioritization implements CameraLocalizer {
     public static class PhotonVisionInputs {
         public boolean cameraConnected = false;
         public boolean estimatePresent = false;
         public int tagsDetected = 0;
-        public int[] fiducialIDs = new int[]{};
-        public Pose3d pose = new Pose3d();
-        public double[] stddevs = new double[1];
-        public String strategy = "NULL";
+        // public double[] stddevs = new double[0];
 
         public void log(String key) {
-            Logger.recordOutput(key + "/cameraConnected", cameraConnected);
-            Logger.recordOutput(key + "/estimatePresent", estimatePresent);
-            Logger.recordOutput(key + "/tagsDetected", tagsDetected);
-            Logger.recordOutput(key + "/fidicialIDs", fiducialIDs);
-            Logger.recordOutput(key + "/pose", pose);
-            Logger.recordOutput(key + "/stddevs", stddevs);
-            Logger.recordOutput(key + "/strategy", strategy);
+            Logger.recordOutput(key  + "/cameraConnected", cameraConnected);
+            // Logger.recordOutput(key + "/estimatePresent", estimatePresent);
+            Logger.recordOutput(key  + "/tagsDetected", tagsDetected);
+            // Logger.recordOutput(key + "stddevs", stddevs);
         }
     }
         
@@ -63,7 +56,7 @@ public class LoggedPhotonVisionLocalizerWithTagPrioritization implements CameraL
 
     /** @param priorityTagStdDevMultiplier Multiply the standard deviations for prioritized tags by this. Probably should be less than one.
      */
-    public LoggedPhotonVisionLocalizerWithTagPrioritization(
+    public PhotonVisionLocalizerWithTagPrioritization(
         PhotonCamera camera, 
         Transform3d offset,
         PhotonPoseEstimator.PoseStrategy primaryStrategy,
@@ -188,10 +181,7 @@ public class LoggedPhotonVisionLocalizerWithTagPrioritization implements CameraL
             (EstimatedRobotPose estimate) -> {
                 var stddevs = calculateStdDevs(estimate);
                 inputs.tagsDetected = estimate.targetsUsed.size();
-                inputs.fiducialIDs = estimate.targetsUsed.stream().mapToInt((tgt) -> tgt.getFiducialId()).toArray();
-                inputs.pose = estimate.estimatedPose;
-                inputs.stddevs = stddevs.getData();
-                inputs.strategy = estimate.strategy.name();
+                // inputs.stddevs = stddevs.getData();
                 return new CommonPoseEstimate(
                     estimate.estimatedPose.toPose2d(),
                     estimate.timestampSeconds,

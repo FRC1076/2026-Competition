@@ -100,8 +100,16 @@ public class HoodSubsystem extends SubsystemBase {
     /** Apply a position to the hood */
     public Command applyPosition(double radians) {
         return Commands.sequence(
-            applySoftwareStop(false),
+            applySoftwareStop(true),
             Commands.runOnce(() -> io.setPosition(radians), this)
+        );
+    }
+
+    /** Apply the supplied position to the hood ONCE and then ends */
+    public Command applyPosition(DoubleSupplier radians) {
+        return Commands.sequence(
+            applySoftwareStop(true),
+            Commands.runOnce(() -> io.setPosition(radians.getAsDouble()), this)
         );
     }
 
