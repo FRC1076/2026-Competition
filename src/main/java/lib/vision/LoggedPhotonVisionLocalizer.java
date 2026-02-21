@@ -197,6 +197,11 @@ public class LoggedPhotonVisionLocalizer implements CameraLocalizer {
         checkStrategies();
     }
 
+    @Override
+    public void log() {
+        inputs.log("PhotonVision/" + getName());
+    }
+
     /** Check that the chosen pose strategies are supported in this class */
     private void checkStrategies() {
         // Check that selected pose strategies are supported
