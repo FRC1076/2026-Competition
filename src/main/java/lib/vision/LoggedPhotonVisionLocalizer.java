@@ -31,7 +31,7 @@ public class LoggedPhotonVisionLocalizer implements CameraLocalizer {
         public boolean cameraConnected = false;
         public boolean estimatePresent = false;
         public int tagsDetected = 0;
-        public Integer[] fiducialIDs = new Integer[]{};
+        public int[] fiducialIDs = new int[]{};
         public Pose3d pose = new Pose3d();
         public Matrix<N3,N1> stddevs = VecBuilder.fill(0, 0, 0);
         public String strategy = "NULL";
@@ -40,7 +40,7 @@ public class LoggedPhotonVisionLocalizer implements CameraLocalizer {
             Logger.recordOutput(key, cameraConnected);
             Logger.recordOutput(key, estimatePresent);
             Logger.recordOutput(key, tagsDetected);
-            Logger.recordOutput(key, fiducialIDs.toString());
+            Logger.recordOutput(key, fiducialIDs);
             Logger.recordOutput(key, pose);
             Logger.recordOutput(key, stddevs);
             Logger.recordOutput(key, strategy);
@@ -164,7 +164,7 @@ public class LoggedPhotonVisionLocalizer implements CameraLocalizer {
             (EstimatedRobotPose estimate) -> {
                 var stddevs = calculateStdDevs(estimate);
                 inputs.tagsDetected = estimate.targetsUsed.size();
-                inputs.fiducialIDs = estimate.targetsUsed.stream().map((tgt) -> tgt.getFiducialId()).toArray((size) -> new Integer[size]);
+                inputs.fiducialIDs = estimate.targetsUsed.stream().mapToInt((tgt) -> tgt.getFiducialId()).toArray();
                 inputs.pose = estimate.estimatedPose;
                 inputs.stddevs = stddevs;
                 inputs.strategy = estimate.strategy.name();
