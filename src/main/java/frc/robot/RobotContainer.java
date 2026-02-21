@@ -25,7 +25,6 @@ import frc.robot.subsystems.drive.DriveIOHardware;
 import frc.robot.subsystems.drive.DriveIOSim;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.TunerConstants;
-import frc.robot.subsystems.flywheel.FlywheelConstants;
 import frc.robot.subsystems.flywheel.FlywheelIODisabled;
 import frc.robot.subsystems.flywheel.FlywheelIOKraken;
 import frc.robot.subsystems.flywheel.FlywheelSubsystem;
@@ -199,7 +198,9 @@ public class RobotContainer {
      * joysticks}.
      */
     private void configureBindings() {
-
+        new Trigger(() -> m_elastic.readNumber("FlywheelVelocityTarget") > 50)
+            .onTrue(m_superstructure.getCommandFactory().applyTurretManualState())
+            .whileTrue(m_flywheel.runVelocity(() -> m_elastic.readNumber("FlywheelVelocityTarget")));
     }
 
     /** Bind triggers on driver controller to commands */

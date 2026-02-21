@@ -43,13 +43,15 @@ public class Elastic {
         this.putSelectedTeamColor();
         
         // Initialize fields, because otherwise they're only updated when teleop is enabled
-        this.putBoolean("safeToFeedCoral", false);
-        this.putBoolean("safeToMoveElevator", false);
-        this.putBoolean("isAutoAligned", false);
+        this.putNumber("FlywheelVelocityTarget", 0);;
     }
 
     public void putNumber(String key, double value) {
         SmartDashboard.putNumber(key, value);
+    }
+
+    public double readNumber(String key) {
+        return SmartDashboard.getNumber(key, 0);
     }
 
     public void putBoolean(String key, boolean value) {

@@ -218,7 +218,7 @@ public class Superstructure {
 
     /** Returns whether or not the slapdown is too high to move the turret */
     public BooleanSupplier safeToMoveTurret() {
-        return () -> m_slapdown.getSlapdownAngleRadians() < SuperstructureConstants.kTurretMoveSlapdownAngleLimitRad;
+        return () -> m_slapdown.getSlapdownAngleRadians() > SuperstructureConstants.kTurretMoveSlapdownAngleLimitRad; // For some reason down is larger number
     }
 
     /** Applies the target state to the turret if it is safe to do so. If unsafe, does nothing. */
