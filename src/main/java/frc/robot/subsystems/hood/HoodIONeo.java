@@ -14,10 +14,8 @@ import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.FeedbackSensor;
-import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.spark.config.LimitSwitchConfig.Behavior;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.math.MathUtil;
@@ -26,7 +24,7 @@ public class HoodIONeo implements HoodIO {
     private final SparkMax m_leadMotor;
 
     private final SparkMaxConfig m_leadMotorConfig;
-    private final RelativeEncoder m_absoluteEncoder;
+    private final RelativeEncoder m_alternateEncoder;
 
     private final SparkClosedLoopController m_closedLoopController;
 
@@ -44,14 +42,6 @@ public class HoodIONeo implements HoodIO {
         m_leadMotorConfig.encoder
             .positionConversionFactor(HoodConstants.kPositionRelEncoderConversionFactor)
             .velocityConversionFactor(HoodConstants.kVelocityRelEncoderConversionFactor);
-
-            /*
-        m_leadMotorConfig.absoluteEncoder
-            .setSparkMaxDataPortConfig()
-            .inverted(true)
-            .positionConversionFactor(HoodConstants.kPositionConversionFactor)
-            .velocityConversionFactor(HoodConstants.kVelocityConversionFactor)
-            .zeroOffset(HoodConstants.kZeroOffsetRadians / (2*Math.PI)); */
 
         m_leadMotorConfig.alternateEncoder
             .setSparkMaxDataPortConfig()
@@ -82,14 +72,9 @@ public class HoodIONeo implements HoodIO {
             .forwardSoftLimitEnabled(false)
             .reverseSoftLimitEnabled(false);
 
-            /*
-        m_leadMotorConfig.limitSwitch
-            .forwardLimitSwitchTriggerBehavior(Behavior.kKeepMovingMotor)
-            .reverseLimitSwitchTriggerBehavior(Behavior.kKeepMovingMotor); */
-
         m_leadMotor.configure(m_leadMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters); 
 
-        m_absoluteEncoder = m_leadMotor.getEncoder();
+        m_alternateEncoder = m_leadMotor.getEncoder();
 
         m_closedLoopController = m_leadMotor.getClosedLoopController();
     }
@@ -110,8 +95,8 @@ public class HoodIONeo implements HoodIO {
     public void updateInputs(HoodIOInputs inputs) {
         inputs.appliedVolts = m_leadMotor.getAppliedOutput() * m_leadMotor.getBusVoltage();
         inputs.currentAmps = m_leadMotor.getOutputCurrent();
-        inputs.angleRadians = MathUtil.angleModulus(m_absoluteEncoder.getPosition()); // TODO: confirm this
-        inputs.velocityRadiansPerSecond = m_absoluteEncoder.getVelocity();
+        inputs.angleRadians = MathUtil.angleModulus(m_alternateEncoder.getPosition()); // TODO: confirm this
+        inputs.velocityRadiansPerSecond = m_alternateEncoder.getVelocity();
         
         Logger.recordOutput("Hood/PIDTargetRadians", m_closedLoopController.getSetpoint());
     }

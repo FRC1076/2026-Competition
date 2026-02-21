@@ -27,12 +27,12 @@ public class FlywheelConstants {
     public static final NeutralModeValue kNeutralMode = NeutralModeValue.Coast;
     public static final MotorAlignmentValue kMotorAlignment = MotorAlignmentValue.Opposed;
 
-    public static final double kP = 3;
+    public static final double kP = 14;
     public static final double kI = 0;
-    public static final double kD = 0;
+    public static final double kD = 0.01;
 
     public static final double kS = 0;
-    public static final double kV = (1.0/53.0);
+    public static final double kV = (11.0/530.0);
     public static final double kA = 0;
 
     public static final double kMaxAcceleration = 20000;

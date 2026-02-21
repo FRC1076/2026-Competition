@@ -53,6 +53,12 @@ public class TurretSubsystem extends SubsystemBase {
         Logger.processInputs("Turret", inputs);
     }
 
+    public double desaturateTurretPosition(double targetPos) {
+        return ((targetPos - TurretConstants.kMinPositionRad)
+            % TurretConstants.kAngleRange + TurretConstants.kMinPositionRad)
+            % TurretConstants.kAngleRange + TurretConstants.kMinPositionRad;
+    }
+
     /** Apply a voltage to the motor with software stops enabled */
     public Command applyVoltage(double volts) {
         return Commands.runOnce(
@@ -88,7 +94,7 @@ public class TurretSubsystem extends SubsystemBase {
     /** Tell the motor to go to a specific position */
     public Command applyPosition(double radians) {
         return Commands.runOnce(
-            () -> io.setPosition(radians),
+            () -> io.setPosition(desaturateTurretPosition(radians)),
             this
         );
     }
@@ -96,7 +102,7 @@ public class TurretSubsystem extends SubsystemBase {
     /** Repeatedly tell the motor to go to a specific position */
     public Command runPosition(DoubleSupplier radians) {
         return Commands.run(
-            () -> io.setPosition(radians.getAsDouble()),
+            () -> io.setPosition(desaturateTurretPosition(radians.getAsDouble())),
             this
         );
     }

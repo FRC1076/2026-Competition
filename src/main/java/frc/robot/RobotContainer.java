@@ -185,6 +185,8 @@ public class RobotContainer {
         configureDriverBindings();
 
         configureOperatorBindings();
+
+        m_superstructure.configureStateBasedBindings();
     }
 
     /**
@@ -257,16 +259,19 @@ public class RobotContainer {
             .onFalse(superstructureCommands.initiateAutoaim());
 
         m_driverController.povUp()
-            .onTrue(m_hood.applyPosition(-0.1));
+            .onTrue(m_hood.applyPosition(0.1));
 
         m_driverController.povDown()
-            .onTrue(m_hood.applyPosition(-0.3));
+            .onTrue(m_hood.applyPosition(0.3));
         
         m_driverController.povLeft()
-            .onTrue(m_turret.applyPosition(1));
+            .onTrue(m_turret.applyPosition(0));
 
         m_driverController.povRight()
-            .onTrue(m_turret.applyPosition(-1));
+            .onTrue(m_turret.applyPosition(2));
+
+        m_driverController.triangle()
+            .onTrue(superstructureCommands.initiateAutoaim());
     }
 
     /** Bind triggers on operator controller to commands */
@@ -312,25 +317,25 @@ public class RobotContainer {
         m_operatorController.povUp()
             .onTrue(Commands.sequence(
                 superstructureCommands.startTurretManualControl(),
-                m_flywheel.applyVoltage(FlywheelConstants.kMaxManualControlVolts))
+                m_flywheel.applyVelocity(500))
             );
         
         m_operatorController.povLeft()
             .onTrue(Commands.sequence(
                 superstructureCommands.startTurretManualControl(),
-                m_flywheel.applyVelocity(200))
+                m_flywheel.decrementVelocity())
             );
 
         m_operatorController.povRight()
             .onTrue(Commands.sequence(
                 superstructureCommands.startTurretManualControl(),
-                m_flywheel.applyVelocity(400))
+                m_flywheel.incrementVelocity())
             );
         
         m_operatorController.povDown()
             .onTrue(Commands.sequence(
                 superstructureCommands.startTurretManualControl(),
-                m_flywheel.applyVoltage(0))
+                m_flywheel.applyVelocity(0))
             );
         
         // Sets the rollers to do the opposite of their current state

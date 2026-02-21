@@ -24,17 +24,17 @@ public class TurretConstants {
     public static final double kMaxManualControlVolts = 1.5;
 
     // If inverted and brake mode
-    public static final InvertedValue kInvertedValue = InvertedValue.CounterClockwise_Positive;
+    public static final InvertedValue kInvertedValue = InvertedValue.Clockwise_Positive;
     public static final NeutralModeValue kNeutralMode = NeutralModeValue.Brake;
 
     // Internal absolute encoder stuff
-    public static final double kEncoderOffsetRot = -0.218262;
+    public static final double kEncoderOffsetRot = -0.199219;
     public static final double kGearRatio = 10;
 
     // Closed loop configs
-    public static final double kP = 80;
+    public static final double kP = 10;
     public static final double kI = 0;
-    public static final double kD = 2;
+    public static final double kD = 0.5;
     public static final double kS = 0;
     public static final double kV = 0;
     public static final double kA = 0;
@@ -48,8 +48,9 @@ public class TurretConstants {
     public static final boolean kEnableFOC = true;
 
     // Software stops
-    public static final double kMaxPositionRad = 2*Math.PI;
-    public static final double kMinPositionRad = -2*Math.PI;
+    public static final double kMaxPositionRad = 4.7 - ((4.7+1.7) - 2*Math.PI); // Cutting off a little bit of extra range of motion so wrapping works
+    public static final double kMinPositionRad = -1.7;
+    public static final double kAngleRange = kMaxPositionRad - kMinPositionRad;
 
     // SysId
     public static final double kSysIdRampRate = 1;

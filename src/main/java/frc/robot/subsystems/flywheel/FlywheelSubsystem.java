@@ -94,6 +94,22 @@ public class FlywheelSubsystem extends SubsystemBase {
         return sysId.quasistatic(direction);
     }
 
+    public Command incrementVelocity() {
+        return Commands.either(
+            applyVelocity(getVelocityRadPerSec()+100),
+            Commands.none(),
+            () -> getVelocityRadPerSec() < 550
+        );
+    }
+
+    public Command decrementVelocity() {
+        return Commands.either(
+            applyVelocity(getVelocityRadPerSec()-100),
+            Commands.none(),
+            () -> getVelocityRadPerSec() > 30
+        );
+    }
+
     public Command sysIdDynamic(Direction direction) {
         return sysId.dynamic(direction);
     }
