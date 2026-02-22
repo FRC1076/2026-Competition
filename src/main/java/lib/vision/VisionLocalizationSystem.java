@@ -5,6 +5,7 @@
 package lib.vision;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.photonvision.PhotonPoseEstimator;
@@ -14,6 +15,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import lib.functional.TriConsumer;
+import lib.vision.CameraLocalizer.CommonPoseEstimate;
 
 
 /**
@@ -99,7 +101,6 @@ public class VisionLocalizationSystem {
      */
     public void update() {
         for (var camStruct : cameras.values()) {
-
             camStruct.camera.log();
 
             if (camStruct.cameraActive) {
@@ -112,6 +113,24 @@ public class VisionLocalizationSystem {
                         );
                     }
                 );
+            }
+        }
+    }
+
+    public void updateAll() {
+        for (var camStruct : cameras.values()) {
+            camStruct.camera.log();
+
+            if (camStruct.cameraActive) {
+                List<CommonPoseEstimate> allEstimates = camStruct.camera.getAllPoseEstimates();
+                
+                for (CommonPoseEstimate estimate : allEstimates) {
+                    measurementConsumer.accept(
+                        estimate.pose(), 
+                        estimate.timestampSeconds(),
+                        estimate.stdDevs()
+                    );
+                }
             }
         }
     }

@@ -4,6 +4,7 @@
 
 package lib.vision;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -193,6 +194,35 @@ public class PhotonVisionLocalizerWithTagPrioritization implements CameraLocaliz
         // inputs.log("PhotonVision/" + getName());
 
         return result;
+    }
+
+    /** Gets all pose estimates in the latest loop */
+    @Override
+    public List<CommonPoseEstimate> getAllPoseEstimates() {
+        final ArrayList<CommonPoseEstimate> poseEstimates = new ArrayList<CommonPoseEstimate>();
+        inputs.cameraConnected = camera.isConnected();
+        inputs.estimatePresent = false;
+        inputs.tagsDetected = 0;
+
+        poseEstimator.addHeadingData(Timer.getFPGATimestamp(), headingSupplier.get());
+        List<PhotonPipelineResult> results = camera.getAllUnreadResults();
+
+        for (var res : results) {
+            getEstimate(res).map((EstimatedRobotPose estimate) -> {
+                var stddevs = calculateStdDevs(estimate);
+                int tagCount = estimate.targetsUsed.size();
+                if (tagCount > inputs.tagsDetected) {inputs.tagsDetected = tagCount;}
+                // inputs.stddevs = stddevs.getData();
+
+                return new CommonPoseEstimate(
+                    estimate.estimatedPose.toPose2d(),
+                    estimate.timestampSeconds,
+                    stddevs
+                );
+            }).ifPresent((estimate) -> poseEstimates.add(estimate));
+        }
+
+        return poseEstimates;
     }
 
     public String getName() {

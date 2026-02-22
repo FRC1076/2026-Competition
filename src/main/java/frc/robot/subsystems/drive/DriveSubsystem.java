@@ -109,7 +109,7 @@ public class DriveSubsystem extends SubsystemBase {
     public void periodic(){
         // updateModuleInputs and processInputs are only used for logging
         io.periodic(); //currently just for calling sim
-        vision.update();
+        vision.update(); // TODO: change to updateAll() if desired
         io.updateInputs(driveInputs);
         // io.updateModuleInputs(frontLeftInputs, 0);
         // io.updateModuleInputs(frontRightInputs, 1);
