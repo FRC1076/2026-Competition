@@ -3,48 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.2117307692307704,
-        "y": 2.5582179487179486
+        "x": 3.5862054208273886,
+        "y": 0.6127246790299581
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.091005139678947,
-        "y": 2.600332150034733
+        "x": 8.114736091298145,
+        "y": 0.4962767475035662
       },
       "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 2.85125641025136,
-        "y": 0.744217948721797
-      },
-      "prevControl": {
-        "x": 2.3279607782480722,
-        "y": 0.37379727176237854
-      },
-      "nextControl": {
-        "x": 3.323163448555506,
-        "y": 1.078262633790825
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 6.142038461533412,
-        "y": 0.744217948721797
-      },
-      "prevControl": {
-        "x": 5.486097934084035,
-        "y": -0.01576746597366052
-      },
-      "nextControl": {
-        "x": 6.643293755554613,
-        "y": 1.3249820524070919
-      },
-      "isLocked": false,
-      "linkedName": null
+      "linkedName": "Srt3"
     },
     {
       "anchor": {
@@ -52,15 +20,20 @@
         "y": 3.9884871794910266
       },
       "prevControl": {
-        "x": 6.095348212500756,
-        "y": 4.061702243908611
+        "x": 5.759900142653351,
+        "y": 3.9897146932952925
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.27960378208014,
+      "rotationDegrees": 180.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -77,10 +50,10 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Start at srt3",
+  "folder": "Srt3 Origin",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }
