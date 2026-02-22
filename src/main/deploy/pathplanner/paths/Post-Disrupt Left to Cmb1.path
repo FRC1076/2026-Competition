@@ -101,7 +101,7 @@
   ],
   "globalConstraints": {
     "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxAcceleration": 3.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -112,10 +112,10 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Post Disrupt",
+  "folder": "Post Disrupt Climb",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -110.40988283380386
+    "rotation": -124.99202019855855
   },
   "useDefaultConstraints": true
 }

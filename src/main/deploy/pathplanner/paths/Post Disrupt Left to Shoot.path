@@ -3,54 +3,59 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.804743589743591,
-        "y": 2.5582179487179486
+        "x": 8.347631954350925,
+        "y": 4.054407988587732
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.0789864863671075,
-        "y": 2.5124841903578012
+        "x": 7.7265763195435095,
+        "y": 3.950898716119829
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Post Disrupt-Left"
     },
     {
       "anchor": {
-        "x": 3.4559230769230784,
-        "y": 5.116423076923077
+        "x": 5.6046362339514975,
+        "y": 7.496091298145506
       },
       "prevControl": {
-        "x": 2.711993041711604,
-        "y": 4.529434270853329
+        "x": 7.014950071326675,
+        "y": 7.366704707560627
       },
       "nextControl": {
-        "x": 3.9736557510268855,
-        "y": 5.5249336489543595
+        "x": 4.66265318495993,
+        "y": 7.582511761355742
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.9211282051282055,
-        "y": 5.546666666666668
+        "x": 2.5511126961483592,
+        "y": 7.043238231098431
       },
       "prevControl": {
-        "x": 5.913581944298811,
-        "y": 5.367711231444302
+        "x": 2.6041712277908857,
+        "y": 7.287542942923518
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Far Shoot Left"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.2644098810612956,
+      "rotationDegrees": 0.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxAcceleration": 3.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -61,10 +66,10 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Srt3 Origin",
+  "folder": "Disrupt",
   "idealStartingState": {
-    "velocity": 0,
-    "rotation": 0.0
+    "velocity": 3.0,
+    "rotation": -124.99202019855855
   },
   "useDefaultConstraints": true
 }

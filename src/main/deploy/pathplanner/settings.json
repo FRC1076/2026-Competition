@@ -3,20 +3,15 @@
   "robotLength": 0.851,
   "holonomicMode": true,
   "pathFolders": [
-    "Int1 Origin",
-    "Int3 Origin",
-    "Post Disrupt",
-    "Srt1 Origin",
-    "Srt2 Origin",
-    "Srt3 Origin"
+    "Disrupt",
+    "Lazy",
+    "Post Disrupt Climb"
   ],
   "autoFolders": [
-    "Center",
-    "Alliance Side + Center",
-    "Alliance Side"
+    "Disrupt and Climb"
   ],
   "defaultMaxVel": 3.0,
-  "defaultMaxAccel": 3.0,
+  "defaultMaxAccel": 3.5,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,
   "defaultNominalVoltage": 12.0,

@@ -1,0 +1,43 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Srt1 to Center Disrupt"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Post Disrupt Left to Shoot"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 3.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Shoot Left to Collect More Left"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Collect More Left to Shoot Left"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
