@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 1.2184308131241082,
-        "y": 4.6366476462196875
+        "x": 1.1666761768901568,
+        "y": 4.662524964336662
       },
       "prevControl": {
-        "x": 1.000335235378031,
-        "y": 4.44256776034237
+        "x": 0.9485805991440797,
+        "y": 4.468445078459345
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,9 +34,43 @@
       "rotationDegrees": 0.0
     }
   ],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.6007667031763451,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 0.5,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    },
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.0,
+      "maxWaypointRelativePos": 0.6,
+      "constraints": {
+        "maxVelocity": 1.0,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "Pre-Climb",
+      "waypointRelativePos": 0.6007667031763446,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
