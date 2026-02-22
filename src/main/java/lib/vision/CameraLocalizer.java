@@ -4,7 +4,6 @@
 
 package lib.vision;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -28,12 +27,14 @@ public interface CameraLocalizer {
 
     public abstract Optional<CommonPoseEstimate> getPoseEstimate();
 
+    /** Returns an immutable list of all pose estimates. */
     public default List<CommonPoseEstimate> getAllPoseEstimates() {
-        final ArrayList<CommonPoseEstimate> poseEstimates = new ArrayList<CommonPoseEstimate>();
-        poseEstimates.clear();
         Optional<CommonPoseEstimate> latestResult = getPoseEstimate();
-        latestResult.ifPresent((pose) -> poseEstimates.add(pose));
-        return poseEstimates;
+
+        if (latestResult.isPresent()) {
+            return List.of(latestResult.get());
+        }
+        return List.of();
     }
 
     public abstract String getName();
