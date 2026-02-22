@@ -15,6 +15,12 @@
           "data": {
             "pathName": "Post-Disrupt Right to Cmb3"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Pre-Climb"
+          }
         }
       ]
     }

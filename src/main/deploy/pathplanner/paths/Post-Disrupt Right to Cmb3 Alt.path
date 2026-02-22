@@ -8,11 +8,27 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.687760342368046,
-        "y": 3.937960057061342
+        "x": 9.153552068473608,
+        "y": 4.028530670470756
       },
       "isLocked": false,
       "linkedName": "Post Disrupt-Right"
+    },
+    {
+      "anchor": {
+        "x": 5.7340228245363765,
+        "y": 1.0526390870185458
+      },
+      "prevControl": {
+        "x": 5.7340228245363765,
+        "y": 4.833960813343493
+      },
+      "nextControl": {
+        "x": 5.7340228245363765,
+        "y": 0.5092154065620549
+      },
+      "isLocked": false,
+      "linkedName": null
     },
     {
       "anchor": {
@@ -20,12 +36,12 @@
         "y": 0.6386019971469341
       },
       "prevControl": {
-        "x": 6.704422253922965,
-        "y": 0.5480313837375184
+        "x": 4.828918774343053,
+        "y": 0.6621799161459968
       },
       "nextControl": {
-        "x": 2.3055064489570176,
-        "y": 0.6975091052654889
+        "x": 2.30527817403709,
+        "y": 0.5868473609129821
       },
       "isLocked": false,
       "linkedName": null
@@ -46,19 +62,23 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.5375956776226893,
+      "waypointRelativePos": 0.5956776226924811,
       "rotationDegrees": -129.1804699242846
     },
     {
-      "waypointRelativePos": 0.9,
+      "waypointRelativePos": 0.8982440342188146,
+      "rotationDegrees": -91.33966106630884
+    },
+    {
+      "waypointRelativePos": 1.8167492120666284,
       "rotationDegrees": 180.0
     }
   ],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 1.65,
-      "maxWaypointRelativePos": 2.0,
+      "minWaypointRelativePos": 2.65,
+      "maxWaypointRelativePos": 3.0,
       "constraints": {
         "maxVelocity": 0.5,
         "maxAcceleration": 3.0,
@@ -70,8 +90,8 @@
     },
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.95,
-      "maxWaypointRelativePos": 1.8143483023000995,
+      "minWaypointRelativePos": 1.9468784227820077,
+      "maxWaypointRelativePos": 2.8143483023000995,
       "constraints": {
         "maxVelocity": 1.0,
         "maxAcceleration": 3.0,
@@ -86,7 +106,7 @@
   "eventMarkers": [
     {
       "name": "Pre-Climb",
-      "waypointRelativePos": 1.8499452354874053,
+      "waypointRelativePos": 2.834063526834611,
       "endWaypointRelativePos": null,
       "command": null
     }
