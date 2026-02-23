@@ -1,0 +1,31 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Srt3 to Center Disrupt"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Post-Disrupt Right to Cmb3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Pre-Climb"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Disrupt and Climb",
+  "choreoAuto": false
+}

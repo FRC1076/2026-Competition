@@ -1,0 +1,75 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 8.347631954350925,
+        "y": 4.054407988587732
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.7265763195435095,
+        "y": 3.950898716119829
+      },
+      "isLocked": false,
+      "linkedName": "Post Disrupt-Left"
+    },
+    {
+      "anchor": {
+        "x": 5.6046362339514975,
+        "y": 7.496091298145506
+      },
+      "prevControl": {
+        "x": 7.014950071326675,
+        "y": 7.366704707560627
+      },
+      "nextControl": {
+        "x": 4.66265318495993,
+        "y": 7.582511761355742
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.5511126961483592,
+        "y": 7.043238231098431
+      },
+      "prevControl": {
+        "x": 2.6041712277908857,
+        "y": 7.287542942923518
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Far Shoot Left"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.2644098810612956,
+      "rotationDegrees": 0.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.5,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "reversed": false,
+  "folder": "Disrupt",
+  "idealStartingState": {
+    "velocity": 3.0,
+    "rotation": -124.99202019855855
+  },
+  "useDefaultConstraints": true
+}

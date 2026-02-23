@@ -1,0 +1,121 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 8.347631954350925,
+        "y": 4.054407988587732
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.519557774607703,
+        "y": 3.0710699001426542
+      },
+      "isLocked": false,
+      "linkedName": "Post Disrupt-Left"
+    },
+    {
+      "anchor": {
+        "x": 4.6601141226818825,
+        "y": 7.496091298145506
+      },
+      "prevControl": {
+        "x": 7.3904471130443445,
+        "y": 7.496091298145506
+      },
+      "nextControl": {
+        "x": 1.394544215703156,
+        "y": 7.496091298145506
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.1666761768901568,
+        "y": 4.662524964336662
+      },
+      "prevControl": {
+        "x": 3.314676176890157,
+        "y": 4.662524964336662
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Cmb1"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.2653247941445584,
+      "rotationDegrees": 120.85853676864392
+    },
+    {
+      "waypointRelativePos": 0.8764867337602877,
+      "rotationDegrees": 180.0
+    },
+    {
+      "waypointRelativePos": 1.0521500457456499,
+      "rotationDegrees": 180.0
+    },
+    {
+      "waypointRelativePos": 1.7118415128320617,
+      "rotationDegrees": 0.0
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 1.8499452354874066,
+      "maxWaypointRelativePos": 2.0,
+      "constraints": {
+        "maxVelocity": 0.5,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    },
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 1.0700985761226784,
+      "maxWaypointRelativePos": 1.85,
+      "constraints": {
+        "maxVelocity": 0.9,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 90.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Pre-Climb",
+      "waypointRelativePos": 1.85,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.5,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "reversed": false,
+  "folder": "Post Disrupt Climb",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -124.99202019855855
+  },
+  "useDefaultConstraints": true
+}
