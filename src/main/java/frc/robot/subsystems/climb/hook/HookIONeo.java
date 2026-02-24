@@ -16,13 +16,11 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
-import frc.robot.subsystems.climb.climber.ClimberConstants.HookConstants;
-
 public class HookIONeo implements HookIO {
     private final SparkMax m_motor;
     private final SparkMaxConfig m_motorConfig;
-    private final SparkClosedLoopController m_climbClosedLoopController;
-    private final RelativeEncoder m_climbEncoder;
+    private final SparkClosedLoopController m_closedLoopController;
+    private final RelativeEncoder m_encoder;
 
     public HookIONeo() {
         m_motor = new SparkMax(HookConstants.kCANId, MotorType.kBrushless);
@@ -31,7 +29,8 @@ public class HookIONeo implements HookIO {
         m_motorConfig
             .inverted(HookConstants.kMotorInverted)
             .smartCurrentLimit(HookConstants.kCurrentLimit)
-            .voltageCompensation(HookConstants.kVoltageCompensation);
+            .voltageCompensation(HookConstants.kVoltageCompensation)
+            .idleMode(HookConstants.kIdleMode);
         
         m_motorConfig.encoder
             .positionConversionFactor(HookConstants.kPositionConversionFactor)
@@ -57,30 +56,31 @@ public class HookIONeo implements HookIO {
         
         m_motor.configure(m_motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         
-        m_climbEncoder = m_motor.getEncoder();
-        m_climbEncoder.setPosition(0);
+        m_encoder = m_motor.getEncoder();
+        m_encoder.setPosition(0);
 
-        m_climbClosedLoopController = m_motor.getClosedLoopController();
+        m_closedLoopController = m_motor.getClosedLoopController();
     }
 
-    /** Sets the voltage for the climber motor */
+    /** Sets the voltage for the hook motor */
     @Override
     public void setVoltage(double volts) {
         m_motor.setVoltage(volts);
     }
 
-    /** Sets the goal position for climber's PID controller in meters */
+    /** Sets the goal position for hook's PID controller in radians */
     @Override
-    public void setPosition(double positionMeters) {
-        m_climbClosedLoopController.setSetpoint(positionMeters, ControlType.kMAXMotionPositionControl);
+    public void setPosition(double positionRadians) {
+        m_closedLoopController.setSetpoint(positionRadians, ControlType.kMAXMotionPositionControl);
     }
 
     @Override
     public void updateInputs(HookIOInputs inputs) {
         inputs.appliedVoltage = m_motor.getAppliedOutput() * m_motor.getBusVoltage();
         inputs.currentAmps = m_motor.getOutputCurrent();
-        inputs.positionRadians = m_climbEncoder.getPosition();
+        inputs.positionRadians = m_encoder.getPosition();
+        inputs.velocityRadPerSec = m_encoder.getVelocity();
 
-        Logger.recordOutput("Climber/PIDTargetRadians", m_climbClosedLoopController.getSetpoint());
+        Logger.recordOutput("ClimbHook/PIDTargetRadians", m_closedLoopController.getSetpoint());
     }
 }

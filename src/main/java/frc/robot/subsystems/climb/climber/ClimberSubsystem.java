@@ -17,7 +17,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-import frc.robot.subsystems.climber.ClimberIOInputsAutoLogged;
 
 public class ClimberSubsystem extends SubsystemBase {
     private final ClimberIO io;
@@ -85,34 +84,6 @@ public class ClimberSubsystem extends SubsystemBase {
         );
     }
 
-    /** Set the hook motor to run at a voltage */
-    public Command applyHookVoltage(double volts) {
-        return Commands.runOnce(
-            () -> io.setHookVoltage(volts)
-        );
-    }
-
-    /** Tell the hook motor to run at the supplied voltage */
-    public Command runHookVoltage(DoubleSupplier volts) {
-        return Commands.run(
-            () -> io.setHookVoltage(volts.getAsDouble())
-        );
-    }
-
-    /** Tell to hook to go to the position in radians */
-    public Command applyHookPosition(double radians) {
-        return Commands.runOnce(
-            () -> io.setHookPosition(radians)
-        );
-    }
-
-    /** Tell the hook to run at the supplied position in radians */
-    public Command applyHookPosition(DoubleSupplier radians) {
-        return Commands.run(
-            () -> io.setHookPosition(radians.getAsDouble())
-        );
-    }
-
     public Command sysIdQuasistatic(Direction direction) {
         return sysId.quasistatic(direction);
     }
@@ -123,10 +94,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
     /** Stops the climber's motors */
     public Command stop() {
-        return Commands.sequence(
-            Commands.runOnce(() -> io.setVoltage(0), this),
-            Commands.runOnce(() -> io.setHookVoltage(0))
-        );
+        return Commands.runOnce(() -> io.setVoltage(0), this);
     }   
 }
 

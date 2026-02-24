@@ -5,6 +5,7 @@
 package frc.robot.subsystems.climb.hook;
 
 import com.ctre.phoenix6.CANBus;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import frc.robot.Constants.CANConstants;
 
@@ -16,6 +17,8 @@ public class HookConstants {
 
     public static final double kVoltageCompensation = 10; 
     public static final int kCurrentLimit = 20;
+
+    public static final IdleMode kIdleMode = IdleMode.kBrake;
 
     public static final double kP = 0;
     public static final double kI = 0;

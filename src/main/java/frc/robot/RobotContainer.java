@@ -21,7 +21,10 @@ import frc.robot.subsystems.climb.climber.ClimberConstants;
 import frc.robot.subsystems.climb.climber.ClimberIODisabled;
 import frc.robot.subsystems.climb.climber.ClimberIONeo;
 import frc.robot.subsystems.climb.climber.ClimberSubsystem;
-import frc.robot.subsystems.climb.climber.ClimberConstants.HookConstants;
+import frc.robot.subsystems.climb.hook.HookConstants;
+import frc.robot.subsystems.climb.hook.HookIODisabled;
+import frc.robot.subsystems.climb.hook.HookIONeo;
+import frc.robot.subsystems.climb.hook.HookSubsystem;
 import frc.robot.subsystems.drive.DriveIOHardware;
 import frc.robot.subsystems.drive.DriveIOSim;
 import frc.robot.subsystems.drive.DriveSubsystem;
@@ -91,6 +94,7 @@ public class RobotContainer {
     private final KickerSubsystem m_kicker;
 
     private final ClimberSubsystem m_climber;
+    private final HookSubsystem m_climbHook;
 
     private final VisionLocalizationSystem m_vision;
 
@@ -129,6 +133,7 @@ public class RobotContainer {
             m_kicker = new KickerSubsystem(new KickerIONeo());
 
             m_climber = new ClimberSubsystem(new ClimberIONeo());
+            m_climbHook = new HookSubsystem(new HookIONeo());
 
             for (PhotonConfig config : PhotonConfig.values()) {
                 PhotonCamera cam = new PhotonCamera(config.name);
@@ -162,6 +167,7 @@ public class RobotContainer {
             m_kicker = new KickerSubsystem(new KickerIODisabled());
 
             m_climber = new ClimberSubsystem(new ClimberIODisabled());
+            m_climbHook = new HookSubsystem(new HookIODisabled());
         }
 
         teleopDriveCommand = new TeleopDriveCommand(
@@ -252,12 +258,12 @@ public class RobotContainer {
             .onFalse(m_hood.applyVoltageUnrestricted(0)); 
 
         m_driverController.povLeft()
-            .onTrue(m_climber.applyHookVoltage(4))
-            .onFalse(m_climber.applyHookVoltage(0));
+            .onTrue(m_climbHook.applyVoltage(4))
+            .onFalse(m_climbHook.applyVoltage(0));
 
         m_driverController.povRight()
-            .onTrue(m_climber.applyHookVoltage(-4))
-            .onFalse(m_climber.applyHookVoltage(0)); */
+            .onTrue(m_climbHook.applyVoltage(-4))
+            .onFalse(m_climbHook.applyVoltage(0)); */
 
         // Trench mode!
         new ToggleableTrigger(m_driverController.circle(), false).getToggledTrigger()
@@ -316,9 +322,9 @@ public class RobotContainer {
             .onFalse(m_climber.applyVoltage(0));
         
         m_operatorController.rightActive().and(joystickTriggers.getToggledTrigger(2))
-            .whileTrue(m_climber.runHookVoltage(
+            .whileTrue(m_climbHook.runVoltage(
                 () -> -m_operatorController.getRightX() * HookConstants.kMaxOperatorControlVolts))
-            .onFalse(m_climber.applyHookVoltage(0));
+            .onFalse(m_climbHook.applyVoltage(0));
         
         m_operatorController.povUp()
             .onTrue(Commands.sequence(

@@ -6,8 +6,8 @@ package frc.robot.subsystems.climb.hook;
 
 import org.littletonrobotics.junction.Logger;
 
-import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Radians;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
 import java.util.function.DoubleSupplier;
@@ -29,15 +29,15 @@ public class HookSubsystem extends SubsystemBase {
         sysId = new SysIdRoutine(
             new SysIdRoutine.Config(
                 null, null, null, 
-                (state) -> Logger.recordOutput("Climber/SysIdState", state.toString())
+                (state) -> Logger.recordOutput("ClimbHook/SysIdState", state.toString())
             ),
             new SysIdRoutine.Mechanism(
                 (voltage) -> io.setVoltage(voltage.in(Volts)), 
                 (log) -> 
-                    log.motor("Climber Neo")
+                    log.motor("Climber Hook")
                     .voltage(Volts.of(inputs.appliedVoltage))
-                    .linearPosition(Meters.of(inputs.positionRadians))
-                    .linearVelocity(MetersPerSecond.of(inputs.velocityMPS)), 
+                    .angularPosition(Radians.of(inputs.positionRadians))
+                    .angularVelocity(RadiansPerSecond.of(inputs.velocityRadPerSec)), 
                 this
             )
         );
@@ -49,7 +49,7 @@ public class HookSubsystem extends SubsystemBase {
         io.periodic();
         // Update inputs and log them
         io.updateInputs(inputs);
-        Logger.processInputs("Climber", inputs);
+        Logger.processInputs("ClimbHook", inputs);
     }
 
     /** Set the motor to the specified voltage */
@@ -69,46 +69,18 @@ public class HookSubsystem extends SubsystemBase {
     }
 
     /** Tell the climber to go to the specified position */
-    public Command applyPosition(double meters) {
+    public Command applyPosition(double radians) {
         return Commands.runOnce(
-            () -> io.setPosition(meters),
+            () -> io.setPosition(radians),
             this
         );
     }
 
     /** Run the climber at the supplied position */
-    public Command runPosition(DoubleSupplier meters) {
+    public Command runPosition(DoubleSupplier radians) {
         return Commands.run(
-            () -> io.setPosition(meters.getAsDouble()),
+            () -> io.setPosition(radians.getAsDouble()),
             this
-        );
-    }
-
-    /** Set the hook motor to run at a voltage */
-    public Command applyHookVoltage(double volts) {
-        return Commands.runOnce(
-            () -> io.setHookVoltage(volts)
-        );
-    }
-
-    /** Tell the hook motor to run at the supplied voltage */
-    public Command runHookVoltage(DoubleSupplier volts) {
-        return Commands.run(
-            () -> io.setHookVoltage(volts.getAsDouble())
-        );
-    }
-
-    /** Tell to hook to go to the position in radians */
-    public Command applyHookPosition(double radians) {
-        return Commands.runOnce(
-            () -> io.setHookPosition(radians)
-        );
-    }
-
-    /** Tell the hook to run at the supplied position in radians */
-    public Command applyHookPosition(DoubleSupplier radians) {
-        return Commands.run(
-            () -> io.setHookPosition(radians.getAsDouble())
         );
     }
 
@@ -122,10 +94,7 @@ public class HookSubsystem extends SubsystemBase {
 
     /** Stops the climber's motors */
     public Command stop() {
-        return Commands.sequence(
-            Commands.runOnce(() -> io.setVoltage(0), this),
-            Commands.runOnce(() -> io.setHookVoltage(0))
-        );
+        return Commands.runOnce(() -> io.setVoltage(0), this);
     }   
 }
 

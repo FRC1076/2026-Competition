@@ -12,6 +12,7 @@ public interface HookIO {
         public double appliedVoltage = 0;
         public double currentAmps = 0;
         public double positionRadians = 0;
+        public double velocityRadPerSec = 0;
     }
 
     public abstract void setVoltage(double volts);
