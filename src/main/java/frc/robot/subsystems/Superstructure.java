@@ -8,9 +8,12 @@ import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 import frc.robot.PhysicalConstants;
+import frc.robot.subsystems.SuperstructureConstants.ClimbStates;
 import frc.robot.subsystems.SuperstructureConstants.IndexStates;
 import frc.robot.subsystems.SuperstructureConstants.IntakeStates;
 import frc.robot.subsystems.SuperstructureConstants.TurretStates;
+import frc.robot.subsystems.climb.climber.ClimberSubsystem;
+import frc.robot.subsystems.climb.hook.HookSubsystem;
 import frc.robot.subsystems.flywheel.FlywheelSubsystem;
 import frc.robot.subsystems.hood.HoodSubsystem;
 import frc.robot.subsystems.kicker.KickerSubsystem;
@@ -34,6 +37,7 @@ public class Superstructure {
         private TurretStates turretState = TurretStates.IDLE;
         private IntakeStates intake = IntakeStates.RETRACTED;
         private IndexStates index = IndexStates.IDLE;
+        private ClimbStates climb = ClimbStates.IDLE;
         
         /** Returns the state of the turret assembly */
         public TurretStates getTurretState() {
@@ -76,6 +80,19 @@ public class Superstructure {
             intake = newIntakeState;
         }
 
+        /** Returns the current commanded climb state. */
+        public ClimbStates getClimbState() {
+            return climb;
+        }
+
+        /** Sets the Climb state
+         *  (note: this does not actually affect the physical robot, it only
+         *   affects the variable in the code)
+         */
+        public void setClimbState(ClimbStates newClimbState) {
+            climb = newClimbState;
+        }
+
         /** Default constructor. Sets all variables to IDLE */
         public MutableSuperState() {
             this.turretState = TurretStates.IDLE;
@@ -98,6 +115,10 @@ public class Superstructure {
     private final SpindexerSubsystem m_spindexer;
     private final KickerSubsystem m_kicker;
 
+    private final ClimberSubsystem m_climber;
+    private final HookSubsystem m_climbHook;
+    
+
     private final Supplier<Pose2d> m_robotPoseSupplier;
     private final Supplier<ChassisSpeeds> m_robotVelocitySupplier;
 
@@ -115,6 +136,8 @@ public class Superstructure {
         SlapdownSubsystem slapdown,
         SpindexerSubsystem spindexer,
         KickerSubsystem kicker,
+        ClimberSubsystem climber,
+        HookSubsystem climbHook,
         Supplier<Pose2d> robotPoseSupplier,
         Supplier<ChassisSpeeds> robotVelocitySupplier
     ) {
@@ -125,6 +148,8 @@ public class Superstructure {
         this.m_slapdown = slapdown;
         this.m_spindexer = spindexer;
         this.m_kicker = kicker;
+        this.m_climber = climber;
+        this.m_climbHook = climbHook;
 
         this.m_robotPoseSupplier = robotPoseSupplier; 
         this.m_robotVelocitySupplier = robotVelocitySupplier;
@@ -242,6 +267,11 @@ public class Superstructure {
         return Commands.runOnce(() -> m_superState.setTurretState(state));
     }
 
+    /** Sets the climb state to the desired target in Super State. Does not affect the physical robot. */
+    public Command setClimbState(ClimbStates state) {
+        return Commands.runOnce(() -> m_superState.setClimbState(state));
+    }
+
     public Command applyIntakeStateAllParallel(IntakeStates state) {
         return Commands.parallel(
             setIntakeState(state),
@@ -273,6 +303,15 @@ public class Superstructure {
         return Commands.parallel(
             setTurretState(state),
             m_flywheel.applyVelocity(state.kFlywheelRadPerSec)
+        );
+    }
+
+    /** Apply the passed in state to the climber and climb hook */
+    public Command applyClimbStateAllParallel(ClimbStates state) {
+        return Commands.parallel(
+            setClimbState(state),
+            m_climber.applyPosition(state.kClimberPosition),
+            m_climbHook.applyPosition(state.kHookPosition)
         );
     }
 
@@ -380,6 +419,30 @@ public class Superstructure {
                 stopIndexing(), 
                 () -> m_superstructure.getSuperState().getTurretState().kIsAutoAim
             );
+        }
+
+        /** Retracts the climber and climb hook */
+        public Command applyClimbIdle() {
+            return applyClimbStateAllParallel(ClimbStates.IDLE);
+        }
+
+        /** Pulls up the intake and extends the climber to get ready to climb */
+        public Command getReadyToClimb() {
+            return Commands.sequence(
+                applyIntakeRetracted(),
+                Commands.waitUntil(() -> m_slapdown.getSlapdownAngleRadians() < SuperstructureConstants.kClimbSlapdownMaxAngleRad),
+                applyClimbStateAllParallel(ClimbStates.READY)
+            );
+        }
+
+        /** Extends the hook to climb */
+        public Command applyClimbStateHookLocked() {
+            return applyClimbStateAllParallel(ClimbStates.LOCKED);
+        }
+
+        /** Climb! */
+        public Command applyClimbStateClimbed() {
+            return applyClimbStateAllParallel(ClimbStates.CLIMBED);
         }
     }
 }
