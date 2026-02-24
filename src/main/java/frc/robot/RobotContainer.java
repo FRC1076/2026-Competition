@@ -58,7 +58,6 @@ import lib.extendedcommands.MultiToggleableTrigger;
 import lib.extendedcommands.ToggleableTrigger;
 import lib.hardware.hid.SamuraiPS5Controller;
 import lib.hardware.hid.SamuraiXboxController;
-import lib.vision.LoggedPhotonVisionLocalizerWithTagPrioritization;
 import lib.vision.PhotonVisionLocalizer;
 import lib.vision.PhotonVisionLocalizerWithTagPrioritization;
 import lib.vision.VisionLocalizationSystem;
@@ -234,7 +233,8 @@ public class RobotContainer {
             ));
 
         new ToggleableTrigger(m_driverController.touchpad(), false).getToggledTrigger()
-            .whileTrue(teleopDriveCommand.applySnakeMode());
+            .and(m_driverController.rightActive().negate())
+                .whileTrue(teleopDriveCommand.applySnakeMode());
 
         m_driverController.L2()
             .onTrue(superstructureCommands.intake())
