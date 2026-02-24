@@ -144,7 +144,8 @@ import org.littletonrobotics.junction.Logger;
         }
 
         // Calculate parameters accounted for imparted velocity
-        turretAngle = target.minus(lookaheadPose.getTranslation()).getAngle();
+        // turretAngle = target.minus(lookaheadPose.getTranslation()).getAngle();
+        turretAngle = targetPose.minus(lookaheadPose).getTranslation().getAngle();
         System.out.println(turretAngle.getRadians());
         hoodAngle = targetIsHub
             ? shotHoodAngleMap.get(lookaheadTurretToTargetDistance).getRadians()
