@@ -2,7 +2,7 @@
 // You may use, distribute, and modify this software under the terms of
 // the license found in the root directory of this project
 
-package frc.robot.subsystems.climber;
+package frc.robot.subsystems.climb.hook;
 
 import org.littletonrobotics.junction.Logger;
 
@@ -18,12 +18,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
-public class ClimberSubsystem extends SubsystemBase {
-    private final ClimberIO io;
-    private final ClimberIOInputsAutoLogged inputs = new ClimberIOInputsAutoLogged();
+public class HookSubsystem extends SubsystemBase {
+    private final HookIO io;
+    private final HookIOInputsAutoLogged inputs = new HookIOInputsAutoLogged();
     private final SysIdRoutine sysId;
 
-    public ClimberSubsystem(ClimberIO io) {
+    public HookSubsystem(HookIO io) {
         this.io = io;
 
         sysId = new SysIdRoutine(
@@ -36,7 +36,7 @@ public class ClimberSubsystem extends SubsystemBase {
                 (log) -> 
                     log.motor("Climber Neo")
                     .voltage(Volts.of(inputs.appliedVoltage))
-                    .linearPosition(Meters.of(inputs.positionMeters))
+                    .linearPosition(Meters.of(inputs.positionRadians))
                     .linearVelocity(MetersPerSecond.of(inputs.velocityMPS)), 
                 this
             )

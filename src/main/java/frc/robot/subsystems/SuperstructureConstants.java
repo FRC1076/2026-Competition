@@ -102,6 +102,26 @@ public class SuperstructureConstants {
         }
     }
 
+    public static final double kClimberDownPosition = 0;
+    public static final double kClimberClimbedPosition = 0.1;
+    public static final double kClimberUpPosition = 0.4;
+    public static final double kHookInPosition = 0;
+    public static final double kHookOutPosition = Math.PI;
+    public static enum ClimbStates {
+        IDLE(kClimberDownPosition, kHookInPosition),
+        READY(kClimberUpPosition, kHookInPosition),
+        LOCKED(kClimberUpPosition, kHookOutPosition),
+        CLIMBED(kClimberClimbedPosition, kHookOutPosition);
+
+        public final double kClimberPosition;
+        public final double kHookPosition;
+        
+        private ClimbStates(double kClimberPosition, double kHookPosition) {
+            this.kClimberPosition = kClimberPosition;
+            this.kHookPosition = kHookPosition;
+        }
+    }
+
     public static final double kTurretMoveSlapdownAngleLimitRad = Math.PI - 0.5;    
 
     public static final double kLeftPassingTargetYCoordinate = 0.75 * PhysicalConstants.FieldConstants.fieldWidth;

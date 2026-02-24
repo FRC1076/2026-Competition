@@ -2,7 +2,7 @@
 // You may use, distribute, and modify this software under the terms of
 // the license found in the root directory of this project
 
-package frc.robot.subsystems.climber;
+package frc.robot.subsystems.climb.climber;
 
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
@@ -16,7 +16,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
-import frc.robot.subsystems.climber.ClimberConstants.HookConstants;
+import frc.robot.subsystems.climb.climber.ClimberConstants.HookConstants;
 
 public class ClimberIONeo implements ClimberIO {
     private final SparkMax m_motor;
