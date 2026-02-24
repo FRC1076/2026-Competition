@@ -185,6 +185,8 @@ public class RobotContainer {
             m_slapdown,
             m_spindexer,
             m_kicker,
+            m_climber,
+            m_climbHook,
             () -> m_drive.getPose(),
             () -> m_drive.getChassisSpeeds()
         );
