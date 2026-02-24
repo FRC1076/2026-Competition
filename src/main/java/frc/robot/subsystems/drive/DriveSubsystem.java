@@ -97,6 +97,8 @@ public class DriveSubsystem extends SubsystemBase {
                 () -> GameConstants.teamColor == Alliance.Red,//DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
                 this
             );
+
+            elastic.buildAutoChooser();
         } catch (Exception ex) {
             DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder", ex.getStackTrace());
         }

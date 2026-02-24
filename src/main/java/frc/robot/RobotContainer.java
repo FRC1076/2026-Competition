@@ -383,8 +383,8 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        // An example command will be run in autonomous
-        return Commands.none();
+        // Get the autonomous command selected on Elastic
+        return m_elastic.getSelectedAutonomousCommand();
     }
 
     /** Returns the amount of time left in the shift */

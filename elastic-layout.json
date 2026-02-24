@@ -3,6 +3,53 @@
   "grid_size": 40,
   "tabs": [
     {
+      "name": "Setup",
+      "grid_layout": {
+        "layouts": [],
+        "containers": [
+          {
+            "title": "teamColor",
+            "x": 40.0,
+            "y": 40.0,
+            "width": 360.0,
+            "height": 120.0,
+            "type": "Large Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/teamColor",
+              "period": 0.06,
+              "data_type": "string"
+            }
+          },
+          {
+            "title": "Auto Chooser",
+            "x": 440.0,
+            "y": 40.0,
+            "width": 360.0,
+            "height": 120.0,
+            "type": "ComboBox Chooser",
+            "properties": {
+              "topic": "/SmartDashboard/Auto Chooser",
+              "period": 0.06,
+              "sort_options": false
+            }
+          },
+          {
+            "title": "Auton Side Chooser",
+            "x": 840.0,
+            "y": 40.0,
+            "width": 360.0,
+            "height": 120.0,
+            "type": "ComboBox Chooser",
+            "properties": {
+              "topic": "/SmartDashboard/Auton Side Chooser",
+              "period": 0.06,
+              "sort_options": false
+            }
+          }
+        ]
+      }
+    },
+    {
       "name": "Teleop",
       "grid_layout": {
         "layouts": [],

@@ -6,13 +6,16 @@ package frc.robot.subsystems;
 
 import java.util.HashMap;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.GameConstants;
 import frc.robot.Constants.GameConstants.AutonSides;
 
@@ -21,6 +24,7 @@ public class Elastic {
     private Field2d field;
     private SendableChooser<AutonSides> autonSideChooser;
     private HashMap<Alliance, String> AllianceNames; 
+    private SendableChooser<Command> autoChooser;
     private Alliance currentAllianceName;
 
     public Elastic() {
@@ -34,13 +38,17 @@ public class Elastic {
         autonSideChooser.setDefaultOption(GameConstants.autonSide.name(), GameConstants.autonSide);
         autonSideChooser.addOption(AutonSides.Left.name(), AutonSides.Left);
         autonSideChooser.addOption(AutonSides.Right.name(), AutonSides.Right);
-        SmartDashboard.putData(autonSideChooser);
+        SmartDashboard.putData("Auton Side Chooser", autonSideChooser);
 
         // Maps the Alliance enum that the Driver Station returns to string names
         AllianceNames = new HashMap<>();
         AllianceNames.put(Alliance.Blue, "Blue");
         AllianceNames.put(Alliance.Red, "Red");
         this.putSelectedTeamColor();
+
+        // Init auto chooser to be empty
+        autoChooser = new SendableChooser<Command>();
+        autoChooser.addOption("None", Commands.none());
         
         // Initialize fields, because otherwise they're only updated when teleop is enabled
         this.putNumber("FlywheelVelocityTarget", 0);;
@@ -92,6 +100,17 @@ public class Elastic {
     /** Returns true to mirror the auton from the left side to the right side
      * when in autonomous mode and the auton is selected as mirrored to the right side */
     public boolean getPathPlannerMirrored() {
-        return DriverStation.isAutonomous() && (GameConstants.autonSide == AutonSides.Right);// autonSideChooser.getSelected().isRightSide;
+        return DriverStation.isAutonomous() && autonSideChooser.getSelected().isRightSide; //(GameConstants.autonSide == AutonSides.Right);
+    }
+
+    /** Build the auto chooser and send it to Elastic after the AutoBuilder has been configured. */
+    public void buildAutoChooser() {
+        autoChooser = AutoBuilder.buildAutoChooser();
+        SmartDashboard.putData("Auto Chooser", autoChooser);
+    }
+
+    /** Returns the selected auto from the auto chooser. */
+    public Command getSelectedAutonomousCommand() {
+        return autoChooser.getSelected();
     }
 }
