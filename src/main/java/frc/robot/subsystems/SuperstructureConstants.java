@@ -20,7 +20,7 @@ public class SuperstructureConstants {
         MANUAL(false, 0),
         AUTOAIM_IDLE(true, 0.75),
         AUTOAIM_SHOOT(true, 1),
-        HUB_PREALIGNED_LOCATION(0,0.1,280),
+        HUB_PREALIGNED_LOCATION(0,0.14,280),
         POINT_DIRECTLY_BACK_FOR_PASSING(0,0,0),
         REVERSE(0,0, -100);  
 

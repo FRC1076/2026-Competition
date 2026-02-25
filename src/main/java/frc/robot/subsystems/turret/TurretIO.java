@@ -28,4 +28,8 @@ public interface TurretIO {
     public default void setSoftwareStops(boolean enabled) {
         
     }
+
+    public default void resetPosition() {
+        
+    }
 }

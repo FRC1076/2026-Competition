@@ -132,7 +132,7 @@ public class RobotContainer {
             m_kicker = new KickerSubsystem(new KickerIONeo());
 
             m_climber = new ClimberSubsystem(new ClimberIONeo());
-            m_climbHook = new HookSubsystem(new HookIONeo());
+            m_climbHook = new HookSubsystem(new HookIODisabled());
 
             for (PhotonConfig config : PhotonConfig.values()) {
                 PhotonCamera cam = new PhotonCamera(config.name);
@@ -375,6 +375,9 @@ public class RobotContainer {
                 m_spindexer.applyVoltage(0),
                 () -> m_spindexer.getVoltage() < 0.5
         ));
+
+        m_operatorController.back()
+            .onTrue(m_turret.rezeroTurret().ignoringDisable(true));
     }
 
     /**

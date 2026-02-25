@@ -125,6 +125,11 @@ public class TurretIOKraken implements TurretIO {
     }
 
     @Override
+    public void resetPosition() {
+        m_motor.setPosition(0);
+    }
+
+    @Override
     public void updateInputs(TurretIOInputs inputs) {
         StatusSignal.refreshAll(
             m_voltageSignal,

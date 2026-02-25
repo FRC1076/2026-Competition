@@ -117,6 +117,10 @@ public class TurretSubsystem extends SubsystemBase {
         );
     }
 
+    public Command rezeroTurret() {
+        return Commands.runOnce(() -> io.resetPosition());
+    }
+
     public Command sysIdQuasistatic(Direction direction) {
         return sysId.quasistatic(direction);
     }
