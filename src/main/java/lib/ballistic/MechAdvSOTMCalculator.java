@@ -18,7 +18,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.interpolation.InterpolatingTreeMap;
-import edu.wpi.first.math.interpolation.InverseInterpolator;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import frc.robot.Constants.SystemConstants;
 
@@ -49,51 +48,15 @@ import org.littletonrobotics.junction.Logger;
     private static double minDistance;
     private static double maxDistance;
     private static double phaseDelay;
-    private static final InterpolatingTreeMap<Double, Rotation2d> shotHoodAngleMap =
-        new InterpolatingTreeMap<>(InverseInterpolator.forDouble(), Rotation2d::interpolate);
-    private static final InterpolatingTreeMap<Double, Rotation2d> shotHoodAngleMapNonHub =
-        new InterpolatingTreeMap<>(InverseInterpolator.forDouble(), Rotation2d::interpolate); // Map of hood heights for non-hub targets
-    private static final InterpolatingDoubleTreeMap shotFlywheelSpeedMap =
-        new InterpolatingDoubleTreeMap();
-    private static final InterpolatingDoubleTreeMap timeOfFlightMap =
-        new InterpolatingDoubleTreeMap();
-
-    static {
-        minDistance = 1.34;
-        maxDistance = 5.60;
-        phaseDelay = 0.03;
-
-        shotHoodAngleMap.put(2.0, Rotation2d.fromRadians(0.001));
-        shotHoodAngleMap.put(6.13, Rotation2d.fromRadians(0.157));
-        //shotHoodAngleMap.put(1.0, Rotation2d.fromRadians(0.01));
-
-        shotHoodAngleMapNonHub.put(1.34, Rotation2d.fromDegrees(0.0));
-        shotHoodAngleMapNonHub.put(1.78, Rotation2d.fromDegrees(1.0));
-        shotHoodAngleMapNonHub.put(2.17, Rotation2d.fromDegrees(2.0));
-        shotHoodAngleMapNonHub.put(2.81, Rotation2d.fromDegrees(4.0));
-        shotHoodAngleMapNonHub.put(3.82, Rotation2d.fromDegrees(5.0));
-        shotHoodAngleMapNonHub.put(4.09, Rotation2d.fromDegrees(6.0));
-        shotHoodAngleMapNonHub.put(4.40, Rotation2d.fromDegrees(7.0));
-        shotHoodAngleMapNonHub.put(4.77, Rotation2d.fromDegrees(8.0));
-        shotHoodAngleMapNonHub.put(5.57, Rotation2d.fromDegrees(9.0));
-        shotHoodAngleMapNonHub.put(5.60, Rotation2d.fromDegrees(10.0));
-
-        shotFlywheelSpeedMap.put(2.0, 230.0);
-        shotFlywheelSpeedMap.put(6.13, 270.0);
-
-        timeOfFlightMap.put(5.68, 1.16);
-        timeOfFlightMap.put(4.55, 1.12);
-        timeOfFlightMap.put(3.15, 1.11);
-        timeOfFlightMap.put(1.88, 1.09);
-        timeOfFlightMap.put(1.38, 0.90);
-    }
+    private static final InterpolatingTreeMap<Double, Double> shotHoodAngleMap = CommonLookupTable.distanceToHoodAngleMap;
+    private static final InterpolatingDoubleTreeMap shotFlywheelSpeedMap = CommonLookupTable.distanceToFlywheelSpeedMap;
+    private static final InterpolatingDoubleTreeMap timeOfFlightMap = CommonLookupTable.distanceToTimeOfFlightMap;
 
     public static CommonShotSolution calculate(
         Pose2d turretPose,
         Pose2d targetPose,
         ChassisSpeeds robotRelativeTurretVelocity,
-        Rotation2d robotHeading,
-        boolean targetIsHub
+        Rotation2d robotHeading
     ) {
         // Calculate estimated pose while accounting for phase delay
         turretPose =
@@ -102,9 +65,6 @@ import org.littletonrobotics.junction.Logger;
                     robotRelativeTurretVelocity.vxMetersPerSecond * phaseDelay,
                     robotRelativeTurretVelocity.vyMetersPerSecond * phaseDelay,
                     robotRelativeTurretVelocity.omegaRadiansPerSecond * phaseDelay));
-
-        // Calculate distance from turret to target
-        Translation2d target = turretPose.relativeTo(targetPose).getTranslation();
 
         // Calculate field-relative robot velocity
         ChassisSpeeds fieldRelativeTurretVelocity = ChassisSpeeds.fromRobotRelativeSpeeds(robotRelativeTurretVelocity, robotHeading);
@@ -116,7 +76,7 @@ import org.littletonrobotics.junction.Logger;
         // Account for imparted velocity by robot (turret) to offset
         double timeOfFlight;
         Pose2d lookaheadPose = turretPose;
-        double lookaheadTurretToTargetDistance = targetPose.getTranslation().getDistance(target);
+        double lookaheadTurretToTargetDistance = targetPose.getTranslation().getDistance(lookaheadPose.getTranslation());
         for (int i = 0; i < 20; i++) {
             timeOfFlight = timeOfFlightMap.get(lookaheadTurretToTargetDistance);
             double offsetX = turretVelocityX * timeOfFlight;
@@ -125,16 +85,13 @@ import org.littletonrobotics.junction.Logger;
                 new Pose2d(
                     turretPose.getTranslation().minus(new Translation2d(offsetX, offsetY)),
                     turretPose.getRotation());
-            lookaheadTurretToTargetDistance = target.getDistance(lookaheadPose.getTranslation());
+            lookaheadTurretToTargetDistance = targetPose.getTranslation().getDistance(lookaheadPose.getTranslation());
         }
 
         // Calculate parameters accounted for imparted velocity
         // turretAngle = target.minus(lookaheadPose.getTranslation()).getAngle();
         turretAngle = targetPose.minus(lookaheadPose).getTranslation().getAngle();
-        System.out.println(turretAngle.getRadians());
-        hoodAngle = targetIsHub
-            ? shotHoodAngleMap.get(lookaheadTurretToTargetDistance).getRadians()
-            : shotHoodAngleMapNonHub.get(lookaheadTurretToTargetDistance).getRadians();
+        hoodAngle = shotHoodAngleMap.get(lookaheadTurretToTargetDistance);
         if (lastTurretAngle == null) lastTurretAngle = turretAngle;
         if (Double.isNaN(lastHoodAngle)) lastHoodAngle = hoodAngle;
         turretVelocity =

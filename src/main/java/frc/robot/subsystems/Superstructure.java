@@ -26,7 +26,7 @@ import frc.robot.subsystems.turret.TurretSubsystem;
 import lib.ballistic.BasicLaunchCalculator;
 import lib.ballistic.CommonShotSolution;
 // import lib.ballistic.HoundSOTMCalculator;
-// import lib.ballistic.MechAdvSOTMCalculator;
+import lib.ballistic.MechAdvSOTMCalculator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -206,23 +206,20 @@ public class Superstructure {
         final Pose3d shooterPose = new Pose3d(m_robotPoseSupplier.get()).transformBy(PhysicalConstants.kBotRelativeTurretPose);
         // final ChassisSpeeds robotVelocity = m_robotVelocitySupplier.get();
         final Pose3d target;
-        // final boolean targetIsHub;
         
         final Pose3d shooterPoseAllianceColorCoordinates = shooterPose.relativeTo(SuperstructureConstants.kAllianceOrigin);
 
         if (shooterPoseAllianceColorCoordinates.getX() <= PhysicalConstants.FieldConstants.LinesVertical.allianceZone) {
             target = SuperstructureConstants.kHubTarget;
-            // targetIsHub = true;
         } else if (shooterPose.getY() <= PhysicalConstants.FieldConstants.LinesHorizontal.center) {
             target = SuperstructureConstants.kRightPassingTarget;
-            // targetIsHub = false;
         } else {
             target = SuperstructureConstants.kLeftPassingTarget;
-            // targetIsHub = false;
         }
 
-        /*
+        
         // Translate the chassis speeds
+        /*
         final ChassisSpeeds turretVelocity = new ChassisSpeeds(
             robotVelocity.vxMetersPerSecond - (robotVelocity.omegaRadiansPerSecond * PhysicalConstants.kBotRelativeTurretPose.getY()),
             robotVelocity.vyMetersPerSecond + (robotVelocity.omegaRadiansPerSecond * PhysicalConstants.kBotRelativeTurretPose.getX()),
@@ -245,8 +242,7 @@ public class Superstructure {
             shooterPose.toPose2d(),
             target.toPose2d(),
             turretVelocity,
-            m_robotPoseSupplier.get().getRotation(),
-            targetIsHub
+            m_robotPoseSupplier.get().getRotation()
         ); */
 
         /* Basic launch calculator without SotM */
