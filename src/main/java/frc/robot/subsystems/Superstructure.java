@@ -7,6 +7,8 @@ package frc.robot.subsystems;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
+import org.littletonrobotics.junction.AutoLogOutput;
+
 import frc.robot.PhysicalConstants;
 import frc.robot.subsystems.SuperstructureConstants.ClimbStates;
 import frc.robot.subsystems.SuperstructureConstants.IndexStates;
@@ -21,10 +23,10 @@ import frc.robot.subsystems.roller.RollerSubsystem;
 import frc.robot.subsystems.slapdown.SlapdownSubsystem;
 import frc.robot.subsystems.spindexer.SpindexerSubsystem;
 import frc.robot.subsystems.turret.TurretSubsystem;
-
+import lib.ballistic.BasicLaunchCalculator;
 import lib.ballistic.CommonShotSolution;
 // import lib.ballistic.HoundSOTMCalculator;
-import lib.ballistic.MechAdvSOTMCalculator;
+// import lib.ballistic.MechAdvSOTMCalculator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -43,6 +45,12 @@ public class Superstructure {
         public TurretStates getTurretState() {
             return turretState;
         }
+
+        /** Returns the state of the turret assembly as a string */
+        @AutoLogOutput(key = "SuperState/TurretState")
+        public String getTurretStateString() {
+            return turretState.toString();
+        }
         
         /** Sets the target state of the turret assembly
          *  (note: this does not actually affect the physical robot, it only
@@ -55,6 +63,12 @@ public class Superstructure {
         /** Returns the index state. */
         public IndexStates getIndexState() {
             return index;
+        }
+
+        /** Returns the index state as a string */
+        @AutoLogOutput(key = "SuperState/IndexState")
+        public String getIndexStateString() {
+            return index.toString();
         }
 
         /** Returns the previous fuel management state of the robot */
@@ -70,6 +84,12 @@ public class Superstructure {
         /** Returns the intake state. */
         public IntakeStates getIntakeState() {
             return intake;
+        }
+
+        /** Returns the intake state as a string */
+        @AutoLogOutput(key = "SuperState/IntakeState")
+        public String getIntakeStateString() {
+            return intake.toString();
         }
 
         /** Sets the Intake state
@@ -184,29 +204,30 @@ public class Superstructure {
      */
     private void updateShootingParams() {
         final Pose3d shooterPose = new Pose3d(m_robotPoseSupplier.get()).transformBy(PhysicalConstants.kBotRelativeTurretPose);
-        final ChassisSpeeds robotVelocity = m_robotVelocitySupplier.get();
+        // final ChassisSpeeds robotVelocity = m_robotVelocitySupplier.get();
         final Pose3d target;
-        final boolean targetIsHub;
+        // final boolean targetIsHub;
         
         final Pose3d shooterPoseAllianceColorCoordinates = shooterPose.relativeTo(SuperstructureConstants.kAllianceOrigin);
 
         if (shooterPoseAllianceColorCoordinates.getX() <= PhysicalConstants.FieldConstants.LinesVertical.allianceZone) {
             target = SuperstructureConstants.kHubTarget;
-            targetIsHub = true;
+            // targetIsHub = true;
         } else if (shooterPose.getY() <= PhysicalConstants.FieldConstants.LinesHorizontal.center) {
             target = SuperstructureConstants.kRightPassingTarget;
-            targetIsHub = false;
+            // targetIsHub = false;
         } else {
             target = SuperstructureConstants.kLeftPassingTarget;
-            targetIsHub = false;
+            // targetIsHub = false;
         }
 
+        /*
         // Translate the chassis speeds
         final ChassisSpeeds turretVelocity = new ChassisSpeeds(
             robotVelocity.vxMetersPerSecond - (robotVelocity.omegaRadiansPerSecond * PhysicalConstants.kBotRelativeTurretPose.getY()),
             robotVelocity.vyMetersPerSecond + (robotVelocity.omegaRadiansPerSecond * PhysicalConstants.kBotRelativeTurretPose.getX()),
             robotVelocity.omegaRadiansPerSecond
-        );
+        ); */
 
         
         /* TechHOUNDs option. Commented out to test Mechanical Advantage's option. * /
@@ -219,14 +240,17 @@ public class Superstructure {
             SuperstructureConstants.kAutoAimTimeToleranceSeconds
         ); */
 
-        /* Mechanical Advantage option */
+        /* Mechanical Advantage option * /
         m_shootingParams = MechAdvSOTMCalculator.calculate(
             shooterPose.toPose2d(),
             target.toPose2d(),
             turretVelocity,
             m_robotPoseSupplier.get().getRotation(),
             targetIsHub
-        );
+        ); */
+
+        /* Basic launch calculator without SotM */
+        m_shootingParams = BasicLaunchCalculator.calculate(shooterPose.toPose2d(), target.toPose2d());
     }
 
     public MutableSuperState getSuperState() {
