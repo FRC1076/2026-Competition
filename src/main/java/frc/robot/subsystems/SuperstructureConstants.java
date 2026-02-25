@@ -140,12 +140,12 @@ public class SuperstructureConstants {
             : new Pose3d(PhysicalConstants.FieldConstants.Hub.oppTopCenterPoint, Rotation3d.kZero);
     public static final Pose3d kLeftPassingTarget =
         Constants.GameConstants.teamColor == Alliance.Blue
-            ? new Pose3d(new Translation3d(0, kLeftPassingTargetYCoordinate, 0), Rotation3d.kZero)
-            : new Pose3d(new Translation3d(PhysicalConstants.FieldConstants.fieldLength, kLeftPassingTargetYCoordinate, 0), Rotation3d.kZero);
+            ? new Pose3d(new Translation3d(2, kLeftPassingTargetYCoordinate, 0), Rotation3d.kZero)
+            : new Pose3d(new Translation3d(PhysicalConstants.FieldConstants.fieldLength - 2, kLeftPassingTargetYCoordinate, 0), Rotation3d.kZero);
     public static final Pose3d kRightPassingTarget =
         Constants.GameConstants.teamColor == Alliance.Blue
-            ? new Pose3d(new Translation3d(0, kRightPassingTargetYCoordinate, 0), Rotation3d.kZero)
-            : new Pose3d(new Translation3d(PhysicalConstants.FieldConstants.fieldLength, kRightPassingTargetYCoordinate, 0), Rotation3d.kZero);
+            ? new Pose3d(new Translation3d(2, kRightPassingTargetYCoordinate, 0), Rotation3d.kZero)
+            : new Pose3d(new Translation3d(PhysicalConstants.FieldConstants.fieldLength - 2, kRightPassingTargetYCoordinate, 0), Rotation3d.kZero);
          
 
     public static final int kAutoAimMaxIterations = 5;
