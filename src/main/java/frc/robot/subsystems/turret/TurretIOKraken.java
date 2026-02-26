@@ -60,7 +60,7 @@ public class TurretIOKraken implements TurretIO {
         m_motorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
         // Offset from internal absolute encoder
-        m_motorConfig.Feedback.FeedbackRotorOffset = TurretConstants.kEncoderOffsetRot;
+        // m_motorConfig.Feedback.FeedbackRotorOffset = TurretConstants.kEncoderOffsetRot; // We'll just start at zero
         m_motorConfig.Feedback.SensorToMechanismRatio = TurretConstants.kGearRatio;
 
         // Closed loop
@@ -84,6 +84,7 @@ public class TurretIOKraken implements TurretIO {
 
         // Apply configs
         m_motor.getConfigurator().apply(m_motorConfig);
+        m_motor.setPosition(0); // Start pointing forward
 
         // Status signals
         m_voltageSignal = m_motor.getMotorVoltage();

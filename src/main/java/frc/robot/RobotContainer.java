@@ -210,9 +210,7 @@ public class RobotContainer {
      * joysticks}.
      */
     private void configureBindings() {
-        new Trigger(() -> m_elastic.readNumber("FlywheelVelocityTarget") > 50)
-            .onTrue(m_superstructure.getCommandFactory().applyTurretManualState())
-            .whileTrue(m_flywheel.runVelocity(() -> m_elastic.readNumber("FlywheelVelocityTarget")));
+        
     }
 
     /** Bind triggers on driver controller to commands */
@@ -331,7 +329,7 @@ public class RobotContainer {
         m_operatorController.povUp()
             .onTrue(Commands.sequence(
                 superstructureCommands.startTurretManualControl(),
-                m_flywheel.applyVelocity(500))
+                m_flywheel.applyVelocity(() -> m_elastic.readNumber("FlywheelVelocityTarget")))
             );
         
         m_operatorController.povLeft()
