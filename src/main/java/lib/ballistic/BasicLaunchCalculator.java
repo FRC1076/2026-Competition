@@ -31,6 +31,8 @@ public class BasicLaunchCalculator {
 
         Logger.recordOutput("ShotCalculator/TurretToTargetDistance", turretToTargetDistanceMeters);
 
+        Logger.recordOutput("ShotCalculator/Target", targetPose);
+
         Logger.recordOutput("ShotCalculator/HoodAngle", hoodAngleRadians);
         Logger.recordOutput("ShotCalculator/TurretAngle", turretAngleRadians);
         Logger.recordOutput("ShotCalculator/FlywheelSpeed", flywheelSpeedRadPerSec);

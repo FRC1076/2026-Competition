@@ -25,7 +25,7 @@ public class SlapdownConstants {
     public static final double kGearRatio = 25;
     public static final double kRotorOffsetRot = -0.241699 + 0.014648 + 0.013916;
 
-    public static final double kP = 6;
+    public static final double kP = 8;
     public static final double kI = 0;
     public static final double kD = 0;
 

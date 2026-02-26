@@ -65,6 +65,7 @@ public class SuperstructureConstants {
         RETRACTED(kSlapdownUpAngle,0),
         EXTENDED(kSlapdownDownAngle, 0),
         INTAKING(kSlapdownDownAngle, kIntakeRollerVoltage),
+        SHOOTING(kSlapdownDownAngle, 10),
         REVERSE(kSlapdownDownAngle, -kIntakeRollerVoltage);
 
         public final double kSlapdownAngle;

@@ -209,7 +209,7 @@ public class Superstructure {
         
         final Pose3d shooterPoseAllianceColorCoordinates = shooterPose.relativeTo(SuperstructureConstants.kAllianceOrigin);
 
-        if (shooterPoseAllianceColorCoordinates.getX() <= PhysicalConstants.FieldConstants.LinesVertical.allianceZone) {
+        if (shooterPoseAllianceColorCoordinates.getX() <= PhysicalConstants.FieldConstants.LinesVertical.allianceZone + 1) {
             target = SuperstructureConstants.kHubTarget;
         } else if (shooterPose.getY() <= PhysicalConstants.FieldConstants.LinesHorizontal.center) {
             target = SuperstructureConstants.kRightPassingTarget;
@@ -290,6 +290,13 @@ public class Superstructure {
     /** Sets the climb state to the desired target in Super State. Does not affect the physical robot. */
     public Command setClimbState(ClimbStates state) {
         return Commands.runOnce(() -> m_superState.setClimbState(state));
+    }
+
+    public Command applyIntakeStateRollerOnly(IntakeStates state) {
+        return Commands.parallel(
+            setIntakeState(state),
+            m_roller.applyVoltage(state.kRollerVoltage)
+        );
     }
 
     public Command applyIntakeStateAllParallel(IntakeStates state) {
@@ -411,6 +418,21 @@ public class Superstructure {
             );
         }
 
+        public Command intakeAndIndexToShoot() {
+            return Commands.parallel(
+                startIndexing(),
+                applyIntakeStateRollerOnly(IntakeStates.SHOOTING)
+            );
+        }
+
+        public Command stopIntakeAndIndexToShoot() {
+            return Commands.parallel(
+                stopIndexing(),
+                applyIntakeStateRollerOnly(IntakeStates.EXTENDED)
+            );
+        }
+
+
         /** Shoot fuel. Either goes to AUTOAIM_SHOOT for turret,
          *  or does nothing for turret depending on if AUTOAIM is active.  */
         public Command shoot() {
@@ -418,10 +440,11 @@ public class Superstructure {
                 Commands.sequence(
                     shootWithAutoaim(),
                     Commands.waitUntil(isReadyToShoot()),
-                    startIndexing()
+                    intakeAndIndexToShoot()
                 ),
                 Commands.sequence(
-                    startIndexing()
+                    Commands.waitUntil(() -> m_flywheel.getVelocityRadPerSec() > 50),
+                    intakeAndIndexToShoot()
                 ),
                 () -> m_superstructure.getSuperState().getTurretState().kIsAutoAim
             );
@@ -433,10 +456,10 @@ public class Superstructure {
         public Command stopShooting() {
             return Commands.either(
                 Commands.sequence(
-                    stopIndexing(),
+                    stopIntakeAndIndexToShoot(),
                     initiateAutoaim()
                 ), 
-                stopIndexing(), 
+                stopIntakeAndIndexToShoot(), 
                 () -> m_superstructure.getSuperState().getTurretState().kIsAutoAim
             );
         }
