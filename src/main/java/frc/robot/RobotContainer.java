@@ -212,7 +212,23 @@ public class RobotContainer {
      * joysticks}.
      */
     private void configureBindings() {
-        
+        // Put option to set auton winner in Elastic
+        m_elastic.putBoolean("Red Won Auto", false);
+        m_elastic.putBoolean("Blue Won Auto", false);
+
+        new Trigger(() -> m_elastic.readBoolean("Red Won Auto"))
+            .onTrue(Commands.sequence(
+                Commands.runOnce(() -> ShiftUtil.setAutonWinner("R")),
+                Commands.waitSeconds(0.5),
+                Commands.runOnce(() -> m_elastic.putBoolean("Red Won Auto", false))
+            ));
+
+        new Trigger(() -> m_elastic.readBoolean("Blue Won Auto"))
+            .onTrue(Commands.sequence(
+                Commands.runOnce(() -> ShiftUtil.setAutonWinner("B")),
+                Commands.waitSeconds(0.5),
+                Commands.runOnce(() -> m_elastic.putBoolean("Blue Won Auto", false))
+            ));
     }
 
     /** Bind triggers on driver controller to commands */

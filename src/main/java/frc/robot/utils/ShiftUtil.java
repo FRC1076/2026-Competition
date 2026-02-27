@@ -63,12 +63,20 @@ public class ShiftUtil {
         }
     }
 
+    /** Returns the hex string of the alliance color whose hub is currently active.
+     *  During the transition period, it returns a lighter version of the color of the first active hub.
+     */
     public static String getActiveHubColorHex() {
+        if (autonWinner.isBlank()) {
+            return "808080";
+        }
         boolean blueAllianceActiveFirst = getAutonWinner().equals("R");
         int remainingSeconds = (int) DriverStation.getMatchTime();
 
-        if (remainingSeconds > 130 || remainingSeconds < 30){
-            return "800080";
+        if (remainingSeconds > 130){
+            return blueAllianceActiveFirst
+                    ? "6495ED"
+                    : "F88379";
         } else if (remainingSeconds > 105){
             return blueAllianceActiveFirst
                     ? "0000FF"
@@ -81,10 +89,12 @@ public class ShiftUtil {
             return blueAllianceActiveFirst
                     ? "0000FF"
                     : "FF0000";
-        } else {
+        } else if (remainingSeconds > 30) {
             return blueAllianceActiveFirst
                     ? "FF0000"
                     : "0000FF";
+        } else {
+            return "800080";
         }
     }
 
@@ -106,6 +116,14 @@ public class ShiftUtil {
         } else {
             return "808080"; // grey for no winner yet
         }
+    }
+
+    /** Sets the auton winner.
+     * 
+     * @param winner R or B based on who wins auto.
+     */
+    public static void setAutonWinner(String winner) {
+        autonWinner = winner;
     }
 }
    

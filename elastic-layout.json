@@ -56,10 +56,10 @@
         "containers": [
           {
             "title": "Match Time",
-            "x": 960.0,
+            "x": 1000.0,
             "y": 0.0,
-            "width": 320.0,
-            "height": 240.0,
+            "width": 280.0,
+            "height": 200.0,
             "type": "Match Time",
             "properties": {
               "topic": "/AdvantageKit/DriverStation/MatchTime",
@@ -72,10 +72,10 @@
           },
           {
             "title": "Shift Time",
-            "x": 760.0,
+            "x": 800.0,
             "y": 0.0,
             "width": 200.0,
-            "height": 240.0,
+            "height": 200.0,
             "type": "Large Text Display",
             "properties": {
               "topic": "/AdvantageKit/RealOutputs/Match/ShiftTime",
@@ -84,41 +84,11 @@
             }
           },
           {
-            "title": "Our Hub Active",
-            "x": 600.0,
-            "y": 0.0,
-            "width": 160.0,
-            "height": 160.0,
-            "type": "Boolean Box",
-            "properties": {
-              "topic": "/AdvantageKit/RealOutputs/Match/OurHubActive",
-              "period": 0.06,
-              "data_type": "boolean",
-              "true_color": 4283215696,
-              "false_color": 4294198070,
-              "true_icon": "Checkmark",
-              "false_icon": "X"
-            }
-          },
-          {
-            "title": "Auton Winner",
-            "x": 600.0,
-            "y": 160.0,
-            "width": 160.0,
-            "height": 80.0,
-            "type": "Single Color View",
-            "properties": {
-              "topic": "/AdvantageKit/RealOutputs/Match/Auton Winner Color Hex",
-              "period": 0.06,
-              "data_type": "string"
-            }
-          },
-          {
             "title": "Field",
             "x": 600.0,
-            "y": 240.0,
+            "y": 200.0,
             "width": 680.0,
-            "height": 320.0,
+            "height": 360.0,
             "type": "Field",
             "properties": {
               "topic": "/SmartDashboard/Field",
@@ -132,19 +102,6 @@
               "robot_color": 4294198070,
               "trajectory_color": 4294967295,
               "show_robot_outside_widget": true
-            }
-          },
-          {
-            "title": "photonvision0_Port_1184_Output_MJPEG_Server",
-            "x": 0.0,
-            "y": 0.0,
-            "width": 480.0,
-            "height": 400.0,
-            "type": "Camera Stream",
-            "properties": {
-              "topic": "/CameraPublisher/photonvision0_Port_1184_Output_MJPEG_Server",
-              "period": 0.06,
-              "rotation_turns": 0
             }
           },
           {
@@ -162,6 +119,45 @@
               "max_value": 500.0,
               "divisions": 5,
               "update_continuously": false
+            }
+          },
+          {
+            "title": "Blue Won Auto",
+            "x": 0.0,
+            "y": 160.0,
+            "width": 280.0,
+            "height": 160.0,
+            "type": "Toggle Button",
+            "properties": {
+              "topic": "/SmartDashboard/Blue Won Auto",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "Red Won Auto",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 280.0,
+            "height": 160.0,
+            "type": "Toggle Button",
+            "properties": {
+              "topic": "/SmartDashboard/Red Won Auto",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "ActiveHubColor",
+            "x": 600.0,
+            "y": 0.0,
+            "width": 200.0,
+            "height": 200.0,
+            "type": "Single Color View",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/Match/ActiveHubColor",
+              "period": 0.06,
+              "data_type": "string"
             }
           }
         ]

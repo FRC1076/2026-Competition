@@ -66,6 +66,10 @@ public class Elastic {
         SmartDashboard.putBoolean(key, value);
     }
 
+    public boolean readBoolean(String key) {
+        return SmartDashboard.getBoolean(key, false);
+    }
+
     public void putString(String key, String value) {
         SmartDashboard.putString(key, value);
     }
