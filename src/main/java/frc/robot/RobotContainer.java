@@ -65,6 +65,8 @@ import lib.vision.VisionLocalizationSystem;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.photonvision.PhotonCamera;
 
+import com.pathplanner.lib.auto.NamedCommands;
+
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Threads;
 import edu.wpi.first.wpilibj.Timer;
@@ -388,6 +390,15 @@ public class RobotContainer {
         return m_elastic.getSelectedAutonomousCommand();
     }
 
+    public void registerNamedCommands() {
+        final SuperstructureCommandFactory commandFactory = m_superstructure.getCommandFactory();
+        NamedCommands.registerCommand("Start Intake", commandFactory.intake());
+        NamedCommands.registerCommand("Turret Idle", commandFactory.applyTurretIdle());
+        NamedCommands.registerCommand("Initiate Autoaim", commandFactory.initiateAutoaim());
+        NamedCommands.registerCommand("Shoot", commandFactory.shoot());
+        NamedCommands.registerCommand("Stop Shooting", commandFactory.stopShooting());
+    }
+
     /** Returns the amount of time left in the shift */
     @AutoLogOutput(key = "Match/ShiftTime", unit="second")
     public int getShiftTime() {
@@ -398,6 +409,12 @@ public class RobotContainer {
     @AutoLogOutput(key = "Match/OurHubActive")
     public boolean isOurHubActive() {
         return ShiftUtil.isOurAllianceActive();
+    }
+
+    /** Returns if the our hub is active */
+    @AutoLogOutput(key = "Match/ActiveHubColor")
+    public String activeHubHexString() {
+        return ShiftUtil.getActiveHubColorHex();
     }
 
     /** Returns if blue alliance won auto */

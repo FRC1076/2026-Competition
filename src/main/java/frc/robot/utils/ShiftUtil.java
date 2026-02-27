@@ -63,6 +63,31 @@ public class ShiftUtil {
         }
     }
 
+    public static String getActiveHubColorHex() {
+        boolean blueAllianceActiveFirst = getAutonWinner().equals("R");
+        int remainingSeconds = (int) DriverStation.getMatchTime();
+
+        if (remainingSeconds > 130 || remainingSeconds < 30){
+            return "800080";
+        } else if (remainingSeconds > 105){
+            return blueAllianceActiveFirst
+                    ? "0000FF"
+                    : "FF0000";
+        } else if (remainingSeconds > 80){
+            return blueAllianceActiveFirst
+                    ? "FF0000"
+                    : "0000FF";
+        } else if (remainingSeconds > 55){
+            return blueAllianceActiveFirst
+                    ? "0000FF"
+                    : "FF0000";
+        } else {
+            return blueAllianceActiveFirst
+                    ? "FF0000"
+                    : "0000FF";
+        }
+    }
+
     static String autonWinner = "";
     public static String getAutonWinner() {
         if (!autonWinner.isBlank()) {
