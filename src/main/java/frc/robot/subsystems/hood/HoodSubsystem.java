@@ -121,6 +121,11 @@ public class HoodSubsystem extends SubsystemBase {
         );
     }
 
+    /** Set the current position of the hood to zero */
+    public Command rezeroHood() {
+        return Commands.runOnce(() -> io.rezero());
+    }
+
     public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
         return sysId.quasistatic(direction);
     }

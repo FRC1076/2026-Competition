@@ -287,10 +287,10 @@ public class RobotContainer {
             .onFalse(m_climbHook.applyVoltage(0)); */
 
         // Trench mode!
-        new ToggleableTrigger(m_driverController.circle(), false).getToggledTrigger()
-            .onTrue(superstructureCommands.applyTurretIdle())
-            .onFalse(superstructureCommands.initiateAutoaim());
+        m_driverController.circle()
+            .onTrue(superstructureCommands.applyTurretIdle());
 
+            /*
         m_driverController.povUp()
             .onTrue(m_hood.applyPosition(0.1));
 
@@ -301,10 +301,17 @@ public class RobotContainer {
             .onTrue(m_turret.applyPosition(0));
 
         m_driverController.povRight()
-            .onTrue(m_turret.applyPosition(2));
+            .onTrue(m_turret.applyPosition(2)); */
 
         m_driverController.triangle()
             .onTrue(superstructureCommands.initiateAutoaim());
+
+        m_driverController.povUp()
+            .onTrue(superstructureCommands.applyTurretStatesPointDirectlyBackForPassing());
+
+        m_driverController.povDown()
+            .onTrue(superstructureCommands.reverseEverything())
+            .onFalse(superstructureCommands.stopReverseEverything());
     }
 
     /** Bind triggers on operator controller to commands */
@@ -379,8 +386,8 @@ public class RobotContainer {
                 () -> m_rollers.getVoltage() < 0.5
             ));
 
-        // Turns the spindexer to the opposite of it's current state
-        m_operatorController.leftBumper()
+        // Turns the kicker to the opposite of it's current state
+        m_operatorController.rightTrigger()
             .onTrue(Commands.either(
                 m_kicker.applyVoltage(12),
                 m_kicker.applyVoltage(0),
@@ -397,6 +404,9 @@ public class RobotContainer {
 
         m_operatorController.back()
             .onTrue(m_turret.rezeroTurret().ignoringDisable(true));
+
+        m_operatorController.start()
+            .onTrue(m_hood.rezeroHood());
     }
 
     /**

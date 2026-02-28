@@ -90,6 +90,11 @@ public class HoodIONeo implements HoodIO {
     public void setPosition(double radians) {
         m_closedLoopController.setSetpoint(radians, ControlType.kMAXMotionPositionControl);
     }
+    
+    @Override
+    public void rezero() {
+        m_alternateEncoder.setPosition(0);
+    }
 
     @Override
     public void updateInputs(HoodIOInputs inputs) {

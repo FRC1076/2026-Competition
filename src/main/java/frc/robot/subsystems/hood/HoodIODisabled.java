@@ -19,6 +19,11 @@ public class HoodIODisabled implements HoodIO {
     }
 
     @Override
+    public void rezero() {
+        positionTargetRadians = 0;
+    }
+
+    @Override
     public void updateInputs(HoodIOInputs inputs) {
         inputs.appliedVolts = appliedVoltage;
         inputs.angleRadians = positionTargetRadians;

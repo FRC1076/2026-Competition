@@ -414,7 +414,15 @@ public class Superstructure {
             return Commands.parallel(
                 m_superstructure.applyTurretStateFlywheelOnly(TurretStates.REVERSE),
                 m_superstructure.applyIndexStateAllParallel(IndexStates.REVERSE),
-                m_superstructure.applyIntakeStateAllParallel(IntakeStates.REVERSE)
+                m_superstructure.applyIntakeStateRollerOnly(IntakeStates.REVERSE)
+            );
+        }
+
+        public Command stopReverseEverything() {
+            return Commands.parallel(
+                m_superstructure.applyTurretStateFlywheelOnly(TurretStates.IDLE),
+                m_superstructure.applyIndexStateAllParallel(IndexStates.IDLE),
+                m_superstructure.applyIntakeStateRollerOnly(IntakeStates.EXTENDED)
             );
         }
 
