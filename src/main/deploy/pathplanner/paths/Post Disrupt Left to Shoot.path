@@ -20,12 +20,12 @@
         "y": 7.360666666666666
       },
       "prevControl": {
-        "x": 7.005826657888,
-        "y": 7.231280076081787
+        "x": 7.764317912218269,
+        "y": 7.300415183867142
       },
       "nextControl": {
-        "x": 4.653529771521255,
-        "y": 7.447087129876902
+        "x": 4.649938654728792,
+        "y": 7.386935622693789
       },
       "isLocked": false,
       "linkedName": null
@@ -46,13 +46,38 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1.2644098810612956,
+      "waypointRelativePos": 0.9015957446808502,
+      "rotationDegrees": 0.0
+    },
+    {
+      "waypointRelativePos": 1.3111702127659512,
       "rotationDegrees": 0.0
     }
   ],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.8176795580110497,
+      "maxWaypointRelativePos": 2.0,
+      "constraints": {
+        "maxVelocity": 1.5,
+        "maxAcceleration": 3.5,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "Initiate Autoaim",
+      "waypointRelativePos": 1.0355169692186201,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.5,
@@ -68,7 +93,7 @@
   "reversed": false,
   "folder": "Disrupt",
   "idealStartingState": {
-    "velocity": 3.0,
+    "velocity": 1.5,
     "rotation": -124.99202019855855
   },
   "useDefaultConstraints": true

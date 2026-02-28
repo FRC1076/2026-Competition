@@ -18,9 +18,9 @@ public class CommonLookupTable {
         distanceToHoodAngleMap.put(5.0, 0.16);
         distanceToHoodAngleMap.put(6.0, 0.2);
 
-        distanceToFlywheelSpeedMap.put(1.0, 190.0);
-        distanceToFlywheelSpeedMap.put(2.0, 205.0);
-        distanceToFlywheelSpeedMap.put(3.0, 230.0);
+        distanceToFlywheelSpeedMap.put(1.0, 195.0);
+        distanceToFlywheelSpeedMap.put(2.0, 210.0);
+        distanceToFlywheelSpeedMap.put(3.0, 235.0);
         distanceToFlywheelSpeedMap.put(4.0, 255.0);
         distanceToFlywheelSpeedMap.put(5.0, 280.0);
         distanceToFlywheelSpeedMap.put(6.0, 305.0);

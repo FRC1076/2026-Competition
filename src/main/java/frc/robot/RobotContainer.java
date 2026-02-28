@@ -67,6 +67,7 @@ import org.photonvision.PhotonCamera;
 
 import com.pathplanner.lib.auto.NamedCommands;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Threads;
 import edu.wpi.first.wpilibj.Timer;
@@ -406,7 +407,7 @@ public class RobotContainer {
             .onTrue(m_turret.rezeroTurret().ignoringDisable(true));
 
         m_operatorController.start()
-            .onTrue(m_hood.rezeroHood());
+            .onTrue(m_hood.rezeroHood().ignoringDisable(true));
     }
 
     /**
