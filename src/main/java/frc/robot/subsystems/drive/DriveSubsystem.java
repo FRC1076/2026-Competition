@@ -67,6 +67,39 @@ public class DriveSubsystem extends SubsystemBase {
 
         io.resetHeading();
         
+        CommandBuilder = new DriveCommandFactory(this);        
+    }
+
+    @Override
+    public void periodic(){
+        // updateModuleInputs and processInputs are only used for logging
+        io.periodic(); //currently just for calling sim
+        vision.update(); // TODO: change to updateAll() if desired
+        io.updateInputs(driveInputs);
+        // io.updateModuleInputs(frontLeftInputs, 0);
+        // io.updateModuleInputs(frontRightInputs, 1);
+        // io.updateModuleInputs(rearLeftInputs, 2);
+        // io.updateModuleInputs(rearRightInputs, 3);
+        Logger.processInputs("Drive", driveInputs);
+        // Logger.processInputs("Drive/FrontLeft", frontLeftInputs);
+        // Logger.processInputs("Drive/FrontRight", frontRightInputs);
+        // Logger.processInputs("Drive/RearLeft", rearLeftInputs);
+        // Logger.processInputs("Drive/RearRight", rearRightInputs);
+
+         /*
+            if(DriverStation.getAlliance().isPresent()){
+                hasSetAlliance = true;
+                if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red) {
+                    io.setAllianceRotation(Rotation2d.fromDegrees(180));
+                } else {
+                    io.setAllianceRotation(Rotation2d.fromDegrees(0));
+                }
+            } 
+        }*/
+        elastic.updateField(driveInputs.Pose); // Update the robot's pose on Elastic
+    }
+
+    public void configureAutoBuilder() {
         try {
             AutoBuilder.configure(
                 () -> elastic.getPathPlannerMirrored() 
@@ -102,38 +135,6 @@ public class DriveSubsystem extends SubsystemBase {
         } catch (Exception ex) {
             DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder", ex.getStackTrace());
         }
-        CommandBuilder = new DriveCommandFactory(this);
-
-        
-    }
-
-    @Override
-    public void periodic(){
-        // updateModuleInputs and processInputs are only used for logging
-        io.periodic(); //currently just for calling sim
-        vision.update(); // TODO: change to updateAll() if desired
-        io.updateInputs(driveInputs);
-        // io.updateModuleInputs(frontLeftInputs, 0);
-        // io.updateModuleInputs(frontRightInputs, 1);
-        // io.updateModuleInputs(rearLeftInputs, 2);
-        // io.updateModuleInputs(rearRightInputs, 3);
-        Logger.processInputs("Drive", driveInputs);
-        // Logger.processInputs("Drive/FrontLeft", frontLeftInputs);
-        // Logger.processInputs("Drive/FrontRight", frontRightInputs);
-        // Logger.processInputs("Drive/RearLeft", rearLeftInputs);
-        // Logger.processInputs("Drive/RearRight", rearRightInputs);
-
-         /*
-            if(DriverStation.getAlliance().isPresent()){
-                hasSetAlliance = true;
-                if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red) {
-                    io.setAllianceRotation(Rotation2d.fromDegrees(180));
-                } else {
-                    io.setAllianceRotation(Rotation2d.fromDegrees(0));
-                }
-            } 
-        }*/
-        elastic.updateField(driveInputs.Pose); // Update the robot's pose on Elastic
     }
 
     /** This method is not used in any command logic. It is only used for LEDs and Elastic */

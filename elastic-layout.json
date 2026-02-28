@@ -55,24 +55,8 @@
         "layouts": [],
         "containers": [
           {
-            "title": "Match Time",
-            "x": 1000.0,
-            "y": 0.0,
-            "width": 280.0,
-            "height": 200.0,
-            "type": "Match Time",
-            "properties": {
-              "topic": "/AdvantageKit/DriverStation/MatchTime",
-              "period": 0.06,
-              "data_type": "double",
-              "time_display_mode": "Minutes and Seconds",
-              "red_start_time": 20,
-              "yellow_start_time": 30
-            }
-          },
-          {
             "title": "Shift Time",
-            "x": 800.0,
+            "x": 1640.0,
             "y": 0.0,
             "width": 200.0,
             "height": 200.0,
@@ -80,13 +64,13 @@
             "properties": {
               "topic": "/AdvantageKit/RealOutputs/Match/ShiftTime",
               "period": 0.06,
-              "data_type": "double"
+              "data_type": "int"
             }
           },
           {
             "title": "Field",
-            "x": 600.0,
-            "y": 200.0,
+            "x": 1440.0,
+            "y": 240.0,
             "width": 680.0,
             "height": 360.0,
             "type": "Field",
@@ -106,8 +90,8 @@
           },
           {
             "title": "FlywheelVelocityTarget",
-            "x": 0.0,
-            "y": 400.0,
+            "x": 880.0,
+            "y": 440.0,
             "width": 480.0,
             "height": 160.0,
             "type": "Number Slider",
@@ -123,7 +107,7 @@
           },
           {
             "title": "Blue Won Auto",
-            "x": 0.0,
+            "x": 880.0,
             "y": 160.0,
             "width": 280.0,
             "height": 160.0,
@@ -136,7 +120,7 @@
           },
           {
             "title": "Red Won Auto",
-            "x": 0.0,
+            "x": 880.0,
             "y": 0.0,
             "width": 280.0,
             "height": 160.0,
@@ -149,7 +133,7 @@
           },
           {
             "title": "ActiveHubColor",
-            "x": 600.0,
+            "x": 1440.0,
             "y": 0.0,
             "width": 200.0,
             "height": 200.0,
@@ -158,6 +142,77 @@
               "topic": "/AdvantageKit/RealOutputs/Match/ActiveHubColor",
               "period": 0.06,
               "data_type": "string"
+            }
+          },
+          {
+            "title": "ActiveHubColor",
+            "x": 480.0,
+            "y": 280.0,
+            "width": 160.0,
+            "height": 160.0,
+            "type": "Single Color View",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/Match/ActiveHubColor",
+              "period": 0.06,
+              "data_type": "string"
+            }
+          },
+          {
+            "title": "ShiftTime",
+            "x": 640.0,
+            "y": 280.0,
+            "width": 200.0,
+            "height": 160.0,
+            "type": "Large Text Display",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/Match/ShiftTime",
+              "period": 0.06,
+              "data_type": "int"
+            }
+          },
+          {
+            "title": "MatchTime",
+            "x": 1840.0,
+            "y": 0.0,
+            "width": 280.0,
+            "height": 200.0,
+            "type": "Match Time",
+            "properties": {
+              "topic": "/AdvantageKit/DriverStation/MatchTime",
+              "period": 0.06,
+              "data_type": "double",
+              "time_display_mode": "Minutes and Seconds",
+              "red_start_time": 20,
+              "yellow_start_time": 30
+            }
+          },
+          {
+            "title": "MatchTime",
+            "x": 480.0,
+            "y": 0.0,
+            "width": 360.0,
+            "height": 280.0,
+            "type": "Match Time",
+            "properties": {
+              "topic": "/AdvantageKit/DriverStation/MatchTime",
+              "period": 0.06,
+              "data_type": "double",
+              "time_display_mode": "Minutes and Seconds",
+              "red_start_time": 20,
+              "yellow_start_time": 30
+            }
+          },
+          {
+            "title": "photonvision1_Port_1186_Output_MJPEG_Server",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 480.0,
+            "height": 440.0,
+            "type": "Camera Stream",
+            "properties": {
+              "topic": "/CameraPublisher/photonvision1_Port_1186_Output_MJPEG_Server",
+              "period": 0.06,
+              "rotation_turns": 0
             }
           }
         ]

@@ -192,6 +192,9 @@ public class RobotContainer {
             () -> m_drive.getChassisSpeeds()
         );
 
+        registerNamedCommands();
+        m_drive.configureAutoBuilder();
+
         // Configure the trigger bindings
         configureBindings();
 
@@ -408,6 +411,7 @@ public class RobotContainer {
 
     public void registerNamedCommands() {
         final SuperstructureCommandFactory commandFactory = m_superstructure.getCommandFactory();
+        NamedCommands.registerCommand("Extend Intake", commandFactory.applyIntakeExtended());
         NamedCommands.registerCommand("Start Intake", commandFactory.intake());
         NamedCommands.registerCommand("Turret Idle", commandFactory.applyTurretIdle());
         NamedCommands.registerCommand("Initiate Autoaim", commandFactory.initiateAutoaim());
