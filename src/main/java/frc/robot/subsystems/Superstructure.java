@@ -211,7 +211,7 @@ public class Superstructure {
 
         if (shooterPoseAllianceColorCoordinates.getX() <= PhysicalConstants.FieldConstants.LinesVertical.allianceZone + 1) {
             target = SuperstructureConstants.kHubTarget;
-        } else if (shooterPose.getY() <= PhysicalConstants.FieldConstants.LinesHorizontal.center) {
+        } else if (shooterPoseAllianceColorCoordinates.getY() <= PhysicalConstants.FieldConstants.LinesHorizontal.center) {
             target = SuperstructureConstants.kRightPassingTarget;
         } else {
             target = SuperstructureConstants.kLeftPassingTarget;

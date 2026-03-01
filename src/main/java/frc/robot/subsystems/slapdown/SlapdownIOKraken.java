@@ -111,6 +111,10 @@ public class SlapdownIOKraken implements SlapdownIO {
         m_motor.setControl(m_positionRequest);
     }
 
+    @Override
+    public void rezero() {
+        m_motor.setPosition(0);
+    }
 
     @Override
     public void updateInputs(SlapdownIOInputs inputs) {

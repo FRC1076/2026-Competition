@@ -24,6 +24,11 @@ public class SlapdownIODisabled implements SlapdownIO {
     }
 
     @Override
+    public void rezero() {
+        positionTarget = 0;
+    }
+
+    @Override
     public void updateInputs(SlapdownIOInputs inputs) {
         inputs.appliedVoltage = voltageTarget;
         inputs.angleRadians = positionTarget;

@@ -27,6 +27,8 @@ public interface SlapdownIO {
 
     public abstract void updateInputs(SlapdownIOInputs inputs);
 
+    public abstract void rezero();
+
     public default void periodic() {
 
     }

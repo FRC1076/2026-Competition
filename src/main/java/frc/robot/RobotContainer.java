@@ -408,6 +408,9 @@ public class RobotContainer {
 
         m_operatorController.start()
             .onTrue(m_hood.rezeroHood().ignoringDisable(true));
+
+        m_operatorController.rightStick().and(joystickTriggers.getToggledTrigger(1))
+            .onTrue(m_slapdown.rezeroSlapdown().ignoringDisable(true));
     }
 
     /**

@@ -104,6 +104,11 @@ public class SlapdownSubsystem extends SubsystemBase{
         );
     }
 
+    /** Set the current position of the slapdown to zero */
+    public Command rezeroSlapdown() {
+        return Commands.runOnce(() -> io.rezero());
+    }
+
     public Command sysIdQuasistatic(Direction direction) {
         return sysId.quasistatic(direction);
     }

@@ -29,6 +29,8 @@ public class BasicLaunchCalculator {
         double hoodAngleRadians = distanceToHoodAngleMap.get(turretToTargetDistanceMeters);
         double flywheelSpeedRadPerSec = distanceToFlywheelSpeedMap.get(turretToTargetDistanceMeters);
 
+        Logger.recordOutput("ShotCalculator/TurretPose", turretPose);
+
         Logger.recordOutput("ShotCalculator/TurretToTargetDistance", turretToTargetDistanceMeters);
 
         Logger.recordOutput("ShotCalculator/Target", targetPose);
