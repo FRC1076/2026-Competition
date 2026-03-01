@@ -295,7 +295,7 @@ public class Superstructure {
     public Command applyIntakeStateRollerOnly(IntakeStates state) {
         return Commands.parallel(
             setIntakeState(state),
-            m_roller.applyVoltage(state.kRollerVoltage)
+            m_roller.applyVelocity(state.kRollerVelocity)
         );
     }
 
@@ -303,7 +303,7 @@ public class Superstructure {
         return Commands.parallel(
             setIntakeState(state),
             m_slapdown.applyPosition(state.kSlapdownAngle),
-            m_roller.applyVoltage(state.kRollerVoltage)
+            m_roller.applyVelocity(state.kRollerVelocity)
         );
     }
 

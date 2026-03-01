@@ -40,6 +40,22 @@ public class RollerSubsystem  extends SubsystemBase {
         );
     }
 
+    /** Set the rollers to the specified velocity */
+    public Command applyVelocity(double radPerSec) {
+        return Commands.runOnce(
+            () -> io.setVelocity(radPerSec),
+            this
+        );
+    }
+
+    /** Run the rollers at the supplied velocity */
+    public Command runVelocity(DoubleSupplier radPerSec) {
+        return Commands.run(
+            () -> io.setVelocity(radPerSec.getAsDouble()),
+            this
+        );
+    }
+
     /** Stop the roller's motors */
     public Command stop() {
         return applyVoltage(0);
