@@ -17,7 +17,7 @@ public class RollerConstants {
 
     // Current limits
     public static final int kSupplyCurrentLimit = 30;
-    public static final int kStatorCurrentLimit = 40;
+    public static final int kStatorCurrentLimit = 45;
 
     public static final InvertedValue kInverted = InvertedValue.CounterClockwise_Positive;
     public static final NeutralModeValue kNeutralMode = NeutralModeValue.Brake;
@@ -30,7 +30,7 @@ public class RollerConstants {
     public static final double kI = 0;
     public static final double kD = 0;
     public static final double kS = 0;
-    public static final double kV = 0; // TODO: find this value
+    public static final double kV = (10.0/140.0); // TODO: confirm this value
     public static final double kA = 0;
 
     // FOC
