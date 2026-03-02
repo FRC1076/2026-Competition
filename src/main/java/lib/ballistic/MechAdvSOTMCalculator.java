@@ -66,8 +66,8 @@ import org.littletonrobotics.junction.Logger;
                     robotRelativeTurretVelocity.vyMetersPerSecond * phaseDelay,
                     robotRelativeTurretVelocity.omegaRadiansPerSecond * phaseDelay));
 
-        // Calculate field-relative robot velocity
-        ChassisSpeeds fieldRelativeTurretVelocity = ChassisSpeeds.fromRobotRelativeSpeeds(robotRelativeTurretVelocity, robotHeading);
+        // Calculate field-relative robot velocity --- we now account for this in the Superstructure
+        ChassisSpeeds fieldRelativeTurretVelocity = robotRelativeTurretVelocity;//ChassisSpeeds.fromRobotRelativeSpeeds(robotRelativeTurretVelocity, robotHeading);
 
         // Calculate field relative turret velocity
         double turretVelocityX = fieldRelativeTurretVelocity.vxMetersPerSecond;

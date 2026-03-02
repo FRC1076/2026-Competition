@@ -27,6 +27,7 @@ import lib.ballistic.BasicLaunchCalculator;
 import lib.ballistic.CommonShotSolution;
 // import lib.ballistic.HoundSOTMCalculator;
 import lib.ballistic.MechAdvSOTMCalculator;
+import lib.ballistic.SOTMLaunchCalculator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -204,7 +205,7 @@ public class Superstructure {
      */
     private void updateShootingParams() {
         final Pose3d shooterPose = new Pose3d(m_robotPoseSupplier.get()).transformBy(PhysicalConstants.kBotRelativeTurretPose);
-        // final ChassisSpeeds robotVelocity = m_robotVelocitySupplier.get();
+        final ChassisSpeeds robotVelocity = m_robotVelocitySupplier.get();
         final Pose3d target;
         
         final Pose3d shooterPoseAllianceColorCoordinates = shooterPose.relativeTo(SuperstructureConstants.kAllianceOrigin);
@@ -219,12 +220,11 @@ public class Superstructure {
 
         
         // Translate the chassis speeds
-        /*
-        final ChassisSpeeds turretVelocity = new ChassisSpeeds(
+        final ChassisSpeeds turretVelocity = ChassisSpeeds.fromRobotRelativeSpeeds(new ChassisSpeeds(
             robotVelocity.vxMetersPerSecond - (robotVelocity.omegaRadiansPerSecond * PhysicalConstants.kBotRelativeTurretPose.getY()),
             robotVelocity.vyMetersPerSecond + (robotVelocity.omegaRadiansPerSecond * PhysicalConstants.kBotRelativeTurretPose.getX()),
             robotVelocity.omegaRadiansPerSecond
-        ); */
+        ), shooterPose.getRotation().toRotation2d());
 
         
         /* TechHOUNDs option. Commented out to test Mechanical Advantage's option. * /
@@ -246,7 +246,10 @@ public class Superstructure {
         ); */
 
         /* Basic launch calculator without SotM */
-        m_shootingParams = BasicLaunchCalculator.calculate(shooterPose.toPose2d(), target.toPose2d());
+        //m_shootingParams = BasicLaunchCalculator.calculate(shooterPose.toPose2d(), target.toPose2d());
+        m_shootingParams = SOTMLaunchCalculator.calculate(
+            shooterPose.toPose2d(), target.toPose2d(), turretVelocity
+        );
     }
 
     public MutableSuperState getSuperState() {
