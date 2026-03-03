@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.347631954350925,
-        "y": 4.054407988587732
+        "x": 8.2,
+        "y": 4.054
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.7265763195435095,
-        "y": 3.950898716119829
+        "x": 7.578944365192584,
+        "y": 3.950490727532097
       },
       "isLocked": false,
       "linkedName": "Post Disrupt-Left"
@@ -75,12 +75,17 @@
       "name": "Initiate Autoaim",
       "waypointRelativePos": 1.0355169692186201,
       "endWaypointRelativePos": null,
-      "command": null
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Initiate Autoaim"
+        }
+      }
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.5,
+    "maxVelocity": 3.5,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

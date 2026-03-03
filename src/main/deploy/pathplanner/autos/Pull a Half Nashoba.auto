@@ -13,7 +13,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.75
           }
         },
         {
@@ -32,18 +32,6 @@
           "type": "path",
           "data": {
             "pathName": "Post Disrupt Left to Shoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Initiate Autoaim"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
           }
         },
         {
