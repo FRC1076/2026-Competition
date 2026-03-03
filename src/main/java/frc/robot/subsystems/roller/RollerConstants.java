@@ -30,7 +30,7 @@ public class RollerConstants {
     public static final double kI = 0;
     public static final double kD = 0;
     public static final double kS = 0;
-    public static final double kV = (10.0/140.0); // TODO: confirm this value
+    public static final double kV = (5.0/140.0); // TODO: confirm this value
     public static final double kA = 0;
 
     // FOC

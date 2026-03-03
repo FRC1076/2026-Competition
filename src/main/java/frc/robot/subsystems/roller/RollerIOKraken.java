@@ -80,7 +80,7 @@ public class RollerIOKraken implements RollerIO {
         if (radPerSec == 0) {
             m_motor.setVoltage(0);
         } else {
-            m_velocityRequest.Velocity = radPerSec;
+            m_velocityRequest.Velocity = m_unitConverter.fromSIVel(radPerSec);
             m_motor.setControl(m_velocityRequest);
         }
     }

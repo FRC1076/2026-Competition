@@ -57,15 +57,15 @@ public class SuperstructureConstants {
     }
     /** intitalizes numerical values for the FuelManagmentStates enum */
     public static double kSlapdownUpAngle = 0;
-    public static double kSlapdownDownAngle = 5.5;
-    public static double kIntakeRollerVelocity = 150;
+    public static double kSlapdownDownAngle = 5.3;
+    public static double kIntakeRollerVelocity = 140;
     
     public static enum IntakeStates {
         /** list of opereational states of the intake and thier inputs */
         RETRACTED(kSlapdownUpAngle,0),
         EXTENDED(kSlapdownDownAngle, 0),
         INTAKING(kSlapdownDownAngle, kIntakeRollerVelocity),
-        SHOOTING(kSlapdownDownAngle, 250),
+        SHOOTING(kSlapdownDownAngle, 200),
         REVERSE(kSlapdownDownAngle, -kIntakeRollerVelocity);
 
         public final double kSlapdownAngle;
@@ -82,7 +82,7 @@ public class SuperstructureConstants {
     }
 
     public static double kSpindexerIndexerVoltage = 12;
-    public static double kKickerIndexVoltage = 6; // TODO: increase this?
+    public static double kKickerIndexVoltage = 8; // TODO: increase this?
     
     public static enum IndexStates {
         /** list of all possible indexing states and their inputs */

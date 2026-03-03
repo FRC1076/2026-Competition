@@ -244,7 +244,7 @@ public class RobotContainer {
         m_driverController.L1().and(m_driverController.R1().negate())
             .whileTrue(teleopDriveCommand.applyDoubleClutch());
 
-        m_driverController.R1().and(m_driverController.L1().negate())
+        m_driverController.R1().or(m_driverController.R2()).and(m_driverController.L1().negate())
             .whileTrue(teleopDriveCommand.applySingleClutch());
 
         m_driverController.create()
