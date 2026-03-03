@@ -44,6 +44,9 @@ public class TurretConstants {
     public static final double kMaxAccelRadPerSec2 = 100*Math.PI;
     public static final double kMaxJerkRadPerSec3 = 100000*Math.PI;
 
+    // Tolerance for shooting
+    public static final double kPIDToleranceRad = 0.3;
+
     // FOC
     public static final boolean kEnableFOC = true;
 

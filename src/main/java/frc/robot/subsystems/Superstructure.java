@@ -25,8 +25,6 @@ import frc.robot.subsystems.spindexer.SpindexerSubsystem;
 import frc.robot.subsystems.turret.TurretSubsystem;
 import lib.ballistic.BasicLaunchCalculator;
 import lib.ballistic.CommonShotSolution;
-// import lib.ballistic.HoundSOTMCalculator;
-import lib.ballistic.MechAdvSOTMCalculator;
 import lib.ballistic.SOTMLaunchCalculator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -147,7 +145,6 @@ public class Superstructure {
     private final SuperstructureCommandFactory m_commandFactory;
 
     private CommonShotSolution m_shootingParams;
-    private double flywheelTargetSpeedRadPerSec;
 
     public Superstructure(
         TurretSubsystem turret,
@@ -195,7 +192,7 @@ public class Superstructure {
                     Commands.run(() -> updateShootingParams()),
                     m_flywheel.runVelocity(() -> m_shootingParams.launchSpeedRadPerSec()),
                     m_hood.runPosition(() -> m_shootingParams.launchPitchRad()),
-                    m_turret.runPosition(() -> m_shootingParams.launchYawRad()/*/ + m_robotPoseSupplier.get().getRotation().getRadians()*/)
+                    m_turret.runPositionSafe(() -> m_shootingParams.launchYawRad(), safeToMoveTurret())
                 )
             );
     }
@@ -226,27 +223,10 @@ public class Superstructure {
             robotVelocity.omegaRadiansPerSecond
         ), shooterPose.getRotation().toRotation2d());
 
-        
-        /* TechHOUNDs option. Commented out to test Mechanical Advantage's option. * /
-        m_shootingParams = HoundSOTMCalculator.solveShootOnTheFly(
-            shooterPose, 
-            target,
-            m_robotVelocitySupplier.get(),
-            m_flywheel.getLinearVelocityMPS(),
-            SuperstructureConstants.kAutoAimMaxIterations,
-            SuperstructureConstants.kAutoAimTimeToleranceSeconds
-        ); */
-
-        /* Mechanical Advantage option * /
-        m_shootingParams = MechAdvSOTMCalculator.calculate(
-            shooterPose.toPose2d(),
-            target.toPose2d(),
-            turretVelocity,
-            m_robotPoseSupplier.get().getRotation()
-        ); */
-
         /* Basic launch calculator without SotM */
         //m_shootingParams = BasicLaunchCalculator.calculate(shooterPose.toPose2d(), target.toPose2d());
+
+        // Calculate launch parameters with SOTM
         m_shootingParams = SOTMLaunchCalculator.calculate(
             shooterPose.toPose2d(), target.toPose2d(), turretVelocity
         );
@@ -256,9 +236,14 @@ public class Superstructure {
         return m_superState;
     }
 
-    /** Returns whether or not the flywheel is within the tolerance of the target shooting state */
-    public BooleanSupplier isReadyToShoot() {
-        return () -> m_flywheel.readyToShoot(flywheelTargetSpeedRadPerSec);
+    /** Returns a trigger that is true when the robot is ready to shoot fuel */
+    public Trigger isReadyToShoot() {
+        return new Trigger(() ->
+            m_flywheel.getVelocityRadPerSec() > SuperstructureConstants.kMinFlywheelShootingVelocity && 
+            (!m_superState.getTurretState().kIsAutoAim ||
+                (m_flywheel.readyToShoot(m_shootingParams.launchSpeedRadPerSec()) 
+                && m_turret.withinTolerance(m_shootingParams.launchYawRad())))
+        );
     }
 
     /** Returns whether or not the slapdown is too high to move the turret */
@@ -450,11 +435,9 @@ public class Superstructure {
             return Commands.either(
                 Commands.sequence(
                     shootWithAutoaim(),
-                    Commands.waitUntil(isReadyToShoot()),
                     intakeAndIndexToShoot()
                 ),
                 Commands.sequence(
-                    Commands.waitUntil(() -> m_flywheel.getVelocityRadPerSec() > 50),
                     intakeAndIndexToShoot()
                 ),
                 () -> m_superstructure.getSuperState().getTurretState().kIsAutoAim

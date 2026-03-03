@@ -23,7 +23,6 @@ import frc.robot.subsystems.climb.climber.ClimberIONeo;
 import frc.robot.subsystems.climb.climber.ClimberSubsystem;
 import frc.robot.subsystems.climb.hook.HookConstants;
 import frc.robot.subsystems.climb.hook.HookIODisabled;
-import frc.robot.subsystems.climb.hook.HookIONeo;
 import frc.robot.subsystems.climb.hook.HookSubsystem;
 import frc.robot.subsystems.drive.DriveIOHardware;
 import frc.robot.subsystems.drive.DriveIOSim;
@@ -62,7 +61,6 @@ import lib.extendedcommands.MultiToggleableTrigger;
 import lib.extendedcommands.ToggleableTrigger;
 import lib.hardware.hid.SamuraiPS5Controller;
 import lib.hardware.hid.SamuraiXboxController;
-import lib.vision.PhotonVisionLocalizer;
 import lib.vision.PhotonVisionLocalizerWithTagPrioritization;
 import lib.vision.VisionLocalizationSystem;
 
@@ -71,7 +69,6 @@ import org.photonvision.PhotonCamera;
 
 import com.pathplanner.lib.auto.NamedCommands;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Threads;
 import edu.wpi.first.wpilibj.Timer;
@@ -270,7 +267,7 @@ public class RobotContainer {
             .onTrue(superstructureCommands.intake())
             .onFalse(superstructureCommands.applyIntakeExtended());
 
-        m_driverController.R2()
+        m_driverController.R2().and(m_superstructure.isReadyToShoot())
             .onTrue(superstructureCommands.shoot())
             .onFalse(superstructureCommands.stopShooting())
             .whileTrue(m_leds.setTempState(LEDStates.RAINBOW).ignoringDisable(true));

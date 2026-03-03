@@ -9,10 +9,12 @@ import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Volts;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -51,6 +53,10 @@ public class TurretSubsystem extends SubsystemBase {
     public void periodic() {
         io.updateInputs(inputs);
         Logger.processInputs("Turret", inputs);
+    }
+
+    public boolean withinTolerance(double targetRadians) {
+        return Math.abs(MathUtil.angleModulus(targetRadians - inputs.motorPositionRad)) <= TurretConstants.kPIDToleranceRad;
     }
 
     public double desaturateTurretPosition(double targetPos) {
@@ -113,6 +119,20 @@ public class TurretSubsystem extends SubsystemBase {
     public Command runPosition(DoubleSupplier radians) {
         return Commands.run(
             () -> io.setPosition(desaturateTurretPosition(radians.getAsDouble())),
+            this
+        );
+    }
+
+    /** Repeated tell the motor to go to a specific position while the boolean supplier is true */
+    public Command runPositionSafe(DoubleSupplier radians, BooleanSupplier isSafe) {
+        return Commands.run(
+            () -> {
+                if (isSafe.getAsBoolean()) {
+                    io.setPosition(desaturateTurretPosition(radians.getAsDouble()));
+                } else {
+                    io.setVoltage(0);
+                }
+            },
             this
         );
     }
