@@ -7,7 +7,6 @@
 package frc.robot.subsystems.led;
 
 import frc.robot.Constants.LEDConstants.LEDStates;
-
 /** This is an interface so you can define what functionality you want
  * without defining how it actually happens.
  */

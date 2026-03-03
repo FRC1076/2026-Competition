@@ -80,4 +80,52 @@ public final class Constants {
         public static final CANBus kRioBus = new CANBus("rio");
         public static final CANBus kCANivoreBus = new CANBus("Default Name");
     }
+
+    public static class LEDConstants {
+        public static final double kHPSignalTime = 3.0;
+
+        public static class LEDDIOConstants {
+            public static final int kDIOPort1 = 7;
+            public static final int kDIOPort2 = 8;
+            public static final int kDIOPort3 = 9; 
+        }
+
+        public static class LEDOnRIOConstants {
+            public static final int kPWMPort = 0;
+            public static final int kLength = 72;
+
+            public static final double kFlashSeconds = 0.1;
+            public static final int kEmptyStateBrightness = 100;
+            public static final int kFlashingStateBrightness = 100;
+        }
+
+        public static enum LEDStates {
+            IDLE(false, false, false),
+            CORAL_INDEXED(true, false, false),
+            HUMAN_PLAYER_SIGNAL(false, true, false),
+            ALGAE(true, true, false),
+            AUTO_ALIGNED(false, false, true),
+            AUTO_ALIGNING(false, false, false),
+            OFF(true, false, true),
+            ELEVATOR_ZEROED(false, true, true),
+            
+            RED_HP_SIGNAL(true, true, true),
+            ORANGE_HP_SIGNAL(false,false,false),
+            YELLOW_HP_SIGNAL(false,false,false),
+            GREEN_HP_SIGNAL(false,false,false),
+            BLUE_HP_SIGNAL(false,false,false),
+            PURPLE_HP_SIGNAL(false,false,false),
+            WHITE_HP_SIGNAL(false,false,false);
+        }
+
+        public final boolean onesPlace;
+        public final boolean twosPlace;
+        public final boolean foursPlace;
+
+        private LEDStates(boolean onesPlace, boolean twosPlace, boolean foursPlace) {
+            this.onesPlace = onesPlace;
+            this.twosPlace = twosPlace;
+            this.foursPlace = foursPlace;
+        }
+    }
 }
