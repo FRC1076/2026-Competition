@@ -3,53 +3,6 @@
   "grid_size": 40,
   "tabs": [
     {
-      "name": "Setup",
-      "grid_layout": {
-        "layouts": [],
-        "containers": [
-          {
-            "title": "Team Color",
-            "x": 40.0,
-            "y": 40.0,
-            "width": 360.0,
-            "height": 120.0,
-            "type": "Large Text Display",
-            "properties": {
-              "topic": "/SmartDashboard/teamColor",
-              "period": 0.06,
-              "data_type": "string"
-            }
-          },
-          {
-            "title": "Auto Chooser",
-            "x": 440.0,
-            "y": 40.0,
-            "width": 360.0,
-            "height": 120.0,
-            "type": "ComboBox Chooser",
-            "properties": {
-              "topic": "/SmartDashboard/Auto Chooser",
-              "period": 0.06,
-              "sort_options": false
-            }
-          },
-          {
-            "title": "Auton Side Chooser",
-            "x": 840.0,
-            "y": 40.0,
-            "width": 360.0,
-            "height": 120.0,
-            "type": "ComboBox Chooser",
-            "properties": {
-              "topic": "/SmartDashboard/Auton Side Chooser",
-              "period": 0.06,
-              "sort_options": false
-            }
-          }
-        ]
-      }
-    },
-    {
       "name": "Teleop",
       "grid_layout": {
         "layouts": [],
@@ -103,32 +56,6 @@
               "max_value": 500.0,
               "divisions": 5,
               "update_continuously": false
-            }
-          },
-          {
-            "title": "Blue Won Auto",
-            "x": 880.0,
-            "y": 160.0,
-            "width": 280.0,
-            "height": 160.0,
-            "type": "Toggle Button",
-            "properties": {
-              "topic": "/SmartDashboard/Blue Won Auto",
-              "period": 0.06,
-              "data_type": "boolean"
-            }
-          },
-          {
-            "title": "Red Won Auto",
-            "x": 880.0,
-            "y": 0.0,
-            "width": 280.0,
-            "height": 160.0,
-            "type": "Toggle Button",
-            "properties": {
-              "topic": "/SmartDashboard/Red Won Auto",
-              "period": 0.06,
-              "data_type": "boolean"
             }
           },
           {
@@ -203,16 +130,57 @@
             }
           },
           {
-            "title": "photonvision1_Port_1186_Output_MJPEG_Server",
+            "title": "photonvision1_Port_1184_Output_MJPEG_Server",
             "x": 0.0,
             "y": 0.0,
             "width": 480.0,
             "height": 440.0,
             "type": "Camera Stream",
             "properties": {
-              "topic": "/CameraPublisher/photonvision1_Port_1186_Output_MJPEG_Server",
+              "topic": "/CameraPublisher/photonvision1_Port_1184_Output_MJPEG_Server",
               "period": 0.06,
-              "rotation_turns": 0
+              "rotation_turns": 0,
+              "compression": 30,
+              "fps": 20
+            }
+          },
+          {
+            "title": "teamColor",
+            "x": 880.0,
+            "y": 0.0,
+            "width": 120.0,
+            "height": 120.0,
+            "type": "Large Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/teamColor",
+              "period": 0.06,
+              "data_type": "string"
+            }
+          },
+          {
+            "title": "Auton Side Chooser",
+            "x": 1240.0,
+            "y": 0.0,
+            "width": 160.0,
+            "height": 120.0,
+            "type": "ComboBox Chooser",
+            "properties": {
+              "topic": "/SmartDashboard/Auton Side Chooser",
+              "period": 0.06,
+              "sort_options": false
+            }
+          },
+          {
+            "title": "Auto Chooser",
+            "x": 1000.0,
+            "y": 0.0,
+            "width": 240.0,
+            "height": 120.0,
+            "type": "ComboBox Chooser",
+            "properties": {
+              "topic": "/SmartDashboard/Auto Chooser",
+              "period": 0.06,
+              "sort_options": false
             }
           }
         ]
@@ -224,10 +192,10 @@
         "layouts": [
           {
             "title": "PathPlanner",
-            "x": 1000.0,
-            "y": 360.0,
-            "width": 240.0,
-            "height": 240.0,
+            "x": 1320.0,
+            "y": 320.0,
+            "width": 360.0,
+            "height": 280.0,
             "type": "List Layout",
             "properties": {
               "label_position": "TOP"
@@ -281,10 +249,10 @@
         "containers": [
           {
             "title": "CAN Utilization",
-            "x": 0.0,
-            "y": 160.0,
-            "width": 320.0,
-            "height": 240.0,
+            "x": 1840.0,
+            "y": 0.0,
+            "width": 280.0,
+            "height": 280.0,
             "type": "Radial Gauge",
             "properties": {
               "topic": "/AdvantageKit/SystemStats/CANBus/Utilization",
@@ -339,7 +307,7 @@
           {
             "title": "RSLState",
             "x": 0.0,
-            "y": 400.0,
+            "y": 160.0,
             "width": 160.0,
             "height": 160.0,
             "type": "Boolean Box",
@@ -355,22 +323,21 @@
           },
           {
             "title": "PDH ChannelCount",
-            "x": 1080.0,
-            "y": 0.0,
+            "x": 1680.0,
+            "y": 120.0,
             "width": 160.0,
             "height": 160.0,
-            "type": "Text Display",
+            "type": "Large Text Display",
             "properties": {
               "topic": "/AdvantageKit/PowerDistribution/ChannelCount",
               "period": 0.06,
-              "data_type": "int",
-              "show_submit_button": false
+              "data_type": "int"
             }
           },
           {
             "title": "Radio Connected",
             "x": 160.0,
-            "y": 400.0,
+            "y": 160.0,
             "width": 160.0,
             "height": 160.0,
             "type": "Boolean Box",
@@ -386,10 +353,10 @@
           },
           {
             "title": "Console",
-            "x": 1000.0,
-            "y": 160.0,
-            "width": 240.0,
-            "height": 200.0,
+            "x": 1680.0,
+            "y": 320.0,
+            "width": 440.0,
+            "height": 280.0,
             "type": "Large Text Display",
             "properties": {
               "topic": "/AdvantageKit/RealOutputs/Console",
@@ -399,10 +366,10 @@
           },
           {
             "title": "Driver Controller",
-            "x": 640.0,
-            "y": 440.0,
-            "width": 160.0,
-            "height": 160.0,
+            "x": 0.0,
+            "y": 320.0,
+            "width": 320.0,
+            "height": 120.0,
             "type": "Text Display",
             "properties": {
               "topic": "/AdvantageKit/DriverStation/Joystick0/Name",
@@ -413,16 +380,56 @@
           },
           {
             "title": "Operator Controller",
-            "x": 800.0,
-            "y": 440.0,
-            "width": 160.0,
-            "height": 160.0,
+            "x": 320.0,
+            "y": 320.0,
+            "width": 320.0,
+            "height": 120.0,
             "type": "Text Display",
             "properties": {
               "topic": "/AdvantageKit/DriverStation/Joystick1/Name",
               "period": 0.06,
               "data_type": "string",
               "show_submit_button": false
+            }
+          },
+          {
+            "title": "SuccessfulDaqs",
+            "x": 1520.0,
+            "y": 0.0,
+            "width": 160.0,
+            "height": 120.0,
+            "type": "Large Text Display",
+            "properties": {
+              "topic": "/AdvantageKit/Drive/SuccessfulDaqs",
+              "period": 0.06,
+              "data_type": "int"
+            }
+          },
+          {
+            "title": "SuccessfulDaqs",
+            "x": 1000.0,
+            "y": 200.0,
+            "width": 160.0,
+            "height": 160.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/AdvantageKit/Drive/SuccessfulDaqs",
+              "period": 0.06,
+              "data_type": "int",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "FailedDaqs",
+            "x": 1680.0,
+            "y": 0.0,
+            "width": 160.0,
+            "height": 120.0,
+            "type": "Large Text Display",
+            "properties": {
+              "topic": "/AdvantageKit/Drive/FailedDaqs",
+              "period": 0.06,
+              "data_type": "int"
             }
           }
         ]
