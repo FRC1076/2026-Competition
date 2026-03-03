@@ -39,6 +39,10 @@ import frc.robot.subsystems.hood.HoodSubsystem;
 import frc.robot.subsystems.kicker.KickerIODisabled;
 import frc.robot.subsystems.kicker.KickerIONeo;
 import frc.robot.subsystems.kicker.KickerSubsystem;
+import frc.robot.subsystems.led.LEDIODisabled;
+import frc.robot.subsystems.led.LEDIORio;
+import frc.robot.subsystems.led.LEDSubsystem;
+import frc.robot.subsystems.led.LEDConstants.LEDStates;
 import frc.robot.subsystems.roller.RollerIODisabled;
 import frc.robot.subsystems.roller.RollerIOKraken;
 import frc.robot.subsystems.roller.RollerSubsystem;
@@ -98,6 +102,8 @@ public class RobotContainer {
     private final ClimberSubsystem m_climber;
     private final HookSubsystem m_climbHook;
 
+    private final LEDSubsystem m_leds;
+
     private final VisionLocalizationSystem m_vision;
 
     private final Superstructure m_superstructure;
@@ -137,6 +143,8 @@ public class RobotContainer {
             m_climber = new ClimberSubsystem(new ClimberIONeo());
             m_climbHook = new HookSubsystem(new HookIODisabled());
 
+            m_leds = new LEDSubsystem(new LEDIORio());
+
             for (PhotonConfig config : PhotonConfig.values()) {
                 PhotonCamera cam = new PhotonCamera(config.name);
                 m_vision.addCamera(new PhotonVisionLocalizerWithTagPrioritization(
@@ -170,6 +178,8 @@ public class RobotContainer {
 
             m_climber = new ClimberSubsystem(new ClimberIODisabled());
             m_climbHook = new HookSubsystem(new HookIODisabled());
+
+            m_leds = new LEDSubsystem(new LEDIODisabled());
         }
 
         teleopDriveCommand = new TeleopDriveCommand(
@@ -262,7 +272,8 @@ public class RobotContainer {
 
         m_driverController.R2()
             .onTrue(superstructureCommands.shoot())
-            .onFalse(superstructureCommands.stopShooting());
+            .onFalse(superstructureCommands.stopShooting())
+            .whileTrue(m_leds.setTempState(LEDStates.RAINBOW));
 
         m_driverController.square()
             .onTrue(superstructureCommands.applyIntakeRetracted());
