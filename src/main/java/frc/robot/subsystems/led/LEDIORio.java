@@ -14,6 +14,8 @@ public class LEDIORio implements LEDBase {
     private final AddressableLED m_leds;
     private final AddressableLEDBuffer m_buffer;
 
+    private LEDStates currentState = LEDStates.OFF;
+
     private final LEDPattern m_off = LEDPattern.kOff;
 
     private final LEDPattern m_purple = LEDPattern.solid(Color.kPurple)
@@ -46,6 +48,8 @@ public class LEDIORio implements LEDBase {
 
     @Override
     public void setState(LEDStates state) {
+        currentState = state;
+
         if (state == LEDStates.OFF) {
             m_off.applyTo(m_buffer);
             m_leds.setData(m_buffer);
@@ -59,5 +63,10 @@ public class LEDIORio implements LEDBase {
             m_purple.applyTo(m_buffer);
             m_leds.setData(m_buffer);
         }
+    }
+
+    @Override
+    public LEDStates getState() {
+        return currentState;
     }
 }

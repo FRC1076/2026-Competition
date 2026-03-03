@@ -273,7 +273,7 @@ public class RobotContainer {
         m_driverController.R2()
             .onTrue(superstructureCommands.shoot())
             .onFalse(superstructureCommands.stopShooting())
-            .whileTrue(m_leds.setTempState(LEDStates.RAINBOW));
+            .whileTrue(m_leds.setTempState(LEDStates.RAINBOW).ignoringDisable(true));
 
         m_driverController.square()
             .onTrue(superstructureCommands.applyIntakeRetracted());

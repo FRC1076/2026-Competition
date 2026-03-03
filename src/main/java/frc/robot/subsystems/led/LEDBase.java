@@ -27,6 +27,6 @@ public interface LEDBase {
     public abstract void setState(LEDStates state);
 
     public default LEDStates getState() {
-        return null;
+        return LEDStates.OFF;
     }
 }
