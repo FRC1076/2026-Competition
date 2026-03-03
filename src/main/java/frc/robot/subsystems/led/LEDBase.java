@@ -6,7 +6,8 @@
 // THEY ARE FOR EDUCATIONAL PURPOSES
 package frc.robot.subsystems.led;
 
-import frc.robot.Constants.LEDConstants.LEDStates;
+import frc.robot.subsystems.led.LEDConstants.LEDStates;
+
 /** This is an interface so you can define what functionality you want
  * without defining how it actually happens.
  */
@@ -24,7 +25,8 @@ public interface LEDBase {
      * @param state The state of the LEDs found in Constants.LEDConstants.LEDStates
      */
     public abstract void setState(LEDStates state);
-    public default LEDStates getState(){
+
+    public default LEDStates getState() {
         return null;
     }
 }

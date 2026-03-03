@@ -14,25 +14,12 @@ public class LEDConstants {
         public static final int kLength = 72;
 
         public static final double kFlashSeconds = 0.1;
-        public static final int kEmptyStateBrightness = 100;
-        public static final int kFlashingStateBrightness = 100;
+        public static final int kBrightnessPercentage = 60;
     }
 
     public static enum LEDStates {
-        IDLE,
-        CORAL_INDEXED,
-        HUMAN_PLAYER_SIGNAL,
-        ALGAE,
-        AUTO_ALIGNED,
-        AUTO_ALIGNING,
         OFF,
-        ELEVATOR_ZEROED,
-        RED_HP_SIGNAL,
-        ORANGE_HP_SIGNAL,
-        YELLOW_HP_SIGNAL,
-        GREEN_HP_SIGNAL,
-        BLUE_HP_SIGNAL,
-        PURPLE_HP_SIGNAL,
-        WHITE_HP_SIGNAL;
+        PURPLE_WHITE_GRADIENT,
+        RAINBOW;
     }
 }

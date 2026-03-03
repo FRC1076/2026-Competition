@@ -6,14 +6,10 @@
 // THEY ARE FOR EDUCATIONAL PURPOSES
 package frc.robot.subsystems.led;
 
-import java.util.Set;
-import java.util.function.BooleanSupplier;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.LEDConstants.LEDStates;
+import frc.robot.subsystems.led.LEDConstants.LEDStates;
 
 /** This is kind of like a subsystem.
  * <p>
@@ -23,7 +19,7 @@ import frc.robot.Constants.LEDConstants.LEDStates;
  */
 public class LEDSubsystem extends SubsystemBase{
     private final LEDBase io;
-    private LEDStates previousState = LEDStates.IDLE;
+    private LEDStates previousState = LEDStates.OFF;
 
     /** Create the LEDs with one of the IO layers.
      * 
@@ -31,6 +27,8 @@ public class LEDSubsystem extends SubsystemBase{
      */
     public LEDSubsystem(LEDBase io) {
         this.io = io;
+
+        setState(LEDStates.PURPLE_WHITE_GRADIENT);
     }
 
     /** Set the state of the LEDs through the chosen IO layer.
@@ -78,5 +76,16 @@ public class LEDSubsystem extends SubsystemBase{
             () -> setState(this.previousState),
             this
         ).withTimeout(seconds);
+    }
+
+    /** Sets the state of the LEDs to the desired state when called,
+     *  and returns to the previous state when canceled.
+     */
+    public Command setTempState(LEDStates state) {
+        return Commands.startEnd(
+            () -> setState(state),
+            () -> setState(this.previousState),
+            this
+        );
     }
 }
