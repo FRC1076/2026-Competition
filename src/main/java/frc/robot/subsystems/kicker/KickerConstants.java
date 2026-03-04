@@ -11,7 +11,7 @@ public class KickerConstants {
     public static final int kCanId = 44;
 
     // Voltage compensation and current limit
-    public static final double kVoltageCompensation = 10.5;
+    public static final double kVoltageCompensation = 12;
     public static final int kCurrentLimitAmps = 20;
 
     public static final boolean kInverted = true;
