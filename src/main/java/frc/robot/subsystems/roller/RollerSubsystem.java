@@ -65,9 +65,4 @@ public class RollerSubsystem  extends SubsystemBase {
     public double getVoltage() {
         return inputs.appliedVoltage;
     }
-
-    /** Gets the roller motor's velocity */
-    public double getVelocity() {
-        return inputs.velocityRadPerSec;
-    }
 }

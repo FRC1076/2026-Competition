@@ -195,14 +195,6 @@ public class Superstructure {
                     m_turret.runPositionSafe(() -> m_shootingParams.launchYawRad(), safeToMoveTurret())
                 )
             );
-
-        new Trigger(() -> m_superState.getIntakeState().kRunRollerAgitation)
-            .whileTrue(Commands.either(
-                m_roller.applyVelocity(0),
-                m_roller.applyVelocity(m_superState.getIntakeState().kRollerVelocity),
-                () -> m_roller.getVelocity() > m_superState.getIntakeState().kRollerVelocity - 50)
-                .repeatedly()
-            );
     }
 
     /** Update parameters saved to m_shootingParams and flywheelTargetRadiansPerSecond
