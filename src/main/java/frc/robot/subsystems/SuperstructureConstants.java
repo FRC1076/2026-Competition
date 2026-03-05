@@ -65,11 +65,12 @@ public class SuperstructureConstants {
         RETRACTED(kSlapdownUpAngle,0),
         EXTENDED(kSlapdownDownAngle, 0),
         INTAKING(kSlapdownDownAngle, kIntakeRollerVelocity),
-        SHOOTING(kSlapdownDownAngle, 200),
+        SHOOTING(kSlapdownDownAngle, 250, true),
         REVERSE(kSlapdownDownAngle, -kIntakeRollerVelocity);
 
         public final double kSlapdownAngle;
         public final double kRollerVelocity;
+        public final boolean kRunRollerAgitation;
 
         /** Constructor for intake states */
         private IntakeStates(
@@ -78,6 +79,17 @@ public class SuperstructureConstants {
         ) {
             this.kSlapdownAngle = slapdownAngle;
             this.kRollerVelocity = rollerVelocity;
+            this.kRunRollerAgitation = false;
+        }
+
+        private IntakeStates(
+            double slapdownAngle,
+            double rollerVelocity,
+            boolean runRollerAgitation
+        ) {
+            this.kSlapdownAngle = slapdownAngle;
+            this.kRollerVelocity = rollerVelocity;
+            this.kRunRollerAgitation = true;
         }
     }
 
