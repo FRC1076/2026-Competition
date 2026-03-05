@@ -5,15 +5,9 @@
     "data": {
       "commands": [
         {
-          "type": "sequential",
+          "type": "deadline",
           "data": {
             "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Extend Intake"
-                }
-              },
               {
                 "type": "wait",
                 "data": {
@@ -23,10 +17,22 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Start Intake"
+                  "name": "Initiate Autoaim"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Extend Intake"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Start Intake"
           }
         },
         {
@@ -61,12 +67,6 @@
                 "type": "named",
                 "data": {
                   "name": "Stop Shooting"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Turret Idle"
                 }
               }
             ]

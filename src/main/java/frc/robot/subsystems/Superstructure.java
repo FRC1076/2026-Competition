@@ -368,6 +368,10 @@ public class Superstructure {
             return m_superstructure.applyTurretStateAllParallel(TurretStates.HUB_PREALIGNED_LOCATION);
         }
 
+        public Command applyTurretStatesLeftTrenchPrealigned() {
+            return m_superstructure.applyTurretStateAllParallel(TurretStates.TURRET_PREALIGNED);
+        }
+
         /** Apply the POINT_DIRECTLY_BACK_FOR_PASSING turret state */
         public Command applyTurretStatesPointDirectlyBackForPassing(){
             return m_superstructure.applyTurretStateAllParallel(TurretStates.POINT_DIRECTLY_BACK_FOR_PASSING);

@@ -437,7 +437,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("Start Intake", commandFactory.intake());
         NamedCommands.registerCommand("Turret Idle", commandFactory.applyTurretIdle());
         NamedCommands.registerCommand("Initiate Autoaim", commandFactory.initiateAutoaim());
-        NamedCommands.registerCommand("Shoot", commandFactory.shoot());
+        NamedCommands.registerCommand("Hub Prealigned", commandFactory.applyTurretStatesLeftTrenchPrealigned());        NamedCommands.registerCommand("Shoot", commandFactory.shoot());
         NamedCommands.registerCommand("Stop Shooting", commandFactory.stopShooting());
     }
 
