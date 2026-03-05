@@ -82,7 +82,7 @@ public class SuperstructureConstants {
     }
 
     public static double kSpindexerIndexerVoltage = 12;
-    public static double kKickerIndexVoltage = 12; // TODO: increase this?
+    public static double kKickerIndexVoltage = 12;
     
     public static enum IndexStates {
         /** list of all possible indexing states and their inputs */

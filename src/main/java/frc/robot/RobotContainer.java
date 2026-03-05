@@ -137,7 +137,7 @@ public class RobotContainer {
             m_spindexer = new SpindexerSubsystem(new SpindexerIOKraken());
             m_kicker = new KickerSubsystem(new KickerIONeo());
 
-            m_climber = new ClimberSubsystem(new ClimberIONeo());
+            m_climber = new ClimberSubsystem(new ClimberIODisabled());
             m_climbHook = new HookSubsystem(new HookIODisabled());
 
             m_leds = new LEDSubsystem(new LEDIORio());

@@ -12,7 +12,7 @@ import frc.robot.Constants.CANConstants;
 
 public class SpindexerConstants {
     public static final int kCANId = 43;
-    public static final CANBus kCANBus = CANConstants.kCANivoreBus;
+    public static final CANBus kCANBus = CANConstants.kRioBus;
     
     public static final int kSupplyCurrentLimit = 40;
     public static final int kStatorCurrentLimit = 50;
