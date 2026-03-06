@@ -19,7 +19,7 @@ public class SOTMLaunchCalculator {
     /** Latency for loop time */
     private static final double latencySecs = 0.02;
     /** Number of iterations recurse through the time of flight calculation */
-    private static final int iterations = 3;
+    private static final int iterations = 5;
 
     public static CommonShotSolution calculate(
         Pose2d turretPose,
