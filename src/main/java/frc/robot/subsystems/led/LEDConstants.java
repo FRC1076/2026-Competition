@@ -11,10 +11,10 @@ public class LEDConstants {
 
     public static class LEDOnRIOConstants {
         public static final int kPWMPort = 0;
-        public static final int kLength = 72;
+        public static final int kLength = 87;
 
         public static final double kFlashSeconds = 0.1;
-        public static final int kBrightnessPercentage = 60;
+        public static final int kBrightnessPercentage = 40;
     }
 
     public static enum LEDStates {
