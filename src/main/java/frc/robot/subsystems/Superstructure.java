@@ -29,6 +29,8 @@ import lib.ballistic.SOTMLaunchCalculator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -195,6 +197,18 @@ public class Superstructure {
                     m_turret.runPositionSafe(() -> m_shootingParams.launchYawRad(), safeToMoveTurret())
                 )
             );
+
+        final double halfShakePeriod = SuperstructureConstants.kSlapdownShakePeriodSec / 2.0;
+        Trigger runSlapdownShake = new Trigger(() -> m_superState.getIntakeState().kRunSlapdownShake);
+        runSlapdownShake
+            .whileTrue(
+                m_slapdown.runPosition(
+                    () -> Timer.getFPGATimestamp() % SuperstructureConstants.kSlapdownShakePeriodSec < halfShakePeriod ? SuperstructureConstants.kSlapdownDownAngle : SuperstructureConstants.kSlapdownShakeUpAngle
+                )
+            );
+            
+            new Trigger(() -> DriverStation.isAutonomousEnabled()).and(runSlapdownShake.negate())
+                .onTrue(m_slapdown.applyPosition(SuperstructureConstants.kSlapdownDownAngle));
     }
 
     /** Update parameters saved to m_shootingParams and flywheelTargetRadiansPerSecond
@@ -390,6 +404,11 @@ public class Superstructure {
         /** Start intaking fuel */
         public Command intake() {
             return m_superstructure.applyIntakeStateAllParallel(IntakeStates.INTAKING);
+        }
+
+        /** Intake fuel only by running the rollers (for autonomous weirdness) */
+        public Command runRollers() {
+            return m_superstructure.applyIntakeStateRollerOnly(IntakeStates.INTAKING);
         }
 
         /** Index fuel for shooting */

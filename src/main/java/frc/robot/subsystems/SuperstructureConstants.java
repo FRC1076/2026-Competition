@@ -56,20 +56,24 @@ public class SuperstructureConstants {
             this.kFlywheelRadPerSec = 0;
         }
     }
-    /** intitalizes numerical values for the FuelManagmentStates enum */
+    /* intitalizes numerical values for the FuelManagmentStates enum */
     public static double kSlapdownUpAngle = 0;
     public static double kSlapdownDownAngle = 5.3;
     public static double kIntakeRollerVelocity = 140;
+
+    public static double kSlapdownShakeUpAngle = 4.8;
+    public static double kSlapdownShakePeriodSec = 2.0; // time for a full cycle
     
     public static enum IntakeStates {
         /** list of opereational states of the intake and thier inputs */
         RETRACTED(kSlapdownUpAngle,0),
         EXTENDED(kSlapdownDownAngle, 0),
         INTAKING(kSlapdownDownAngle, kIntakeRollerVelocity),
-        SHOOTING(kSlapdownDownAngle, 200),
+        SHOOTING(true, 200),
         REVERSE(kSlapdownDownAngle, -kIntakeRollerVelocity);
 
         public final double kSlapdownAngle;
+        public final boolean kRunSlapdownShake;
         public final double kRollerVelocity;
 
         /** Constructor for intake states */
@@ -78,6 +82,16 @@ public class SuperstructureConstants {
             double rollerVelocity
         ) {
             this.kSlapdownAngle = slapdownAngle;
+            this.kRunSlapdownShake = false;
+            this.kRollerVelocity = rollerVelocity;
+        }
+
+        private IntakeStates(
+            boolean runSlapdownShake,
+            double rollerVelocity
+        ) {
+            this.kRunSlapdownShake = runSlapdownShake;
+            this.kSlapdownAngle = kSlapdownDownAngle;
             this.kRollerVelocity = rollerVelocity;
         }
     }

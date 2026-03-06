@@ -434,7 +434,7 @@ public class RobotContainer {
     public void registerNamedCommands() {
         final SuperstructureCommandFactory commandFactory = m_superstructure.getCommandFactory();
         NamedCommands.registerCommand("Extend Intake", commandFactory.applyIntakeExtended());
-        NamedCommands.registerCommand("Start Intake", commandFactory.intake());
+        NamedCommands.registerCommand("Start Intake", commandFactory.runRollers());
         NamedCommands.registerCommand("Turret Idle", commandFactory.applyTurretIdle());
         NamedCommands.registerCommand("Initiate Autoaim", commandFactory.initiateAutoaim());
         NamedCommands.registerCommand("Hub Prealigned", commandFactory.applyTurretStatesLeftTrenchPrealigned());        NamedCommands.registerCommand("Shoot", commandFactory.shoot());
