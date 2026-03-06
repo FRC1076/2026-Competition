@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.578944365192584,
-        "y": 3.950490727532097
+        "x": 7.002011412268189,
+        "y": 4.080285306704707
       },
       "isLocked": false,
       "linkedName": "Post Disrupt-Left"
@@ -56,10 +56,22 @@
   ],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "Initiate Autoaim",
+      "waypointRelativePos": 1.0355169692186201,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Initiate Autoaim"
+        }
+      }
+    }
+  ],
   "globalConstraints": {
-    "maxVelocity": 3.5,
-    "maxAcceleration": 4.0,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -72,8 +84,8 @@
   "reversed": false,
   "folder": "Disrupt",
   "idealStartingState": {
-    "velocity": 1.5,
-    "rotation": -124.99202019855855
+    "velocity": 2.5,
+    "rotation": -115.0
   },
   "useDefaultConstraints": true
 }
