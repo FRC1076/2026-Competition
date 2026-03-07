@@ -4,18 +4,29 @@
 
 package frc.robot.subsystems.spindexer;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
+import lib.units.TalonFXUnitConverter;
 
 public class SpindexerIOKraken implements SpindexerIO {
     private final TalonFX m_motor;
     private final TalonFXConfiguration m_motorConfig;
+
+    private final TalonFXUnitConverter m_unitConverter;
+
+    // Control requests
+    private final VoltageOut m_voltageRequest;
+    private final VelocityTorqueCurrentFOC m_velocityRequest;
 
     //Status Signals 
     private final StatusSignal<Voltage> m_voltageSignal;
@@ -27,6 +38,8 @@ public class SpindexerIOKraken implements SpindexerIO {
         m_motor = new TalonFX(SpindexerConstants.kCANId, SpindexerConstants.kCANBus);
 
         m_motorConfig = new TalonFXConfiguration();
+
+        m_unitConverter = new TalonFXUnitConverter();
         
         // Voltage and current configs 
         m_motorConfig.Voltage.PeakForwardVoltage = 12;
@@ -45,21 +58,42 @@ public class SpindexerIOKraken implements SpindexerIO {
         // Gear ratio
         m_motorConfig.Feedback.SensorToMechanismRatio = SpindexerConstants.kGearRatio;
 
-        //closed loop 
+        // Closed loop
+        m_motorConfig.Slot0.kP = m_unitConverter.fromSIkP(SpindexerConstants.kP);
+        m_motorConfig.Slot0.kI = m_unitConverter.fromSIkI(SpindexerConstants.kI);
+        m_motorConfig.Slot0.kD = m_unitConverter.fromSIkD(SpindexerConstants.kD);
+        m_motorConfig.Slot0.kS = m_unitConverter.fromSIkS(SpindexerConstants.kS);
+        m_motorConfig.Slot0.kV = m_unitConverter.fromSIkV(SpindexerConstants.kV);
+        m_motorConfig.Slot0.kA = m_unitConverter.fromSIkA(SpindexerConstants.kA);
+
         m_motor.getConfigurator().apply(m_motorConfig);
 
-        // Set uo Satus signals 
+        m_voltageRequest = new VoltageOut(0).withEnableFOC(SpindexerConstants.kUseFOC);
+        m_velocityRequest = new VelocityTorqueCurrentFOC(0).withSlot(0);
+
+        // Set up Satus signals 
         m_voltageSignal = m_motor.getMotorVoltage();
         m_currentSignal = m_motor.getTorqueCurrent();
         m_velocitySignal = m_motor.getVelocity();
         m_temperatureSignal = m_motor.getDeviceTemp();
-
     }
 
-    /**Sets the voltage for the Spindexer's motor */
+    /** Sets the voltage for spindexer's motor */
     @Override
     public void setVoltage(double volts) {
-        m_motor.setVoltage(volts);
+        m_voltageRequest.Output = volts;
+        m_motor.setControl(m_voltageRequest);
+    }
+
+    /** Sets the velocity of the spindexer by FOC PID */
+    @Override
+    public void setVelocity(double radPerSec) {
+        if (radPerSec == 0) {
+            m_motor.setVoltage(0);
+        } else {
+            m_velocityRequest.Velocity = m_unitConverter.fromSIVel(radPerSec);
+            m_motor.setControl(m_velocityRequest);
+        }
     }
 
     @Override
@@ -73,7 +107,9 @@ public class SpindexerIOKraken implements SpindexerIO {
 
         inputs.appliedVoltage = m_voltageSignal.getValueAsDouble();
         inputs.currentAmps = m_currentSignal.getValueAsDouble();
-        inputs.velocityRadPerSec = m_velocitySignal.getValueAsDouble() * 2 * Math.PI;
+        inputs.velocityRadPerSec = m_unitConverter.toSIVel(m_velocitySignal.getValueAsDouble());
         inputs.motorTempDegC = m_temperatureSignal.getValueAsDouble();
+
+        Logger.recordOutput("Spindexer/PIDTargetRadPerSec", m_unitConverter.toSIVel(m_velocityRequest.Velocity));
     }
 }   

@@ -42,6 +42,22 @@ public class SpindexerSubsystem extends SubsystemBase{
         );
     }
 
+    /** Set the spindexer to the specified velocity */
+    public Command applyVelocity(double radPerSec) {
+        return Commands.runOnce(
+            () -> io.setVelocity(radPerSec),
+            this
+        );
+    }
+
+    /** Run the spindexer at the supplied velocity */
+    public Command runVelocity(DoubleSupplier radPerSec) {
+        return Commands.run(
+            () -> io.setVelocity(radPerSec.getAsDouble()),
+            this
+        );
+    }
+
     /** Gets motor's current voltage */
     public double getVoltage() {
         return inputs.appliedVoltage;
