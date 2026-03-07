@@ -151,10 +151,10 @@ public class RobotContainer {
                     config.singleTagPoseStrategy,
                     () -> m_drive.getPose().getRotation(),
                     PhysicalConstants.VisionConstants.kAprilTagFieldLayout,
-                    config.defaultSingleTagStdDevs.times(2),
-                    config.defaultMultiTagStdDevs.times(2),
+                    config.defaultSingleTagStdDevs.times(PhysicalConstants.VisionConstants.PhotonVision.kHubTagPriority),
+                    config.defaultMultiTagStdDevs.times(PhysicalConstants.VisionConstants.PhotonVision.kHubTagPriority),
                     VisionConstants.kHubTags,
-                    0.5)
+                    (1.0 / PhysicalConstants.VisionConstants.PhotonVision.kHubTagPriority))
                 );
             }
         } else {
@@ -259,9 +259,9 @@ public class RobotContainer {
                 m_drive.resetHeading()
             ));
 
-        new ToggleableTrigger(m_driverController.touchpad(), false).getToggledTrigger()
+        /*new ToggleableTrigger(m_driverController.touchpad(), false).getToggledTrigger()
             .and(m_driverController.rightActive().negate())
-                .whileTrue(teleopDriveCommand.applySnakeMode());
+                .whileTrue(teleopDriveCommand.applySnakeMode());*/
 
         m_driverController.L2()
             .onTrue(superstructureCommands.intake())
@@ -277,6 +277,12 @@ public class RobotContainer {
 
         m_driverController.cross()
             .onTrue(superstructureCommands.applyTurretStatesHubPreAlignedLocation());
+
+        m_driverController.povLeft()
+            .onTrue(superstructureCommands.applyTurretStatesLeftTrenchPrealigned());
+
+        m_driverController.povRight()
+            .onTrue(superstructureCommands.applyTurretStatesRightTrenchPrealigned());
 
             /*
         m_driverController.povUp()

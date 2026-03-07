@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.572,
-        "y": 7.361
+        "x": 3.5722051282051295,
+        "y": 7.360666666666666
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.9390317044846057,
-        "y": 7.352713134929587
+        "x": 3.939236832689735,
+        "y": 7.352379801596253
       },
       "isLocked": false,
       "linkedName": "Far Shoot Left"

@@ -36,6 +36,7 @@ public class PhysicalConstants {
         public static class PhotonVision {
             public static final Vector<N3> kDefaultSingleTagStdDevs = VecBuilder.fill(1.5, 1.5, 1.5);
             public static final Vector<N3> kDefaultMultiTagStdDevs = VecBuilder.fill(0.75, 0.75, 0.75);
+            public static final double kHubTagPriority = 4;
 
             public static enum PhotonConfig {
                 FRONT_LEFT(

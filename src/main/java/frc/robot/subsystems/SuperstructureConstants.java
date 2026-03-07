@@ -22,7 +22,8 @@ public class SuperstructureConstants {
         AUTOAIM_SHOOT(true, 1),
         HUB_PREALIGNED_LOCATION(0,0.01,245),
         POINT_DIRECTLY_BACK_FOR_PASSING(0,0.1,350),
-        TURRET_PREALIGNED(1.9, 0.09, 235),
+        TRENCH_PREALIGNED_LEFT(-1.5, 0.09, 235),
+        TRENCH_PREALIGNED_RIGHT(1.5, 0.09, 235),
         REVERSE(0,0, -100);  
 
         double kTurretAngleRadians;
@@ -58,11 +59,11 @@ public class SuperstructureConstants {
     }
     /* intitalizes numerical values for the FuelManagmentStates enum */
     public static double kSlapdownUpAngle = 0;
-    public static double kSlapdownDownAngle = 5.3;
+    public static double kSlapdownDownAngle = 5.5;
     public static double kIntakeRollerVelocity = 140;
 
-    public static double kSlapdownShakeUpAngle = 4;
-    public static double kSlapdownShakePeriodSec = 1.5; // time for a full cycle
+    public static double kSlapdownShakeUpAngle = kSlapdownDownAngle;
+    public static double kSlapdownShakePeriodSec = 0.5; // time for a full cycle
     
     public static enum IntakeStates {
         /** list of opereational states of the intake and thier inputs */
@@ -96,16 +97,16 @@ public class SuperstructureConstants {
         }
     }
 
-    public static double kSpindexerIndexerVoltage = 12;
+    public static double kSpindexerIndexerVelocityRadPerSec = 65;
     public static double kKickerIndexVoltage = 12;
     
     public static enum IndexStates {
         /** list of all possible indexing states and their inputs */
         IDLE(0,0),
-        INDEXING(kSpindexerIndexerVoltage, kKickerIndexVoltage),
-        REVERSE(-kSpindexerIndexerVoltage, -kKickerIndexVoltage);
+        INDEXING(kSpindexerIndexerVelocityRadPerSec, kKickerIndexVoltage),
+        REVERSE(-kSpindexerIndexerVelocityRadPerSec, -kKickerIndexVoltage);
 
-        public final double kSpindexerVoltage;
+        public final double kSpindexerRadPerSec;
         public final double kKickerVoltage;
 
         /** construcor for indexStates */
@@ -113,7 +114,7 @@ public class SuperstructureConstants {
             double spindexerVoltage,
             double kickerVoltage
         ) {
-            this.kSpindexerVoltage = spindexerVoltage;
+            this.kSpindexerRadPerSec = spindexerVoltage;
             this.kKickerVoltage = kickerVoltage;
         }
     }
@@ -158,12 +159,12 @@ public class SuperstructureConstants {
     public static final Pose3d kLeftPassingTarget =
         Constants.GameConstants.teamColor == Alliance.Blue
             ? new Pose3d(new Translation3d(2, kLeftPassingTargetYCoordinate, 0), Rotation3d.kZero)
-            : new Pose3d(new Translation3d(PhysicalConstants.FieldConstants.fieldLength - 2, kLeftPassingTargetYCoordinate, 0), Rotation3d.kZero);
+            : new Pose3d(new Translation3d(PhysicalConstants.FieldConstants.fieldLength - 2, kRightPassingTargetYCoordinate, 0), Rotation3d.kZero);
     public static final Pose3d kRightPassingTarget =
         Constants.GameConstants.teamColor == Alliance.Blue
             ? new Pose3d(new Translation3d(2, kRightPassingTargetYCoordinate, 0), Rotation3d.kZero)
-            : new Pose3d(new Translation3d(PhysicalConstants.FieldConstants.fieldLength - 2, kRightPassingTargetYCoordinate, 0), Rotation3d.kZero);
-         
+            : new Pose3d(new Translation3d(PhysicalConstants.FieldConstants.fieldLength - 2, kLeftPassingTargetYCoordinate, 0), Rotation3d.kZero);
+    // Left and right are swapped for red due to rotating 180 degrees
 
     public static final int kAutoAimMaxIterations = 5;
     public static final double kAutoAimTimeToleranceSeconds = 5;

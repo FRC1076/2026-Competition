@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.2,
-        "y": 4.054
+        "x": 7.9472241992882555,
+        "y": 4.9871886120996445
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.371925820256777,
-        "y": 3.0706619115549225
+        "x": 7.1191500195450335,
+        "y": 4.003850523654567
       },
       "isLocked": false,
       "linkedName": "Post Disrupt-Left"
@@ -115,7 +115,7 @@
   "folder": "Post Disrupt Climb",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -124.99202019855855
+    "rotation": -132.87890360333847
   },
   "useDefaultConstraints": true
 }

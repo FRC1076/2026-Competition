@@ -223,6 +223,10 @@ public class Superstructure {
 
         if (shooterPoseAllianceColorCoordinates.getX() <= PhysicalConstants.FieldConstants.LinesVertical.allianceZone + 1) {
             target = SuperstructureConstants.kHubTarget;
+        } else if (shooterPoseAllianceColorCoordinates.getX() >= PhysicalConstants.FieldConstants.LinesVertical.neutralZoneFar
+                && shooterPoseAllianceColorCoordinates.getX() <= PhysicalConstants.FieldConstants.LinesVertical.oppAllianceZone) {
+            m_shootingParams = new CommonShotSolution(0, Math.PI, 300);
+            return;
         } else if (shooterPoseAllianceColorCoordinates.getY() <= PhysicalConstants.FieldConstants.LinesHorizontal.center) {
             target = SuperstructureConstants.kRightPassingTarget;
         } else {
@@ -312,7 +316,7 @@ public class Superstructure {
     public Command applyIndexStateAllParallel(IndexStates state) {
         return Commands.parallel(
             setIndexState(state),
-            m_spindexer.applyVoltage(state.kSpindexerVoltage),
+            m_spindexer.applyVelocity(state.kSpindexerRadPerSec),
             m_kicker.applyVoltage(state.kKickerVoltage)
         );
     }
@@ -383,7 +387,11 @@ public class Superstructure {
         }
 
         public Command applyTurretStatesLeftTrenchPrealigned() {
-            return m_superstructure.applyTurretStateAllParallel(TurretStates.TURRET_PREALIGNED);
+            return m_superstructure.applyTurretStateAllParallel(TurretStates.TRENCH_PREALIGNED_LEFT);
+        }
+
+        public Command applyTurretStatesRightTrenchPrealigned() {
+            return m_superstructure.applyTurretStateAllParallel(TurretStates.TRENCH_PREALIGNED_RIGHT);
         }
 
         /** Apply the POINT_DIRECTLY_BACK_FOR_PASSING turret state */
