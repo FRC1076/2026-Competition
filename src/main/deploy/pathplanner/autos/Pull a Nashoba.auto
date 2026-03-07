@@ -19,12 +19,6 @@
                 "data": {
                   "name": "Initiate Autoaim"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Extend Intake"
-                }
               }
             ]
           }
