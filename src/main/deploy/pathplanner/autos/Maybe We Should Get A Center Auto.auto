@@ -3,7 +3,50 @@
   "command": {
     "type": "sequential",
     "data": {
-      "commands": []
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Extend Intake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Initiate Autoaim"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Srt2 to Outpost"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 8.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Stop Shooting"
+          }
+        }
+      ]
     }
   },
   "resetOdom": true,
