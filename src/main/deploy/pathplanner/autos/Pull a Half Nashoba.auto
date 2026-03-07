@@ -37,13 +37,19 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 7.0
+            "waitTime": 6.0
           }
         },
         {
           "type": "named",
           "data": {
             "name": "Stop Shooting"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Shoot to Move Back"
           }
         }
       ]

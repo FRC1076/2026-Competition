@@ -8,7 +8,7 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.780000000000001,
+        "x": 4.597216405673217,
         "y": 7.37
       },
       "isLocked": false,
@@ -16,16 +16,32 @@
     },
     {
       "anchor": {
-        "x": 5.617574893009986,
-        "y": 7.37
+        "x": 4.931849182655272,
+        "y": 7.381152457542477
       },
       "prevControl": {
-        "x": 4.618249515091305,
-        "y": 7.406725863470846
+        "x": 4.4013409415121245,
+        "y": 7.379643366619116
       },
       "nextControl": {
-        "x": 7.769987179487181,
-        "y": 7.290897435897436
+        "x": 6.371628888938718,
+        "y": 7.385248074382867
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.157,
+        "y": 7.120870185449359
+      },
+      "prevControl": {
+        "x": 6.542939008974534,
+        "y": 7.364517750341498
+      },
+      "nextControl": {
+        "x": 9.602681883024252,
+        "y": 6.150470756062767
       },
       "isLocked": false,
       "linkedName": null
@@ -36,8 +52,8 @@
         "y": 4.054
       },
       "prevControl": {
-        "x": 9.532681883024251,
-        "y": 5.7748416547788874
+        "x": 8.15062044592115,
+        "y": 4.382294251101868
       },
       "nextControl": null,
       "isLocked": false,
@@ -46,19 +62,19 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.7212967131922444,
+      "waypointRelativePos": 1.6949766960124009,
       "rotationDegrees": 180.0
     },
     {
-      "waypointRelativePos": 1.330031517334517,
+      "waypointRelativePos": 2.0802692905230575,
       "rotationDegrees": -55.67793777638352
     }
   ],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 1.2959276018099577,
-      "maxWaypointRelativePos": 2.0,
+      "minWaypointRelativePos": 2.3,
+      "maxWaypointRelativePos": 3.0,
       "constraints": {
         "maxVelocity": 1.5,
         "maxAcceleration": 3.5,
