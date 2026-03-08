@@ -69,6 +69,7 @@ import org.photonvision.PhotonCamera;
 
 import com.pathplanner.lib.auto.NamedCommands;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Threads;
 import edu.wpi.first.wpilibj.Timer;
@@ -114,6 +115,8 @@ public class RobotContainer {
         new SamuraiXboxController(OIConstants.kOperatorControllerPort);
 
     TeleopDriveCommand teleopDriveCommand;
+
+    boolean endAuto = false;
     
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -240,6 +243,12 @@ public class RobotContainer {
                 Commands.waitSeconds(0.5),
                 Commands.runOnce(() -> m_elastic.putBoolean("Blue Won Auto", false))
             ));
+
+        new Trigger(() -> endAuto)
+            .onTrue(m_superstructure.getCommandFactory().applyTurretIdle());
+
+        new Trigger(() -> DriverStation.isAutonomousEnabled())
+            .onTrue(Commands.runOnce(() -> isAutonDone(false)));
     }
 
     /** Bind triggers on driver controller to commands */
@@ -437,14 +446,20 @@ public class RobotContainer {
         return m_elastic.getSelectedAutonomousCommand();
     }
 
+    public void isAutonDone(boolean state) {
+        endAuto = state;
+    }
+
     public void registerNamedCommands() {
         final SuperstructureCommandFactory commandFactory = m_superstructure.getCommandFactory();
         NamedCommands.registerCommand("Extend Intake", commandFactory.applyIntakeExtended());
         NamedCommands.registerCommand("Start Intake", commandFactory.runRollers());
         NamedCommands.registerCommand("Turret Idle", commandFactory.applyTurretIdle());
         NamedCommands.registerCommand("Initiate Autoaim", commandFactory.initiateAutoaim());
-        NamedCommands.registerCommand("Hub Prealigned", commandFactory.applyTurretStatesLeftTrenchPrealigned());        NamedCommands.registerCommand("Shoot", commandFactory.shoot());
+        NamedCommands.registerCommand("Hub Prealigned", commandFactory.applyTurretStatesLeftTrenchPrealigned());
+        NamedCommands.registerCommand("Shoot", commandFactory.shoot());
         NamedCommands.registerCommand("Stop Shooting", commandFactory.stopShooting());
+        NamedCommands.registerCommand("End", Commands.runOnce(() -> isAutonDone(true)));
     }
 
     /** Returns the amount of time left in the shift */
