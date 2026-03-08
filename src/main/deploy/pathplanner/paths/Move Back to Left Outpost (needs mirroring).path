@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8561131646669229,
-        "y": 7.182386971126923
+        "x": 1.5644222222222226,
+        "y": 7.3
       },
       "isLocked": false,
       "linkedName": "Move Back"
     },
     {
       "anchor": {
-        "x": 0.7062870699881383,
+        "x": 0.781601423487545,
         "y": 7.3
       },
       "prevControl": {
-        "x": 1.2953023476113326,
-        "y": 7.297093568534797
+        "x": 1.3816014234875449,
+        "y": 7.3
       },
       "nextControl": null,
       "isLocked": false,
