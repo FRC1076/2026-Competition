@@ -23,7 +23,6 @@ import frc.robot.subsystems.roller.RollerSubsystem;
 import frc.robot.subsystems.slapdown.SlapdownSubsystem;
 import frc.robot.subsystems.spindexer.SpindexerSubsystem;
 import frc.robot.subsystems.turret.TurretSubsystem;
-import lib.ballistic.BasicLaunchCalculator;
 import lib.ballistic.CommonShotSolution;
 import lib.ballistic.SOTMLaunchCalculator;
 import edu.wpi.first.math.geometry.Pose2d;

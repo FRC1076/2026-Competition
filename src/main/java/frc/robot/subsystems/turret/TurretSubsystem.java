@@ -51,6 +51,7 @@ public class TurretSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        io.periodic();
         io.updateInputs(inputs);
         Logger.processInputs("Turret", inputs);
     }
@@ -139,6 +140,10 @@ public class TurretSubsystem extends SubsystemBase {
 
     public Command rezeroTurret() {
         return Commands.runOnce(() -> io.resetPosition());
+    }
+
+    public Command resetTurretEncoderTo(double posRadPerSec) {
+        return Commands.runOnce(() -> io.resetPositionTo(posRadPerSec));
     }
 
     public Command sysIdQuasistatic(Direction direction) {

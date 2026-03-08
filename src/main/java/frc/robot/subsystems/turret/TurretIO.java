@@ -30,6 +30,14 @@ public interface TurretIO {
     }
 
     public default void resetPosition() {
+        resetPositionTo(0);
+    }
+
+    public default void resetPositionTo(double position) {
+
+    }
+
+    public default void periodic() {
         
     }
 }

@@ -19,7 +19,6 @@ import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.Superstructure.SuperstructureCommandFactory;
 import frc.robot.subsystems.climb.climber.ClimberConstants;
 import frc.robot.subsystems.climb.climber.ClimberIODisabled;
-import frc.robot.subsystems.climb.climber.ClimberIONeo;
 import frc.robot.subsystems.climb.climber.ClimberSubsystem;
 import frc.robot.subsystems.climb.hook.HookConstants;
 import frc.robot.subsystems.climb.hook.HookIODisabled;
@@ -58,7 +57,6 @@ import frc.robot.subsystems.turret.TurretIOKraken;
 import frc.robot.subsystems.turret.TurretSubsystem;
 import frc.robot.utils.ShiftUtil;
 import lib.extendedcommands.MultiToggleableTrigger;
-import lib.extendedcommands.ToggleableTrigger;
 import lib.hardware.hid.SamuraiPS5Controller;
 import lib.hardware.hid.SamuraiXboxController;
 import lib.vision.PhotonVisionLocalizerWithTagPrioritization;
@@ -117,7 +115,6 @@ public class RobotContainer {
     TeleopDriveCommand teleopDriveCommand;
 
     boolean endAuto = false;
-    
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {

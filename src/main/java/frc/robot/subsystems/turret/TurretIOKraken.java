@@ -20,6 +20,7 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
+import edu.wpi.first.wpilibj.DigitalInput;
 import lib.units.TalonFXUnitConverter;
 
 public class TurretIOKraken implements TurretIO {
@@ -27,6 +28,9 @@ public class TurretIOKraken implements TurretIO {
 
     private final TalonFXConfiguration m_motorConfig;
     private final TalonFXUnitConverter m_unitConverter;
+
+    // Beam break to rezero turret
+    private final DigitalInput m_rezeroingBeamBreak;
 
     // Status signals
     private final StatusSignal<Voltage> m_voltageSignal;
@@ -44,6 +48,8 @@ public class TurretIOKraken implements TurretIO {
         m_motor = new TalonFX(TurretConstants.kCANId, TurretConstants.kCANBus);
         m_motorConfig = new TalonFXConfiguration();
         m_unitConverter = new TalonFXUnitConverter();
+
+        m_rezeroingBeamBreak = new DigitalInput(TurretConstants.kBeamBreakPort);
 
         // Voltage and current configs
         m_motorConfig.Voltage.PeakForwardVoltage = TurretConstants.kMaxVoltage;
@@ -128,6 +134,20 @@ public class TurretIOKraken implements TurretIO {
     @Override
     public void resetPosition() {
         m_motor.setPosition(0);
+    }
+
+    @Override
+    public void resetPositionTo(double position) {
+        m_motor.setPosition(position);
+    }
+
+    @Override
+    public void periodic() {
+        // Rezero the turret if it passes by the beam break
+        if (m_rezeroingBeamBreak.get()) {
+            // TODO: uncomment this if we want to test it
+            // m_motor.setPosition(TurretConstants.kBeamBreakRezeroingPosition);
+        }
     }
 
     @Override
