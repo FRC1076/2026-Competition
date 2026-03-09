@@ -16,7 +16,7 @@ public class TurretConstants {
     public static final CANBus kCANBus = CANConstants.kCANivoreBus;
 
     // Beambreak???
-    public static final int kBeamBreakPort = 1;
+    public static final int kBeamBreakPort = 0;
     public static final double kBeamBreakRezeroingPosition = 0;
 
     // Voltage and current limits

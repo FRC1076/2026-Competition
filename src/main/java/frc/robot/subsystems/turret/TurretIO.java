@@ -15,6 +15,8 @@ public interface TurretIO {
 
         public double motorPositionRad = 0;
         public double motorVelocityRadPerSec = 0;
+
+        public boolean beamBroken = false;
     }
 
     public abstract void setVoltage(double volts);
@@ -38,6 +40,6 @@ public interface TurretIO {
     }
 
     public default void periodic() {
-        
+
     }
 }

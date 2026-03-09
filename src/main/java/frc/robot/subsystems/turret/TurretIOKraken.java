@@ -21,6 +21,7 @@ import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.DigitalInput;
+import lib.hardware.BeamBreak;
 import lib.units.TalonFXUnitConverter;
 
 public class TurretIOKraken implements TurretIO {
@@ -30,7 +31,7 @@ public class TurretIOKraken implements TurretIO {
     private final TalonFXUnitConverter m_unitConverter;
 
     // Beam break to rezero turret
-    private final DigitalInput m_rezeroingBeamBreak;
+    private final BeamBreak m_rezeroingBeamBreak;
 
     // Status signals
     private final StatusSignal<Voltage> m_voltageSignal;
@@ -49,7 +50,7 @@ public class TurretIOKraken implements TurretIO {
         m_motorConfig = new TalonFXConfiguration();
         m_unitConverter = new TalonFXUnitConverter();
 
-        m_rezeroingBeamBreak = new DigitalInput(TurretConstants.kBeamBreakPort);
+        m_rezeroingBeamBreak = new BeamBreak(TurretConstants.kBeamBreakPort);
 
         // Voltage and current configs
         m_motorConfig.Voltage.PeakForwardVoltage = TurretConstants.kMaxVoltage;
@@ -144,9 +145,9 @@ public class TurretIOKraken implements TurretIO {
     @Override
     public void periodic() {
         // Rezero the turret if it passes by the beam break
-        if (m_rezeroingBeamBreak.get()) {
+        if (m_rezeroingBeamBreak.isBeamBroken()) {
             // TODO: uncomment this if we want to test it
-            // m_motor.setPosition(TurretConstants.kBeamBreakRezeroingPosition);
+            m_motor.setPosition(TurretConstants.kBeamBreakRezeroingPosition, 0.01);
         }
     }
 
@@ -165,6 +166,7 @@ public class TurretIOKraken implements TurretIO {
         inputs.motorPositionRad = m_unitConverter.toSIPos(m_motorPositionSignal.getValueAsDouble());
         inputs.motorVelocityRadPerSec = m_unitConverter.toSIVel(m_velocitySignal.getValueAsDouble());
         inputs.motorTempDegC = m_temperatureSignal.getValueAsDouble();
+        inputs.beamBroken = m_rezeroingBeamBreak.isBeamBroken();
 
         Logger.recordOutput("Turret/PositionTargetRad", m_positionRequest.getPositionMeasure().in(Radians));
     }
