@@ -10,11 +10,11 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 
 public class SOTMLaunchCalculator {
     /** Meters away from hub to hood angle in radians */
-    private static final InterpolatingDoubleTreeMap distanceToHoodAngleMap = CommonLookupTable.distanceToHoodAngleMap;
+    private static final InterpolatingDoubleTreeMap distanceToHoodAngleMap = CommonLookupTable.hubTable.hoodAngle();
     /** Meters away from hub to flywheel speed in radians per second */
-    private static final InterpolatingDoubleTreeMap distanceToFlywheelSpeedMap = CommonLookupTable.distanceToFlywheelSpeedMap;
+    private static final InterpolatingDoubleTreeMap distanceToFlywheelSpeedMap = CommonLookupTable.hubTable.flywheelSpeed();
     /** Meters away from hub to time of flight in seconds */
-    private static final InterpolatingDoubleTreeMap distanceToTimeOfFlightMap = CommonLookupTable.distanceToTimeOfFlightMap;
+    private static final InterpolatingDoubleTreeMap distanceToTimeOfFlightMap = CommonLookupTable.hubTable.timeOfFlight();
 
     /** Latency for loop time */
     private static final double latencySecs = 0.02;

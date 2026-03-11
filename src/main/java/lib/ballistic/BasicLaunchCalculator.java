@@ -8,9 +8,9 @@ import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 
 public class BasicLaunchCalculator {
     /** Meters away from hub to hood angle in radians */
-    private static final InterpolatingDoubleTreeMap distanceToHoodAngleMap = CommonLookupTable.distanceToHoodAngleMap;
+    private static final InterpolatingDoubleTreeMap distanceToHoodAngleMap = CommonLookupTable.hubTable.hoodAngle();
     /** Meters away from hub to flywheel speed in radians per second */
-    private static final InterpolatingDoubleTreeMap distanceToFlywheelSpeedMap = CommonLookupTable.distanceToFlywheelSpeedMap;
+    private static final InterpolatingDoubleTreeMap distanceToFlywheelSpeedMap = CommonLookupTable.hubTable.flywheelSpeed();
 
     /** Calculate what parameters to send to the Superstructure
      * 
