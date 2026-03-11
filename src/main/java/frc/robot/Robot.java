@@ -10,13 +10,16 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.CANConstants;
 import frc.robot.Constants.SystemConstants;
 import frc.robot.Constants.SystemConstants.RobotMode;
 
 import org.littletonrobotics.junction.AutoLogOutputManager;
 import org.littletonrobotics.junction.LogFileUtil;
+import org.littletonrobotics.junction.LoggedPowerDistribution;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
@@ -73,6 +76,9 @@ public class Robot extends LoggedRobot {
         }
 
         AutoLogOutputManager.addPackage("lib");
+
+        // Register PDH?
+        LoggedPowerDistribution.getInstance(CANConstants.kPdhCanId, ModuleType.kRev);
 
         Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may be added.
 

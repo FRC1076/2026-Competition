@@ -79,5 +79,7 @@ public final class Constants {
     public static class CANConstants {
         public static final CANBus kRioBus = new CANBus("rio");
         public static final CANBus kCANivoreBus = new CANBus("Default Name");
+
+        public static final int kPdhCanId = 1;
     }
 }
