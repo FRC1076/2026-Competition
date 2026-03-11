@@ -5,28 +5,22 @@
     "data": {
       "commands": [
         {
-          "type": "deadline",
+          "type": "parallel",
           "data": {
             "commands": [
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 0.4
-                }
-              },
               {
                 "type": "named",
                 "data": {
                   "name": "Initiate Autoaim"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Start Intake"
+                }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Start Intake"
           }
         },
         {
@@ -52,9 +46,9 @@
                 }
               },
               {
-                "type": "wait",
+                "type": "path",
                 "data": {
-                  "waitTime": 3.0
+                  "pathName": "Shoot to Srt1"
                 }
               },
               {
@@ -69,7 +63,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Shoot Left to Collect More Left"
+            "pathName": "Srt1 to Collect More Left"
           }
         },
         {
