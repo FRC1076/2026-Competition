@@ -52,4 +52,9 @@ public class KickerIONeo implements KickerIO{
 
         inputs.velocityRadPerSec = m_encoder.getVelocity();
     }
+
+    @Override
+    public void setVelocityRadPerSec(double velocity) {
+        //nothing because neos can't do that
+    }
 }

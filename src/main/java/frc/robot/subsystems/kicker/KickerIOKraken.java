@@ -1,14 +1,9 @@
 package frc.robot.subsystems.kicker;
 
-import frc.robot.subsystems.kicker.KickerConstants;
-import frc.robot.subsystems.kicker.KickerConstants.Control;
-
-
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
-
 
 import lib.units.TalonFXUnitConverter;
 
@@ -31,7 +26,7 @@ public class KickerIOKraken implements KickerIO {
 
 
     public void KickerIOTalon() {
-        m_motor = new TalonFX(KickerConstants.kMotorPort);
+        m_motor = new TalonFX(KickerConstants.kCanId);
 
         m_motorConfig = new TalonFXConfiguration();
         m_unitConverter = new TalonFXUnitConverter();
@@ -42,18 +37,18 @@ public class KickerIOKraken implements KickerIO {
         m_motorConfig.CurrentLimits.StatorCurrentLimit = KickerConstants.kCurrentLimitAmps;
 
         //Inverted
-        m_motorConfig.MotorOutput.Inverted = KickerConstants.kInverted;
+        m_motorConfig.MotorOutput.Inverted = KickerConstants.kPositiveDirection;
 
-        //set brale mode
-        m_motorConfig.MotorOutput.NeutralMode = KickerConstants.kIdleMode;
+        //set brake mode
+        m_motorConfig.MotorOutput.NeutralMode = KickerConstants.kNeutralMode;
         
         // Closed loop
-        m_motorConfig.Slot0.kP = m_unitConverter.fromSIkp(Control.kP);
-        m_motorConfig.Slot0.kI = m_unitConverter.fromSIkp(Control.kI);
-        m_motorConfig.Slot0.kD = m_unitConverter.fromSIkp(Control.kD);
-        m_motorConfig.Slot0.kS = m_unitConverter.fromSIkp(Control.kS);
-        m_motorConfig.Slot0.kV = m_unitConverter.fromSIkp(Control.kV);
-        m_motorConfig.Slot0.kA = m_unitConverter.fromSIkp(Control.kA);
+        m_motorConfig.Slot0.kP = m_unitConverter.fromSIkP(KickerConstants.kP);
+        m_motorConfig.Slot0.kI = m_unitConverter.fromSIkI(KickerConstants.kI);
+        m_motorConfig.Slot0.kD = m_unitConverter.fromSIkD(KickerConstants.kD);
+        m_motorConfig.Slot0.kS = m_unitConverter.fromSIkS(KickerConstants.kS);
+        m_motorConfig.Slot0.kV = m_unitConverter.fromSIkV(KickerConstants.kV);
+        m_motorConfig.Slot0.kA = m_unitConverter.fromSIkA(KickerConstants.kA);
         
        // m_motorConfig.MotionMagic.MotionMagicAcceleration = m_unitConverter.fromSIAccel(Control.kMaxAcceleration);
        // m_motorConfig.MotionMagic.MotionMagicJerk = m_unitConverter.fromSIJerk(Control.kMaxJerk);
@@ -73,7 +68,7 @@ public class KickerIOKraken implements KickerIO {
     }
 
     @Override
-    public void SetVelocityRadPerSec(double velocity) {
+    public void setVelocityRadPerSec(double velocity) {
         if(velocity != 0) {
             m_velocityRequest.Velocity = m_unitConverter.fromSIVel(velocity);
             m_motor.setControl(m_velocityRequest);
