@@ -17,4 +17,8 @@ public class KickerIODisabled implements KickerIO {
         inputs.appliedVoltage = voltageTarget;
     }
     
+    @Override
+    public void setVelocityRadPerSec(double velocity) {
+        // Do nothing, we are disabled
+    }
 }
