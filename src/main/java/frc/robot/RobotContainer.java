@@ -128,20 +128,21 @@ public class RobotContainer {
                 m_vision,
                 m_elastic
             );
-            m_turret = new TurretSubsystem(new TurretIOKraken());
-            m_flywheel = new FlywheelSubsystem(new FlywheelIOKraken());
-            m_hood = new HoodSubsystem(new HoodIONeo());
+            m_turret = new TurretSubsystem(new TurretIODisabled());
+            m_flywheel = new FlywheelSubsystem(new FlywheelIODisabled());
+            m_hood = new HoodSubsystem(new HoodIODisabled());
 
-            m_rollers = new RollerSubsystem(new RollerIOKraken());
-            m_slapdown = new SlapdownSubsystem(new SlapdownIOKraken());
-            m_spindexer = new SpindexerSubsystem(new SpindexerIOKraken());
-            m_kicker = new KickerSubsystem(new KickerIONeo());
+            m_rollers = new RollerSubsystem(new RollerIODisabled());
+            m_slapdown = new SlapdownSubsystem(new SlapdownIODisabled());
+            m_spindexer = new SpindexerSubsystem(new SpindexerIODisabled());
+            m_kicker = new KickerSubsystem(new KickerIODisabled());
 
             m_climber = new ClimberSubsystem(new ClimberIODisabled());
             m_climbHook = new HookSubsystem(new HookIODisabled());
 
             m_leds = new LEDSubsystem(new LEDIORio());
 
+            /*
             for (PhotonConfig config : PhotonConfig.values()) {
                 PhotonCamera cam = new PhotonCamera(config.name);
                 m_vision.addCamera(new PhotonVisionLocalizerWithTagPrioritization(
@@ -156,7 +157,7 @@ public class RobotContainer {
                     VisionConstants.kHubTags,
                     (1.0 / PhysicalConstants.VisionConstants.PhotonVision.kHubTagPriority))
                 );
-            }
+            }*/
         } else {
             m_drive = new DriveSubsystem(
                 new DriveIOSim(TunerConstants.createDrivetrain()),
