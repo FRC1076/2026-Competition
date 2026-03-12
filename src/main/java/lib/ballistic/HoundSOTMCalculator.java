@@ -17,7 +17,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 
 public class HoundSOTMCalculator {
-    private static final InterpolatingDoubleTreeMap shotFlywheelSpeedMap = CommonLookupTable.distanceToFlywheelSpeedMap;
+    private static final InterpolatingDoubleTreeMap shotFlywheelSpeedMap = CommonLookupTable.hubTable.flywheelSpeed();
 
     public static CommonShotSolution solveShootOnTheFly(
             Pose3d shooterPose,

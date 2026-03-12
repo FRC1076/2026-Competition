@@ -48,9 +48,9 @@ import org.littletonrobotics.junction.Logger;
     private static double minDistance;
     private static double maxDistance;
     private static double phaseDelay;
-    private static final InterpolatingTreeMap<Double, Double> shotHoodAngleMap = CommonLookupTable.distanceToHoodAngleMap;
-    private static final InterpolatingDoubleTreeMap shotFlywheelSpeedMap = CommonLookupTable.distanceToFlywheelSpeedMap;
-    private static final InterpolatingDoubleTreeMap timeOfFlightMap = CommonLookupTable.distanceToTimeOfFlightMap;
+    private static final InterpolatingTreeMap<Double, Double> shotHoodAngleMap = CommonLookupTable.hubTable.hoodAngle();
+    private static final InterpolatingDoubleTreeMap shotFlywheelSpeedMap = CommonLookupTable.hubTable.flywheelSpeed();
+    private static final InterpolatingDoubleTreeMap timeOfFlightMap = CommonLookupTable.hubTable.timeOfFlight();
 
     public static CommonShotSolution calculate(
         Pose2d turretPose,

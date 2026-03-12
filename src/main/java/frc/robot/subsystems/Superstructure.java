@@ -216,37 +216,37 @@ public class Superstructure {
     private void updateShootingParams() {
         final Pose3d shooterPose = new Pose3d(m_robotPoseSupplier.get()).transformBy(PhysicalConstants.kBotRelativeTurretPose);
         final ChassisSpeeds robotVelocity = m_robotVelocitySupplier.get();
-        final Pose3d target;
         
         final Pose3d shooterPoseAllianceColorCoordinates = shooterPose.relativeTo(SuperstructureConstants.kAllianceOrigin);
 
-        if (shooterPoseAllianceColorCoordinates.getX() <= PhysicalConstants.FieldConstants.LinesVertical.allianceZone + 1) {
-            target = SuperstructureConstants.kHubTarget;
-        } else if (shooterPoseAllianceColorCoordinates.getX() >= PhysicalConstants.FieldConstants.LinesVertical.neutralZoneFar
-                && shooterPoseAllianceColorCoordinates.getX() <= PhysicalConstants.FieldConstants.LinesVertical.oppAllianceZone) {
-            m_shootingParams = new CommonShotSolution(0, Math.PI, 300);
-            return;
-        } else if (shooterPoseAllianceColorCoordinates.getY() <= PhysicalConstants.FieldConstants.LinesHorizontal.center) {
-            target = SuperstructureConstants.kRightPassingTarget;
-        } else {
-            target = SuperstructureConstants.kLeftPassingTarget;
-        }
-
-        
         // Translate the chassis speeds
         final ChassisSpeeds turretVelocity = ChassisSpeeds.fromRobotRelativeSpeeds(new ChassisSpeeds(
             robotVelocity.vxMetersPerSecond - (robotVelocity.omegaRadiansPerSecond * PhysicalConstants.kBotRelativeTurretPose.getY()),
             robotVelocity.vyMetersPerSecond + (robotVelocity.omegaRadiansPerSecond * PhysicalConstants.kBotRelativeTurretPose.getX()),
             robotVelocity.omegaRadiansPerSecond
         ), shooterPose.getRotation().toRotation2d());
-
-        /* Basic launch calculator without SotM */
-        //m_shootingParams = BasicLaunchCalculator.calculate(shooterPose.toPose2d(), target.toPose2d());
-
-        // Calculate launch parameters with SOTM
-        m_shootingParams = SOTMLaunchCalculator.calculate(
-            shooterPose.toPose2d(), target.toPose2d(), turretVelocity
-        );
+        
+        // TODO: check tolerance (+ 0.25) on alliance zone (otherwise we'll ram into the trench)
+        if (shooterPoseAllianceColorCoordinates.getX() <= PhysicalConstants.FieldConstants.LinesVertical.allianceZone + 0.25) {
+            m_shootingParams = SOTMLaunchCalculator.calculateHub(shooterPose.toPose2d(), SuperstructureConstants.kHubTarget.toPose2d(), turretVelocity);
+            return;
+        } else if (shooterPoseAllianceColorCoordinates.getX() <= PhysicalConstants.FieldConstants.LinesVertical.neutralZoneNear
+                && shooterPoseAllianceColorCoordinates.getX() >= PhysicalConstants.FieldConstants.LinesVertical.allianceZone) {
+            m_shootingParams = SOTMLaunchCalculator.calculateHub(shooterPose.toPose2d(), SuperstructureConstants.kHubTarget.toPose2d(), turretVelocity);
+            m_shootingParams = CommonShotSolution.withZeroPitch(m_shootingParams); // Don't ram into the trench
+            return;
+        } else if (shooterPoseAllianceColorCoordinates.getX() >= PhysicalConstants.FieldConstants.LinesVertical.neutralZoneFar
+                && shooterPoseAllianceColorCoordinates.getX() <= PhysicalConstants.FieldConstants.LinesVertical.oppAllianceZone) {
+            m_shootingParams = SOTMLaunchCalculator.calculatePass(shooterPose.toPose2d(), SuperstructureConstants.kHubTarget.toPose2d(), turretVelocity);
+            m_shootingParams = CommonShotSolution.withZeroPitch(m_shootingParams); // Don't ram into the trench
+            return;
+        } else if (shooterPoseAllianceColorCoordinates.getY() <= PhysicalConstants.FieldConstants.LinesHorizontal.center) {
+            m_shootingParams = SOTMLaunchCalculator.calculatePass(shooterPose.toPose2d(), SuperstructureConstants.kRightPassingTarget.toPose2d(), turretVelocity);
+            return;
+        } else {
+            m_shootingParams = SOTMLaunchCalculator.calculatePass(shooterPose.toPose2d(), SuperstructureConstants.kLeftPassingTarget.toPose2d(), turretVelocity);
+            return;
+        }
     }
 
     public MutableSuperState getSuperState() {
