@@ -62,4 +62,20 @@ public class SOTMLaunchCalculator {
 
         return new CommonShotSolution(hoodAngleRadians, turretAngleRadians, flywheelSpeedRadPerSec);
     }
+
+    public static CommonShotSolution calculateHub(
+        Pose2d turretPose,
+        Pose2d targetPose,
+        ChassisSpeeds turretVelocity
+    ) {
+        return calculate(turretPose, targetPose, turretVelocity, CommonLookupTable.hubTable);
+    }
+
+    public static CommonShotSolution calculatePass(
+        Pose2d turretPose,
+        Pose2d targetPose,
+        ChassisSpeeds turretVelocity
+    ) {
+        return calculate(turretPose, targetPose, turretVelocity, CommonLookupTable.passingTable);
+    }
 }

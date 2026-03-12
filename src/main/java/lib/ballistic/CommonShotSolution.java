@@ -8,4 +8,8 @@ public record CommonShotSolution (
     double launchPitchRad,
     double launchYawRad,
     double launchSpeedRadPerSec
-) { }
+) {
+    public static CommonShotSolution withZeroPitch(CommonShotSolution old) {
+        return new CommonShotSolution(0, old.launchYawRad(), old.launchSpeedRadPerSec());
+    }
+}
