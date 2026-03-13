@@ -45,8 +45,8 @@ public class PhysicalConstants {
                     kDefaultMultiTagStdDevs.times(2),
                     PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
                     PoseStrategy.PNP_DISTANCE_TRIG_SOLVE,
-                    12.560835, 12.411879, 19.229705,
-                    0, 20, 45
+                    9.375, 13.178, 9.166,
+                    0, 20, 30
                 ),
                 FRONT_RIGHT(
                     "FRONT_RIGHT",
@@ -54,8 +54,8 @@ public class PhysicalConstants {
                     kDefaultMultiTagStdDevs.times(2),
                     PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
                     PoseStrategy.PNP_DISTANCE_TRIG_SOLVE,
-                    12.561091, -13.411623, 19.2290705,
-                    0, 20, -45
+                    9.375, -13.178, 9.166,
+                    0, 20, -30
                 ),
                 REAR_RIGHT(
                     "REAR_RIGHT",
@@ -63,7 +63,7 @@ public class PhysicalConstants {
                     kDefaultMultiTagStdDevs,
                     PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
                     PoseStrategy.PNP_DISTANCE_TRIG_SOLVE,
-                    -12.537499, -13.411967, 19.229364,
+                    -10.722310, -13.231252, 5.748,
                     0, 20, -135
                 ),
                 REAR_LEFT(
@@ -72,7 +72,7 @@ public class PhysicalConstants {
                     kDefaultMultiTagStdDevs,
                     PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
                     PoseStrategy.PNP_DISTANCE_TRIG_SOLVE,
-                    -12.810731, 12.810475, 10.479360,
+                    -10.722310, 13.231252, 11.811,
                     0, 20, 135
                 );
 
