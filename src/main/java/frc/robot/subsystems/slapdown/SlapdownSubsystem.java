@@ -50,6 +50,10 @@ public class SlapdownSubsystem extends SubsystemBase{
         return inputs.angleRadians;
     }
 
+    public boolean withinTolerance(double target) {
+        return Math.abs(getSlapdownAngleRadians() - target) < SlapdownConstants.kAngleToleranceRadians;
+    }
+
     @Override
     public void periodic() {
         io.updateInputs(inputs);
@@ -100,6 +104,22 @@ public class SlapdownSubsystem extends SubsystemBase{
     public Command runPosition(DoubleSupplier radians) {
         return Commands.run(
             () -> io.setPosition(MathUtil.clamp(radians.getAsDouble(), SlapdownConstants.kMinAngleRadians, SlapdownConstants.kMaxAngleRadians)),
+            this
+        );
+    }
+
+    /** Tell the slapdown to hold its position but allow it to be somehwat compliant */
+    public Command holdPositionWeak(double radians) {
+        return Commands.runOnce(
+            () -> io.setPositionWeak(MathUtil.clamp(radians, SlapdownConstants.kMinAngleRadians, SlapdownConstants.kMaxAngleRadians)),
+            this
+        );
+    }
+
+    /** Run the slapdown to weakly hold the supplied position */
+    public Command runHoldPositionWeak(DoubleSupplier radianSupplier) {
+        return Commands.run(
+            () -> io.setPositionWeak(MathUtil.clamp(radianSupplier.getAsDouble(), SlapdownConstants.kMinAngleRadians, SlapdownConstants.kMaxAngleRadians)),
             this
         );
     }

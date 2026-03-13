@@ -16,7 +16,7 @@ public interface SlapdownIO {
         public double velocityRadiansPerSecond = 0;
         public double motorTempDegC = 0;
 
-        public double motorCurrent = 0;
+        public double PIDTargetRadians = 0;
     }
 
     public abstract void setVoltage(double volts);
@@ -24,6 +24,10 @@ public interface SlapdownIO {
     public abstract void setVoltageNoSoftStops(double volts);
 
     public abstract void setPosition(double radians);
+
+    public default void setPositionWeak(double radians) {
+        setPosition(radians);
+    }
 
     public abstract void updateInputs(SlapdownIOInputs inputs);
 

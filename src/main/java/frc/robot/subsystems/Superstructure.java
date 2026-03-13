@@ -305,10 +305,14 @@ public class Superstructure {
     }
 
     public Command applyIntakeStateAllParallel(IntakeStates state) {
-        return Commands.parallel(
-            setIntakeState(state),
-            m_slapdown.applyPosition(state.kSlapdownAngle),
-            m_roller.applyVelocity(state.kRollerVelocity)
+        return Commands.sequence(
+            Commands.parallel(
+                setIntakeState(state),
+                m_slapdown.applyPosition(state.kSlapdownAngle),
+                m_roller.applyVelocity(state.kRollerVelocity)
+            ),
+            Commands.waitUntil(() -> m_slapdown.withinTolerance(state.kSlapdownAngle)),
+            m_slapdown.holdPositionWeak(state.kSlapdownAngle)
         );
     }
 
