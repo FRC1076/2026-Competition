@@ -34,7 +34,7 @@ public class TurretConstants {
 
     // Internal absolute encoder stuff
     public static final double kEncoderOffsetRot = -0.683105;
-    public static final double kGearRatio = 10;
+    public static final double kSensorToMechanismRatio = 10;
     public static final double kRotorToSensorRatio = 1;
 
     // Closed loop configs

@@ -73,7 +73,7 @@ public class TurretIOKraken implements TurretIO {
 
         // Offset from internal absolute encoder
         // m_motorConfig.Feedback.FeedbackRotorOffset = TurretConstants.kEncoderOffsetRot; // We'll just start at zero
-        m_motorConfig.Feedback.SensorToMechanismRatio = TurretConstants.kGearRatio;
+        m_motorConfig.Feedback.SensorToMechanismRatio = TurretConstants.kSensorToMechanismRatio;
 
         // Closed loop
         m_motorConfig.Slot0.kP = m_unitConverter.fromSIkP(TurretConstants.kP);
