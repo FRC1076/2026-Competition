@@ -13,6 +13,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.units.measure.Angle;
@@ -20,7 +21,6 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
-import edu.wpi.first.wpilibj.DigitalInput;
 import lib.hardware.BeamBreak;
 import lib.units.TalonFXUnitConverter;
 
@@ -65,6 +65,11 @@ public class TurretIOKraken implements TurretIO {
 
         // Set brake mode
         m_motorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+
+        // CANcoder
+        m_motorConfig.Feedback.FeedbackRemoteSensorID = TurretConstants.kCANcoderCANId;
+        m_motorConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
+        m_motorConfig.Feedback.RotorToSensorRatio = TurretConstants.kRotorToSensorRatio;
 
         // Offset from internal absolute encoder
         // m_motorConfig.Feedback.FeedbackRotorOffset = TurretConstants.kEncoderOffsetRot; // We'll just start at zero

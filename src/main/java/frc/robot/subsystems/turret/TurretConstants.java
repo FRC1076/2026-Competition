@@ -13,6 +13,7 @@ import frc.robot.Constants.CANConstants;
 public class TurretConstants {
     // CAN
     public static final int kCANId = 34;
+    public static final int kCANcoderCANId = 35;
     public static final CANBus kCANBus = CANConstants.kCANivoreBus;
 
     // Beambreak???
@@ -34,6 +35,7 @@ public class TurretConstants {
     // Internal absolute encoder stuff
     public static final double kEncoderOffsetRot = -0.683105;
     public static final double kGearRatio = 10;
+    public static final double kRotorToSensorRatio = 1;
 
     // Closed loop configs
     public static final double kP = 10;
