@@ -331,8 +331,8 @@ public class RobotContainer {
             .onTrue(superstructureCommands.applyTurretStatesPointDirectlyBackForPassing());
 
         m_driverController.povDown()
-            .onTrue(superstructureCommands.reverseEverything())
-            .onFalse(superstructureCommands.stopReverseEverything());
+            .onTrue(superstructureCommands.reverseSpindexer())
+            .onFalse(superstructureCommands.stopReverseSpindexer());
     }
 
     /** Bind triggers on operator controller to commands */
@@ -422,6 +422,10 @@ public class RobotContainer {
                 m_spindexer.applyVoltage(0),
                 () -> m_spindexer.getVoltage() < 0.5
         ));
+
+        m_operatorController.x()
+            .onTrue(superstructureCommands.reverseEverything())
+            .onFalse(superstructureCommands.stopReverseEverything());
 
         m_operatorController.back()
             .onTrue(m_turret.rezeroTurret().ignoringDisable(true));

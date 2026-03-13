@@ -324,6 +324,10 @@ public class Superstructure {
         );
     }
 
+    public Command applyIndexStateSpindexerOnly(IndexStates state) {
+        return m_spindexer.applyVelocity(state.kSpindexerRadPerSec);
+    }
+
     /** Apply the passed in state to the turret, hood, and flywheel, all at the same time. */
     public Command applyTurretStateAllParallel(TurretStates state) {
         return Commands.parallel(
@@ -446,6 +450,14 @@ public class Superstructure {
                 m_superstructure.applyIndexStateAllParallel(IndexStates.IDLE),
                 m_superstructure.applyIntakeStateRollerOnly(IntakeStates.EXTENDED)
             );
+        }
+
+        public Command reverseSpindexer() {
+            return m_superstructure.applyIndexStateSpindexerOnly(IndexStates.REVERSE);
+        }
+
+        public Command stopReverseSpindexer() {
+            return m_superstructure.applyIndexStateSpindexerOnly(IndexStates.IDLE);
         }
 
         public Command intakeAndIndexToShoot() {
