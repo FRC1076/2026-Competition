@@ -45,7 +45,7 @@ public class PhysicalConstants {
                     kDefaultMultiTagStdDevs.times(2),
                     PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
                     PoseStrategy.PNP_DISTANCE_TRIG_SOLVE,
-                    9.375, 13.178, 9.166,
+                    9.278, 12.916, 9.168,
                     0, 20, 30
                 ),
                 FRONT_RIGHT(
@@ -54,7 +54,7 @@ public class PhysicalConstants {
                     kDefaultMultiTagStdDevs.times(2),
                     PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
                     PoseStrategy.PNP_DISTANCE_TRIG_SOLVE,
-                    9.375, -13.178, 9.166,
+                    9.278, -12.916, 9.168,
                     0, 20, -30
                 ),
                 REAR_RIGHT(
