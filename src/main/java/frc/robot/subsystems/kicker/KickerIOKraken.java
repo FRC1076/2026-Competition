@@ -25,8 +25,8 @@ public class KickerIOKraken implements KickerIO {
     private StatusSignal<Current> m_currentSignal;
 
 
-    public void KickerIOTalon() {
-        m_motor = new TalonFX(KickerConstants.kCanId);
+    public KickerIOKraken() {
+        m_motor = new TalonFX(KickerConstants.kCanId, KickerConstants.kCANBus);
 
         m_motorConfig = new TalonFXConfiguration();
         m_unitConverter = new TalonFXUnitConverter();
@@ -82,9 +82,11 @@ public class KickerIOKraken implements KickerIO {
     public void updateInputs(KickerIOInputs inputs) {
         m_voltageSignal.refresh();
         m_velocitySignal.refresh();
+        m_currentSignal.refresh();
 
         inputs.appliedVoltage = m_voltageSignal.getValueAsDouble();
-        inputs.currentAmps = m_unitConverter.toSIVel(m_velocitySignal.getValueAsDouble());
+        inputs.velocityRadPerSec = m_unitConverter.toSIVel(m_velocitySignal.getValueAsDouble());
+        inputs.currentAmps = (m_currentSignal.getValueAsDouble());
     }
 }
 

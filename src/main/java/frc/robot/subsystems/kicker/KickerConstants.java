@@ -4,13 +4,17 @@
 
 package frc.robot.subsystems.kicker;
 
+import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import frc.robot.Constants.CANConstants;
+
 public class KickerConstants {
     // CAN Id
     public static final int kCanId = 44;
+    public static final CANBus kCANBus = CANConstants.kCANivoreBus;
 
     // PID Constants
     public static final double kP = 0.1;
@@ -29,7 +33,7 @@ public class KickerConstants {
     public static final IdleMode kIdleMode = IdleMode.kBrake;
 
     // KRAKEN
-    public static final InvertedValue kPositiveDirection = InvertedValue.Clockwise_Positive;
+    public static final InvertedValue kPositiveDirection = InvertedValue.CounterClockwise_Positive;
     public static final NeutralModeValue kNeutralMode = NeutralModeValue.Brake;
 
     // Velocity conversion factor

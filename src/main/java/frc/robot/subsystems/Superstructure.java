@@ -319,13 +319,13 @@ public class Superstructure {
     public Command applyIndexStateAllParallel(IndexStates state) {
         return Commands.parallel(
             setIndexState(state),
-            m_spindexer.applyVelocity(state.kSpindexerRadPerSec),
+            m_spindexer.applyVoltage(state.kSpindexerVoltage),
             m_kicker.applyVoltage(state.kKickerVoltage)
         );
     }
 
     public Command applyIndexStateSpindexerOnly(IndexStates state) {
-        return m_spindexer.applyVelocity(state.kSpindexerRadPerSec);
+        return m_spindexer.applyVoltage(state.kSpindexerVoltage);
     }
 
     /** Apply the passed in state to the turret, hood, and flywheel, all at the same time. */

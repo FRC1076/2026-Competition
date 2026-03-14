@@ -34,7 +34,9 @@ import frc.robot.subsystems.hood.HoodConstants;
 import frc.robot.subsystems.hood.HoodIODisabled;
 import frc.robot.subsystems.hood.HoodIONeo;
 import frc.robot.subsystems.hood.HoodSubsystem;
+import frc.robot.subsystems.kicker.KickerIO;
 import frc.robot.subsystems.kicker.KickerIODisabled;
+import frc.robot.subsystems.kicker.KickerIOKraken;
 import frc.robot.subsystems.kicker.KickerIONeo;
 import frc.robot.subsystems.kicker.KickerSubsystem;
 import frc.robot.subsystems.led.LEDIODisabled;
@@ -132,10 +134,10 @@ public class RobotContainer {
             m_flywheel = new FlywheelSubsystem(new FlywheelIOKraken());
             m_hood = new HoodSubsystem(new HoodIONeo());
 
-            m_rollers = new RollerSubsystem(new RollerIOKraken());
-            m_slapdown = new SlapdownSubsystem(new SlapdownIOKraken());
+            m_rollers = new RollerSubsystem(new RollerIODisabled());
+            m_slapdown = new SlapdownSubsystem(new SlapdownIODisabled());
             m_spindexer = new SpindexerSubsystem(new SpindexerIOKraken());
-            m_kicker = new KickerSubsystem(new KickerIONeo());
+            m_kicker = new KickerSubsystem(new KickerIOKraken());
 
             m_climber = new ClimberSubsystem(new ClimberIODisabled());
             m_climbHook = new HookSubsystem(new HookIODisabled());
