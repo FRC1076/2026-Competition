@@ -34,10 +34,8 @@ import frc.robot.subsystems.hood.HoodConstants;
 import frc.robot.subsystems.hood.HoodIODisabled;
 import frc.robot.subsystems.hood.HoodIONeo;
 import frc.robot.subsystems.hood.HoodSubsystem;
-import frc.robot.subsystems.kicker.KickerIO;
 import frc.robot.subsystems.kicker.KickerIODisabled;
 import frc.robot.subsystems.kicker.KickerIOKraken;
-import frc.robot.subsystems.kicker.KickerIONeo;
 import frc.robot.subsystems.kicker.KickerSubsystem;
 import frc.robot.subsystems.led.LEDIODisabled;
 import frc.robot.subsystems.led.LEDIORio;
@@ -114,6 +112,7 @@ public class RobotContainer {
     private final SamuraiXboxController m_operatorController = 
         new SamuraiXboxController(OIConstants.kOperatorControllerPort);
 
+    // Command for the driver
     TeleopDriveCommand teleopDriveCommand;
 
     boolean endAuto = false;
@@ -125,6 +124,7 @@ public class RobotContainer {
         m_elastic = new Elastic();
 
         if (SystemConstants.kMode == RobotMode.REAL || RobotBase.isReal()) {
+            // The robot is real! Use the real IO layers
             m_drive = new DriveSubsystem(
                 new DriveIOHardware(TunerConstants.createDrivetrain()),
                 m_vision,
@@ -160,6 +160,7 @@ public class RobotContainer {
                 );
             }
         } else {
+            // The robot is not real. Use the disabled or simulation IO layers
             m_drive = new DriveSubsystem(
                 new DriveIOSim(TunerConstants.createDrivetrain()),
                 m_vision,
@@ -188,6 +189,7 @@ public class RobotContainer {
             () -> -m_driverController.getRightX()
         );
 
+        // Create the superstructure that brings all of the mechanisms together
         m_superstructure = new Superstructure(
             m_turret,
             m_flywheel,
@@ -243,9 +245,11 @@ public class RobotContainer {
                 Commands.runOnce(() -> m_elastic.putBoolean("Blue Won Auto", false))
             ));
 
+        // Reset auto-aim when autonomous ends
         new Trigger(() -> endAuto)
             .onTrue(m_superstructure.getCommandFactory().applyTurretIdle());
 
+        // Auton is not done when it first starts
         new Trigger(() -> DriverStation.isAutonomousEnabled())
             .onTrue(Commands.runOnce(() -> isAutonDone(false)));
     }
@@ -256,12 +260,15 @@ public class RobotContainer {
 
         m_drive.setDefaultCommand(teleopDriveCommand);
 
+        // Double clutch
         m_driverController.L1().and(m_driverController.R1().negate())
             .whileTrue(teleopDriveCommand.applyDoubleClutch());
 
+        // Single clutch
         m_driverController.R1().or(m_driverController.R2()).and(m_driverController.L1().negate())
             .whileTrue(teleopDriveCommand.applySingleClutch());
 
+        // Reset the heading of the gyro
         m_driverController.create()
             .onTrue(Commands.runOnce(() ->
                 m_drive.resetHeading()
