@@ -52,17 +52,6 @@ public final class Constants {
 
         // Autonomous command is selected in getAutonomousCommand() in RobotContainer
         
-        public enum TeamColors {
-            kTeamColorBlue("BLUE"),
-            kTeamColorRed("RED");
-
-            public final String color;
-
-            private TeamColors(String color) {
-                this.color = color;
-            }
-        }
-        
         // States describing whether the auton is on the left or right side of the alliance
         public enum AutonSides {
             Left(false),
