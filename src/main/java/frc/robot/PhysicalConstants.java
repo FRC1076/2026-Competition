@@ -41,8 +41,8 @@ public class PhysicalConstants {
             public static enum PhotonConfig {
                 FRONT_LEFT(
                     "FRONT_LEFT",
-                    kDefaultSingleTagStdDevs.times(2),
-                    kDefaultMultiTagStdDevs.times(2),
+                    kDefaultSingleTagStdDevs,
+                    kDefaultMultiTagStdDevs,
                     PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
                     PoseStrategy.PNP_DISTANCE_TRIG_SOLVE,
                     9.278, 12.916, 9.168,
@@ -50,8 +50,8 @@ public class PhysicalConstants {
                 ),
                 FRONT_RIGHT(
                     "FRONT_RIGHT",
-                    kDefaultSingleTagStdDevs.times(2),
-                    kDefaultMultiTagStdDevs.times(2),
+                    kDefaultSingleTagStdDevs,
+                    kDefaultMultiTagStdDevs,
                     PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
                     PoseStrategy.PNP_DISTANCE_TRIG_SOLVE,
                     9.278, -12.916, 9.168,
