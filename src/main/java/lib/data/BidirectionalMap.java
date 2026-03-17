@@ -5,6 +5,7 @@
 package lib.data;
 
 import java.util.HashMap;
+import java.util.function.BiConsumer;
 
 /** Bidirection map made using HashMaps. Allows the user to get by either key or value.
  *  Made with help from Gemini, but typed out by a user.
@@ -18,11 +19,13 @@ public class BidirectionalMap<K, V> {
 
     /** Associates the specified value with the specified key. */
     public void put(K key, V value) {
-        if (forwardMap.containsKey(key)) {
-            inverseMap.remove(forwardMap.remove(key));
+        if (key == null || value == null) {
+            throw new IllegalArgumentException("BidirectionalMap does not support null values");
         }
-        if (inverseMap.containsKey(value)) {
-            forwardMap.remove(inverseMap.remove(value));
+
+        V oldValue = forwardMap.remove(key);
+        if (oldValue != null) {
+            inverseMap.remove(oldValue);
         }
         
         forwardMap.put(key, value);
@@ -30,12 +33,12 @@ public class BidirectionalMap<K, V> {
     }
 
     /** Returns the value with which the key is mapped, or null if none. */
-    public V getByForwardKey(K key) {
+    public V get(K key) {
         return forwardMap.get(key);
     }
 
     /** Returns the key with which the value is mapped, or null if none. */
-    public K getByInverseKey(V value) {
+    public K getKey(V value) {
         return inverseMap.get(value);
     }
 
@@ -47,6 +50,11 @@ public class BidirectionalMap<K, V> {
     /** Returns if the specified value has a mapping. */
     public boolean containsValue(V value) {
         return inverseMap.containsKey(value);
+    }
+
+    /** Performs the passed in action for each key-value pair. */
+    public void forEach(BiConsumer<? super K, ? super V> action) {
+        forwardMap.forEach(action);
     }
 
     /** Removes the mapping for the specified key. */
