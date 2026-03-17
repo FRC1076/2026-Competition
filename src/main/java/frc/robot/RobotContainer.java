@@ -8,6 +8,7 @@
 
 package frc.robot;
 
+import frc.robot.Constants.GameConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.SystemConstants;
 import frc.robot.Constants.SystemConstants.RobotMode;
@@ -71,7 +72,9 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Threads;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -204,6 +207,9 @@ public class RobotContainer {
             () -> m_drive.getChassisSpeeds()
         );
 
+        // Set the alliance color
+        CommandScheduler.getInstance().schedule(setAlliance(m_elastic.getSelectedTeamColor()));
+
         registerNamedCommands();
         m_drive.configureAutoBuilder();
 
@@ -252,6 +258,10 @@ public class RobotContainer {
         // Auton is not done when it first starts
         new Trigger(() -> DriverStation.isAutonomousEnabled())
             .onTrue(Commands.runOnce(() -> isAutonDone(false)));
+
+        // Update alliance from Elastic
+        new Trigger(() -> m_elastic.getSelectedTeamColor() == GameConstants.teamColor)
+            .onChange(setAlliance(m_elastic.getSelectedTeamColor()));
     }
 
     /** Bind triggers on driver controller to commands */
@@ -479,12 +489,6 @@ public class RobotContainer {
     }
 
     /** Returns if the our hub is active */
-    @AutoLogOutput(key = "Match/OurHubActive")
-    public boolean isOurHubActive() {
-        return ShiftUtil.isOurAllianceActive();
-    }
-
-    /** Returns if the our hub is active */
     @AutoLogOutput(key = "Match/ActiveHubColor")
     public String activeHubHexString() {
         return ShiftUtil.getActiveHubColorHex();
@@ -502,6 +506,14 @@ public class RobotContainer {
             Commands.waitSeconds(20),
             Commands.runOnce(() -> Threads.setCurrentThreadPriority(true, 1)),
             Commands.print("Main Thread Priority raised to RT1 at " + Timer.getFPGATimestamp())
+        ).ignoringDisable(true);
+    }
+
+    /** Command to change which alliance we are on */
+    public Command setAlliance(Alliance newAlliance) {
+        return Commands.parallel(
+            Commands.runOnce(() -> m_drive.setAllianceRotation(newAlliance)),
+            Commands.runOnce(() -> m_superstructure.setTeamColor(newAlliance))
         ).ignoringDisable(true);
     }
 }

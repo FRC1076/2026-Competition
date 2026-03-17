@@ -59,11 +59,7 @@ public class DriveSubsystem extends SubsystemBase {
         this.elastic = elastic;
         vision.registerMeasurementConsumer(this.io::addVisionMeasurement); // In DriveIOHardware, addVisionMeasurement is built into the SwerveDrivetrain class
 
-        if (GameConstants.teamColor == Alliance.Red) {
-            io.setAllianceRotation(Rotation2d.fromDegrees(180));
-        } else {
-            io.setAllianceRotation(Rotation2d.fromDegrees(0));
-        }
+       setAllianceRotation(elastic.getSelectedTeamColor());
 
         io.resetHeading();
         
@@ -210,6 +206,15 @@ public class DriveSubsystem extends SubsystemBase {
      */
     public void resetHeading() {
         io.resetHeading();
+    }
+
+    /** Allows you to select which way is forward based on the alliance */
+    public void setAllianceRotation(Alliance alliance) {
+        if (GameConstants.teamColor == Alliance.Red) {
+            io.setAllianceRotation(Rotation2d.fromDegrees(180));
+        } else {
+            io.setAllianceRotation(Rotation2d.fromDegrees(0));
+        }
     }
 
     public Rotation2d getHeading() {

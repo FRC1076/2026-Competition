@@ -11,6 +11,7 @@ import org.littletonrobotics.junction.AutoLogOutput;
 
 import frc.robot.PhysicalConstants;
 import frc.robot.subsystems.SuperstructureConstants.ClimbStates;
+import frc.robot.subsystems.SuperstructureConstants.FieldTargets;
 import frc.robot.subsystems.SuperstructureConstants.IndexStates;
 import frc.robot.subsystems.SuperstructureConstants.IntakeStates;
 import frc.robot.subsystems.SuperstructureConstants.TurretStates;
@@ -30,6 +31,7 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -146,6 +148,7 @@ public class Superstructure {
     private final SuperstructureCommandFactory m_commandFactory;
 
     private CommonShotSolution m_shootingParams;
+    private FieldTargets fieldTargets = SuperstructureConstants.kBlueAllianceTargets;
 
     public Superstructure(
         TurretSubsystem turret,
@@ -217,7 +220,7 @@ public class Superstructure {
         final Pose3d shooterPose = new Pose3d(m_robotPoseSupplier.get()).transformBy(PhysicalConstants.kBotRelativeTurretPose);
         final ChassisSpeeds robotVelocity = m_robotVelocitySupplier.get();
         
-        final Pose3d shooterPoseAllianceColorCoordinates = shooterPose.relativeTo(SuperstructureConstants.kAllianceOrigin);
+        final Pose3d shooterPoseAllianceColorCoordinates = shooterPose.relativeTo(fieldTargets.kAllianceOrigin());
 
         // Translate the chassis speeds
         final ChassisSpeeds turretVelocity = ChassisSpeeds.fromRobotRelativeSpeeds(new ChassisSpeeds(
@@ -228,29 +231,39 @@ public class Superstructure {
         
         // TODO: check tolerance (+ 0.25) on alliance zone (otherwise we'll ram into the trench)
         if (shooterPoseAllianceColorCoordinates.getX() <= PhysicalConstants.FieldConstants.LinesVertical.allianceZone + 0.25) {
-            m_shootingParams = SOTMLaunchCalculator.calculateHub(shooterPose.toPose2d(), SuperstructureConstants.kHubTarget.toPose2d(), turretVelocity);
+            m_shootingParams = SOTMLaunchCalculator.calculateHub(shooterPose.toPose2d(), fieldTargets.kHubTarget().toPose2d(), turretVelocity);
             return;
         } else if (shooterPoseAllianceColorCoordinates.getX() <= PhysicalConstants.FieldConstants.LinesVertical.neutralZoneNear
                 && shooterPoseAllianceColorCoordinates.getX() >= PhysicalConstants.FieldConstants.LinesVertical.allianceZone) {
-            m_shootingParams = SOTMLaunchCalculator.calculateHub(shooterPose.toPose2d(), SuperstructureConstants.kHubTarget.toPose2d(), turretVelocity);
+            m_shootingParams = SOTMLaunchCalculator.calculateHub(shooterPose.toPose2d(), fieldTargets.kHubTarget().toPose2d(), turretVelocity);
             m_shootingParams = CommonShotSolution.withZeroPitch(m_shootingParams); // Don't ram into the trench
             return;
         } else if (shooterPoseAllianceColorCoordinates.getX() >= PhysicalConstants.FieldConstants.LinesVertical.neutralZoneFar
                 && shooterPoseAllianceColorCoordinates.getX() <= PhysicalConstants.FieldConstants.LinesVertical.oppAllianceZone) {
-            m_shootingParams = SOTMLaunchCalculator.calculatePass(shooterPose.toPose2d(), SuperstructureConstants.kHubTarget.toPose2d(), turretVelocity);
+            // TODO: actually have this point at the passing targets
+            m_shootingParams = SOTMLaunchCalculator.calculatePass(shooterPose.toPose2d(), fieldTargets.kHubTarget().toPose2d(), turretVelocity);
             m_shootingParams = CommonShotSolution.withZeroPitch(m_shootingParams); // Don't ram into the trench
             return;
         } else if (shooterPoseAllianceColorCoordinates.getY() <= PhysicalConstants.FieldConstants.LinesHorizontal.center) {
-            m_shootingParams = SOTMLaunchCalculator.calculatePass(shooterPose.toPose2d(), SuperstructureConstants.kRightPassingTarget.toPose2d(), turretVelocity);
+            m_shootingParams = SOTMLaunchCalculator.calculatePass(shooterPose.toPose2d(), fieldTargets.kRightPassingTarget().toPose2d(), turretVelocity);
             return;
         } else {
-            m_shootingParams = SOTMLaunchCalculator.calculatePass(shooterPose.toPose2d(), SuperstructureConstants.kLeftPassingTarget.toPose2d(), turretVelocity);
+            m_shootingParams = SOTMLaunchCalculator.calculatePass(shooterPose.toPose2d(), fieldTargets.kLeftPassingTarget().toPose2d(), turretVelocity);
             return;
         }
     }
 
     public MutableSuperState getSuperState() {
         return m_superState;
+    }
+
+    /** Sets the team color for where to shoot fuel */
+    public void setTeamColor(Alliance color) {
+        if (color == Alliance.Blue) {
+            fieldTargets = SuperstructureConstants.kBlueAllianceTargets;
+        } else {
+            fieldTargets = SuperstructureConstants.kRedAllianceTargets;
+        }
     }
 
     /** Returns a trigger that is true when the robot is ready to shoot fuel */

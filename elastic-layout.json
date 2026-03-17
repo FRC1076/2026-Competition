@@ -145,19 +145,6 @@
             }
           },
           {
-            "title": "teamColor",
-            "x": 880.0,
-            "y": 0.0,
-            "width": 120.0,
-            "height": 120.0,
-            "type": "Large Text Display",
-            "properties": {
-              "topic": "/SmartDashboard/teamColor",
-              "period": 0.06,
-              "data_type": "string"
-            }
-          },
-          {
             "title": "Auton Side Chooser",
             "x": 1240.0,
             "y": 0.0,
@@ -179,6 +166,19 @@
             "type": "ComboBox Chooser",
             "properties": {
               "topic": "/SmartDashboard/Auto Chooser",
+              "period": 0.06,
+              "sort_options": false
+            }
+          },
+          {
+            "title": "Team Color",
+            "x": 880.0,
+            "y": 0.0,
+            "width": 120.0,
+            "height": 120.0,
+            "type": "ComboBox Chooser",
+            "properties": {
+              "topic": "/SmartDashboard/Team Color",
               "period": 0.06,
               "sort_options": false
             }

@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems;
 
-import java.util.HashMap;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -23,9 +21,8 @@ public class Elastic {
     // private SendableChooser<TeamColors> teamChooser;
     private Field2d field;
     private SendableChooser<AutonSides> autonSideChooser;
-    private HashMap<Alliance, String> AllianceNames; 
+    private SendableChooser<Alliance> allianceChooser;
     private SendableChooser<Command> autoChooser;
-    private Alliance currentAllianceName;
 
     public Elastic() {
         /* This is a dropdown menu on the SmartDashboard that allows the user to select whether 
@@ -40,11 +37,12 @@ public class Elastic {
         autonSideChooser.addOption(AutonSides.Right.name(), AutonSides.Right);
         SmartDashboard.putData("Auton Side Chooser", autonSideChooser);
 
-        // Maps the Alliance enum that the Driver Station returns to string names
-        AllianceNames = new HashMap<>();
-        AllianceNames.put(Alliance.Blue, "Blue");
-        AllianceNames.put(Alliance.Red, "Red");
-        this.putSelectedTeamColor();
+        // Allow selection of alliance on Elastic
+        allianceChooser = new SendableChooser<>();
+        allianceChooser.setDefaultOption(GameConstants.teamColor.name(), GameConstants.teamColor);
+        allianceChooser.addOption(Alliance.Blue.name(), Alliance.Blue);
+        allianceChooser.addOption(Alliance.Red.name(), Alliance.Red);
+        SmartDashboard.putData("Team Color", allianceChooser);
 
         // Init auto chooser to be empty
         autoChooser = new SendableChooser<Command>();
@@ -76,25 +74,7 @@ public class Elastic {
 
     /** Gets the selected team color from the driver station */
     public Alliance getSelectedTeamColor() {
-        return GameConstants.teamColor;
-    }
-
-    public void putSelectedTeamColor() {
-        this.putSelectedTeamColor(this.getSelectedTeamColor());
-    }
-
-    public void putSelectedTeamColor(Alliance alliance) {
-        SmartDashboard.putString(
-            "teamColor",
-            AllianceNames.get(alliance));
-        this.currentAllianceName = alliance;
-    }
-
-    /** Sends the selected team color to the dashboard if it has changed */
-    public void updateTeamColor() {
-        if (this.getSelectedTeamColor() != this.currentAllianceName) {
-            this.putSelectedTeamColor();
-        }
+        return allianceChooser.getSelected();
     }
 
     public void updateField(Pose2d robotPose) {

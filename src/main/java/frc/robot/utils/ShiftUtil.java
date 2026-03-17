@@ -5,8 +5,6 @@
 package frc.robot.utils;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import frc.robot.Constants.GameConstants;
 
 public class ShiftUtil {
     // get the time (in seconds) left until next 
@@ -43,24 +41,6 @@ public class ShiftUtil {
     // a method if there are less then or equal to 3 seconnds 
     public static boolean shiftEndWarning() {
         return getSecondsRemainingInShift() <= 3;
-    }
-
-    public static boolean isOurAllianceActive(){
-        boolean blueAllianceActiveFirst = getAutonWinner().equals("R"); // FMS sends who will be inactive first
-        boolean areWeBlue = GameConstants.teamColor == Alliance.Blue;
-        int remainingSeconds = (int) DriverStation.getMatchTime();
-
-        if (remainingSeconds > 130 || remainingSeconds < 30){
-            return true;
-        } else if (remainingSeconds > 105){
-            return blueAllianceActiveFirst == areWeBlue;
-        } else if (remainingSeconds > 80){
-            return !(blueAllianceActiveFirst == areWeBlue);
-        } else if (remainingSeconds > 55){
-            return blueAllianceActiveFirst == areWeBlue;
-        } else {
-            return !(blueAllianceActiveFirst == areWeBlue);
-        }
     }
 
     /** Returns the hex string of the alliance color whose hub is currently active.

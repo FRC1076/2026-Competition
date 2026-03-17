@@ -9,8 +9,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import frc.robot.Constants;
 import frc.robot.PhysicalConstants;
 
 public class SuperstructureConstants {    
@@ -146,25 +144,31 @@ public class SuperstructureConstants {
     public static final double kLeftPassingTargetYCoordinate = 0.75 * PhysicalConstants.FieldConstants.fieldWidth;
     public static final double kRightPassingTargetYCoordinate = 0.25 * PhysicalConstants.FieldConstants.fieldWidth;
 
-    public static final Pose3d kAllianceOrigin = 
-        Constants.GameConstants.teamColor == Alliance.Blue
-            ? new Pose3d()
-            : new Pose3d(
-                new Translation3d(PhysicalConstants.FieldConstants.fieldLength, PhysicalConstants.FieldConstants.fieldWidth, 0),
-                new Rotation3d(Rotation2d.fromRadians(Math.PI)));
-    public static final Pose3d kHubTarget = 
-        Constants.GameConstants.teamColor == Alliance.Blue
-            ? new Pose3d(PhysicalConstants.FieldConstants.Hub.topCenterPoint, Rotation3d.kZero)
-            : new Pose3d(PhysicalConstants.FieldConstants.Hub.oppTopCenterPoint, Rotation3d.kZero);
-    public static final Pose3d kLeftPassingTarget =
-        Constants.GameConstants.teamColor == Alliance.Blue
-            ? new Pose3d(new Translation3d(2, kLeftPassingTargetYCoordinate, 0), Rotation3d.kZero)
-            : new Pose3d(new Translation3d(PhysicalConstants.FieldConstants.fieldLength - 2, kRightPassingTargetYCoordinate, 0), Rotation3d.kZero);
-    public static final Pose3d kRightPassingTarget =
-        Constants.GameConstants.teamColor == Alliance.Blue
-            ? new Pose3d(new Translation3d(2, kRightPassingTargetYCoordinate, 0), Rotation3d.kZero)
-            : new Pose3d(new Translation3d(PhysicalConstants.FieldConstants.fieldLength - 2, kLeftPassingTargetYCoordinate, 0), Rotation3d.kZero);
-    // Left and right are swapped for red due to rotating 180 degrees
+    public record FieldTargets(
+        Pose3d kAllianceOrigin,
+        Pose3d kHubTarget,
+        Pose3d kLeftPassingTarget,
+        Pose3d kRightPassingTarget
+    ) {
+
+    }
+
+    public static final FieldTargets kBlueAllianceTargets = new FieldTargets(
+        new Pose3d(),
+        new Pose3d(PhysicalConstants.FieldConstants.Hub.topCenterPoint, Rotation3d.kZero),
+        new Pose3d(new Translation3d(2, kLeftPassingTargetYCoordinate, 0), Rotation3d.kZero),
+        new Pose3d(new Translation3d(2, kRightPassingTargetYCoordinate, 0), Rotation3d.kZero)
+    );
+
+    public static final FieldTargets kRedAllianceTargets = new FieldTargets(
+        new Pose3d(
+            new Translation3d(PhysicalConstants.FieldConstants.fieldLength, PhysicalConstants.FieldConstants.fieldWidth, 0),
+            new Rotation3d(Rotation2d.fromRadians(Math.PI))),
+        new Pose3d(PhysicalConstants.FieldConstants.Hub.oppTopCenterPoint, Rotation3d.kZero),
+        // Left and right are swapped for red due to rotating 180 degrees
+        new Pose3d(new Translation3d(PhysicalConstants.FieldConstants.fieldLength - 2, kRightPassingTargetYCoordinate, 0), Rotation3d.kZero),
+        new Pose3d(new Translation3d(PhysicalConstants.FieldConstants.fieldLength - 2, kLeftPassingTargetYCoordinate, 0), Rotation3d.kZero)
+    );
 
     public static final int kAutoAimMaxIterations = 5;
     public static final double kAutoAimTimeToleranceSeconds = 5;
