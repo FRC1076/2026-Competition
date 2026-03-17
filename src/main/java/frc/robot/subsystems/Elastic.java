@@ -51,7 +51,7 @@ public class Elastic {
         autoChooser.addOption("None", Commands.none());
         
         // Initialize fields, because otherwise they're only updated when teleop is enabled
-        this.putNumber("FlywheelVelocityTarget", 0);;
+        this.putNumber("FlywheelVelocityTarget", 0);
     }
 
     public void putNumber(String key, double value) {
