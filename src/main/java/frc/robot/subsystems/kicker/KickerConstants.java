@@ -17,16 +17,17 @@ public class KickerConstants {
     public static final CANBus kCANBus = CANConstants.kCANivoreBus;
 
     // PID Constants
-    public static final double kP = 0.1;
+    public static final double kP = 3;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
     public static final double kS = 0.0;
-    public static final double kV = 0.0;
+    public static final double kV = 6.0/750.0;
     public static final double kA = 0.0;
 
     // Voltage compensation and current limit
     public static final double kVoltageCompensation = 12;
-    public static final int kCurrentLimitAmps = 20;
+    public static final int kSupplyCurrentLimit = 40;
+    public static final int kStatorCurrentLimit = 50;
 
     // NEO
     public static final boolean kInverted = true;
@@ -37,6 +38,6 @@ public class KickerConstants {
     public static final NeutralModeValue kNeutralMode = NeutralModeValue.Brake;
 
     // Velocity conversion factor
-    public static final double kGearRatio = 1;
+    public static final double kGearRatio = 5;
     public static final double kVelocityConversionFactor = 2 * Math.PI / kGearRatio / 60.0;
 }

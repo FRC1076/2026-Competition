@@ -23,7 +23,7 @@ public class KickerIONeo implements KickerIO{
 
         m_motorConfig
             .voltageCompensation(KickerConstants.kVoltageCompensation)
-            .smartCurrentLimit(KickerConstants.kCurrentLimitAmps)
+            //.smartCurrentLimit(KickerConstants.kCurrentLimitAmps)
             .inverted(KickerConstants.kInverted)
             .idleMode(KickerConstants.kIdleMode);
 

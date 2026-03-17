@@ -42,6 +42,13 @@ public class KickerSubsystem extends SubsystemBase {
         );
     }
 
+    public Command applyVelocity(double radPerSec) {
+        return Commands.runOnce(
+            () -> io.setVelocityRadPerSec(radPerSec),
+            this
+        );
+    }
+
     /** Stop the Kickre's motor */
     public Command stop() {
         return applyVoltage(0);

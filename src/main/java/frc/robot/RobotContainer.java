@@ -427,7 +427,7 @@ public class RobotContainer {
         // Turns the spindexer to the opposite of it's current state    
         m_operatorController.rightBumper()
             .onTrue(Commands.either(
-                m_spindexer.applyVoltage(12),
+                m_spindexer.applyVoltage(9),
                 m_spindexer.applyVoltage(0),
                 () -> m_spindexer.getVoltage() < 0.5
         ));

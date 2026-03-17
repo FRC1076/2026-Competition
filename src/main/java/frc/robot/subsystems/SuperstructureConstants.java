@@ -97,25 +97,25 @@ public class SuperstructureConstants {
         }
     }
 
-    public static double kSpindexerIndexerVoltage = 12;
-    public static double kKickerIndexVoltage = 12;
+    public static double kSpindexerIndexerVoltage = 9;
+    public static double kKickerIndexRadPerSec = 150;
     
     public static enum IndexStates {
         /** list of all possible indexing states and their inputs */
         IDLE(0,0),
-        INDEXING(kSpindexerIndexerVoltage, kKickerIndexVoltage),
-        REVERSE(-4, -kKickerIndexVoltage);
+        INDEXING(kSpindexerIndexerVoltage, kKickerIndexRadPerSec),
+        REVERSE(-4, -kKickerIndexRadPerSec);
 
         public final double kSpindexerVoltage;
-        public final double kKickerVoltage;
+        public final double kKickerRadPerSec;
 
         /** construcor for indexStates */
         private IndexStates(
             double spindexerVoltage,
-            double kickerVoltage
+            double kickerRadPerSec
         ) {
             this.kSpindexerVoltage = spindexerVoltage;
-            this.kKickerVoltage = kickerVoltage;
+            this.kKickerRadPerSec = kickerRadPerSec;
         }
     }
 

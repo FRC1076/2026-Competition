@@ -2,7 +2,7 @@ package frc.robot.subsystems.kicker;
 
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
+import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import lib.units.TalonFXUnitConverter;
@@ -17,7 +17,7 @@ public class KickerIOKraken implements KickerIO {
     private TalonFXUnitConverter m_unitConverter;
 
     // velocity control 
-    private final MotionMagicVelocityVoltage m_velocityRequest = new MotionMagicVelocityVoltage(0);
+    private final VelocityTorqueCurrentFOC m_velocityRequest = new VelocityTorqueCurrentFOC(0);
 
     // Status Signals
     private StatusSignal<Voltage> m_voltageSignal;
@@ -34,13 +34,17 @@ public class KickerIOKraken implements KickerIO {
         // Voltage and current Configs 
         m_motorConfig.Voltage.PeakForwardVoltage = 12;
         m_motorConfig.Voltage.PeakReverseVoltage = -12;
-        m_motorConfig.CurrentLimits.StatorCurrentLimit = KickerConstants.kCurrentLimitAmps;
+        m_motorConfig.CurrentLimits.SupplyCurrentLimit = KickerConstants.kSupplyCurrentLimit;
+        m_motorConfig.CurrentLimits.StatorCurrentLimit = KickerConstants.kStatorCurrentLimit;
 
         //Inverted
         m_motorConfig.MotorOutput.Inverted = KickerConstants.kPositiveDirection;
 
         //set brake mode
         m_motorConfig.MotorOutput.NeutralMode = KickerConstants.kNeutralMode;
+
+        // Gear ratio
+        m_motorConfig.Feedback.SensorToMechanismRatio = KickerConstants.kGearRatio;
         
         // Closed loop
         m_motorConfig.Slot0.kP = m_unitConverter.fromSIkP(KickerConstants.kP);
@@ -49,9 +53,6 @@ public class KickerIOKraken implements KickerIO {
         m_motorConfig.Slot0.kS = m_unitConverter.fromSIkS(KickerConstants.kS);
         m_motorConfig.Slot0.kV = m_unitConverter.fromSIkV(KickerConstants.kV);
         m_motorConfig.Slot0.kA = m_unitConverter.fromSIkA(KickerConstants.kA);
-        
-       // m_motorConfig.MotionMagic.MotionMagicAcceleration = m_unitConverter.fromSIAccel(Control.kMaxAcceleration);
-       // m_motorConfig.MotionMagic.MotionMagicJerk = m_unitConverter.fromSIJerk(Control.kMaxJerk);
 
         // config the motor
         m_motor.getConfigurator().apply(m_motorConfig);
