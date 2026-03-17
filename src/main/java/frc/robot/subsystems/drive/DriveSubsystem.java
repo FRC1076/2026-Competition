@@ -123,7 +123,7 @@ public class DriveSubsystem extends SubsystemBase {
                     PathPlannerConstants.Control.rotPID
                 ),
                 RobotConfig.fromGUISettings(),
-                () -> GameConstants.teamColor == Alliance.Red,//DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
+                () -> elastic.getSelectedTeamColor() == Alliance.Red,//DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
                 this
             );
 
