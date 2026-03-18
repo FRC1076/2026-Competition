@@ -74,7 +74,6 @@ import edu.wpi.first.wpilibj.Threads;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -208,7 +207,7 @@ public class RobotContainer {
         );
 
         // Set the alliance color
-        CommandScheduler.getInstance().schedule(setAlliance(m_elastic.getSelectedTeamColor()));
+        setAlliance(m_elastic.getSelectedTeamColor());
 
         registerNamedCommands();
         m_drive.configureAutoBuilder();
@@ -261,7 +260,7 @@ public class RobotContainer {
 
         // Update alliance from Elastic
         new Trigger(() -> m_elastic.getSelectedTeamColor() == GameConstants.teamColor)
-            .onChange(setAlliance(m_elastic.getSelectedTeamColor()));
+            .onChange(Commands.runOnce(() -> setAlliance(m_elastic.getSelectedTeamColor())));
     }
 
     /** Bind triggers on driver controller to commands */
@@ -510,10 +509,8 @@ public class RobotContainer {
     }
 
     /** Command to change which alliance we are on */
-    public Command setAlliance(Alliance newAlliance) {
-        return Commands.parallel(
-            Commands.runOnce(() -> m_drive.setAllianceRotation(newAlliance)),
-            Commands.runOnce(() -> m_superstructure.setTeamColor(newAlliance))
-        ).ignoringDisable(true);
+    public void setAlliance(Alliance newAlliance) {
+        m_drive.setAllianceRotation(newAlliance);
+        m_superstructure.setTeamColor(newAlliance);
     }
 }
