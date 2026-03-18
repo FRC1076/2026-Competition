@@ -196,7 +196,7 @@ public class Superstructure {
                     Commands.run(() -> updateShootingParams()),
                     m_flywheel.runVelocity(() -> m_shootingParams.launchSpeedRadPerSec()),
                     m_hood.runPosition(() -> m_shootingParams.launchPitchRad()),
-                    m_turret.runPositionSafe(() -> m_shootingParams.launchYawRad(), safeToMoveTurret())
+                    m_turret.runPosition(() -> m_shootingParams.launchYawRad())
                 )
             );
 
@@ -346,7 +346,7 @@ public class Superstructure {
     public Command applyTurretStateAllParallel(TurretStates state) {
         return Commands.parallel(
             setTurretState(state),
-            applyTurretPositionSafe(state.kTurretAngleRadians),
+            m_turret.applyPosition(state.kTurretAngleRadians),
             m_flywheel.applyVelocity(state.kFlywheelRadPerSec),
             m_hood.applyPosition(state.kHoodAngleRadians)
         );

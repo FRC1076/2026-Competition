@@ -260,9 +260,9 @@ public class RobotContainer {
 
         // Update alliance from Elastic
         new Trigger(() -> m_elastic.getSelectedTeamColor() == Alliance.Blue)
-            .onTrue(Commands.runOnce(() -> setAlliance(Alliance.Blue)));
+            .onTrue(Commands.runOnce(() -> setAlliance(Alliance.Blue)).ignoringDisable(true));
         new Trigger(() -> m_elastic.getSelectedTeamColor() == Alliance.Red)
-            .onTrue(Commands.runOnce(() -> setAlliance(Alliance.Red)));
+            .onTrue(Commands.runOnce(() -> setAlliance(Alliance.Red)).ignoringDisable(true));
     }
 
     /** Bind triggers on driver controller to commands */
