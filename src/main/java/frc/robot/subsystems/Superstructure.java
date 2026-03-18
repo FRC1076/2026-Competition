@@ -271,8 +271,9 @@ public class Superstructure {
         return new Trigger(() ->
             m_flywheel.getVelocityRadPerSec() > SuperstructureConstants.kMinFlywheelShootingVelocity && 
             (!m_superState.getTurretState().kIsAutoAim ||
-                (m_flywheel.readyToShoot(m_shootingParams.launchSpeedRadPerSec()) 
-                && m_turret.withinTolerance(m_shootingParams.launchYawRad())))
+                //(m_flywheel.readyToShoot(m_shootingParams.launchSpeedRadPerSec()) 
+                m_flywheel.getVelocityRadPerSec() > SuperstructureConstants.kMinFlywheelShootingVelocity
+                && m_turret.withinTolerance(m_shootingParams.launchYawRad()))
         );
     }
 
@@ -333,7 +334,7 @@ public class Superstructure {
         return Commands.parallel(
             setIndexState(state),
             m_spindexer.applyVoltage(state.kSpindexerVoltage),
-            m_kicker.applyVelocity(state.kKickerRadPerSec)
+            m_kicker.applyVoltage(state.kKickerVoltage)
         );
     }
 

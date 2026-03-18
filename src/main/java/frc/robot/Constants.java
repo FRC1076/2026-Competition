@@ -46,7 +46,7 @@ public final class Constants {
 
     /** Contains starting position and team */
     public static class GameConstants {
-        public static Alliance teamColor = Alliance.Red;
+        public static Alliance teamColor = Alliance.Blue;
         public static AutonSides autonSide = AutonSides.Left;
         public static boolean rearRightCameraEnabledAuton = false; // Only set to true if running algae auton
 

@@ -152,7 +152,7 @@ public class TurretIOKraken implements TurretIO {
         // Rezero the turret if it passes by the beam break
         if (m_rezeroingBeamBreak.isBeamBroken()) {
             // TODO: uncomment this if we want to test it
-            m_motor.setPosition(TurretConstants.kBeamBreakRezeroingPosition, 0.01);
+            //m_motor.setPosition(TurretConstants.kBeamBreakRezeroingPosition, 0.01);
         }
     }
 

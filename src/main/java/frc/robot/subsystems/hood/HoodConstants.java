@@ -32,11 +32,9 @@ public class HoodConstants {
     public static final double kVelocityRelEncoderConversionFactor = kPositionRelEncoderConversionFactor / 60;
 
     // PID
-    public static final double kP = 60;
+    public static final double kP = 50;
     public static final double kI = 0;
-    public static final double kD = 0;
-    public static final double kMaxVelocityRadPerSec = Math.PI;
-    public static final double kMaxAccelerationRadPerSec2 = 2*Math.PI;
+    public static final double kD = 2;
 
     // Feedforward
     public static final double kS = 0;
@@ -46,6 +44,6 @@ public class HoodConstants {
 
     public static final double kCosRatio = 1.0/(2.0*Math.PI);
 
-    public static final double kCruiseVelocity = Math.PI;
-    public static final double kMaxAccel = Math.PI;
+    public static final double kCruiseVelocity = 100*Math.PI;
+    public static final double kMaxAccel = 100*Math.PI;
 }

@@ -12,8 +12,10 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class SamuraiPS5Controller extends CommandPS5Controller {
     public static double kDefaultStickDeadband = 0.05;
+    public static double kDefaultTriggerThreshold = 0.5;
 
     private double stickDeadband;
+    private double triggerThreshold;
 
     private DoubleSupplier leftStickX_DB;
     private DoubleSupplier leftStickY_DB;
@@ -21,12 +23,13 @@ public class SamuraiPS5Controller extends CommandPS5Controller {
     private DoubleSupplier rightStickY_DB;
 
     public SamuraiPS5Controller(int port) {
-        this(port, kDefaultStickDeadband);
+        this(port, kDefaultStickDeadband, kDefaultTriggerThreshold);
     }
 
-    public SamuraiPS5Controller(int port, double stickDeadband) {
+    public SamuraiPS5Controller(int port, double stickDeadband, double triggerThreshold) {
         super(port);
         this.stickDeadband = stickDeadband;
+        this.triggerThreshold = triggerThreshold;
         configSticks();
     }
 
@@ -71,5 +74,15 @@ public class SamuraiPS5Controller extends CommandPS5Controller {
 
     public Trigger rightActive() {
         return new Trigger(() -> getRightX() != 0 || getRightY() != 0);
+    }
+
+    @Override
+    public Trigger L2() {
+        return new Trigger(() -> getL2Axis() >= triggerThreshold);
+    }
+    
+    @Override
+    public Trigger R2() {
+        return new Trigger(() -> getR2Axis() >= triggerThreshold);
     }
 }

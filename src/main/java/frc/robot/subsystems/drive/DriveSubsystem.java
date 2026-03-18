@@ -210,7 +210,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     /** Allows you to select which way is forward based on the alliance */
     public void setAllianceRotation(Alliance alliance) {
-        if (GameConstants.teamColor == Alliance.Red) {
+        if (alliance == Alliance.Red) {
             io.setAllianceRotation(Rotation2d.fromDegrees(180));
         } else {
             io.setAllianceRotation(Rotation2d.fromDegrees(0));

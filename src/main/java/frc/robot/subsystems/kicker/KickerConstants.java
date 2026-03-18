@@ -36,6 +36,7 @@ public class KickerConstants {
     // KRAKEN
     public static final InvertedValue kPositiveDirection = InvertedValue.CounterClockwise_Positive;
     public static final NeutralModeValue kNeutralMode = NeutralModeValue.Brake;
+    public static final boolean kUseFOC = true;
 
     // Velocity conversion factor
     public static final double kGearRatio = 5;

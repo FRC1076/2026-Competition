@@ -37,6 +37,7 @@ public class FlywheelIOKraken implements FlywheelIO {
     private final VoltageOut m_voltageRequest;
     // private final MotionMagicVelocityVoltage m_velocityRequest;
     private final VelocityTorqueCurrentFOC m_velocityRequest;
+    private final Follower m_followerRequest;
 
     // Voltage, velocity, current, and temperature status signals
     private final StatusSignal<Voltage> m_leadVoltageSignal;
@@ -80,13 +81,14 @@ public class FlywheelIOKraken implements FlywheelIO {
         m_leadMotorConfig.Slot0.kV = m_unitConverter.fromSIkV(FlywheelConstants.kV);
         m_leadMotorConfig.Slot0.kA = m_unitConverter.fromSIkA(FlywheelConstants.kA);
 
-        m_followMotorConfig = m_leadMotorConfig.clone();
-        m_followMotor.setControl(new Follower(FlywheelConstants.kLeadMotorCANId, FlywheelConstants.kMotorAlignment));
-        
+        m_followMotorConfig = m_leadMotorConfig.clone();        
 
         // Apply the configuration to the motor
         m_leadMotor.getConfigurator().apply(m_leadMotorConfig);
         m_followMotor.getConfigurator().apply(m_followMotorConfig);
+
+        m_followerRequest = new Follower(FlywheelConstants.kLeadMotorCANId, FlywheelConstants.kMotorAlignment);
+        m_followMotor.setControl(m_followerRequest);
 
         // Set up status signals
         m_leadVoltageSignal = m_leadMotor.getMotorVoltage();

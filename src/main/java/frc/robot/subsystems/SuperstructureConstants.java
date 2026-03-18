@@ -16,7 +16,7 @@ public class SuperstructureConstants {
         /* list of possible operational states the turret can be set to */
         IDLE(0,0,0),
         MANUAL(false, 0),
-        AUTOAIM_IDLE(true, 0.75),
+        AUTOAIM_IDLE(true, 1),
         AUTOAIM_SHOOT(true, 1),
         HUB_PREALIGNED_LOCATION(0,0.01,245),
         POINT_DIRECTLY_BACK_FOR_PASSING(0,0.1,350),
@@ -95,25 +95,25 @@ public class SuperstructureConstants {
         }
     }
 
-    public static double kSpindexerIndexerVoltage = 9;
-    public static double kKickerIndexRadPerSec = 150;
+    public static double kSpindexerIndexerVoltage = 7.2;
+    public static double kKickerIndexVoltage = 12;
     
     public static enum IndexStates {
         /** list of all possible indexing states and their inputs */
         IDLE(0,0),
-        INDEXING(kSpindexerIndexerVoltage, kKickerIndexRadPerSec),
-        REVERSE(-4, -kKickerIndexRadPerSec);
+        INDEXING(kSpindexerIndexerVoltage, kKickerIndexVoltage),
+        REVERSE(-4, -kKickerIndexVoltage);
 
         public final double kSpindexerVoltage;
-        public final double kKickerRadPerSec;
+        public final double kKickerVoltage;
 
         /** construcor for indexStates */
         private IndexStates(
             double spindexerVoltage,
-            double kickerRadPerSec
+            double kickerVoltage
         ) {
             this.kSpindexerVoltage = spindexerVoltage;
-            this.kKickerRadPerSec = kickerRadPerSec;
+            this.kKickerVoltage = kickerVoltage;
         }
     }
 
