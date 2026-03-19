@@ -57,45 +57,56 @@ public class SuperstructureConstants {
     }
     /* intitalizes numerical values for the FuelManagmentStates enum */
     public static double kSlapdownUpAngle = 0;
-    public static double kSlapdownDownAngle = 5.5;
-    public static double kIntakeRollerVelocity = 140;
+    public static double kSlapdownDownAngle = 1.73;
+    public static double kIntakeRollerVoltage = 12;
 
-    public static double kSlapdownShakeUpAngle = kSlapdownDownAngle;
-    public static double kSlapdownShakePeriodSec = 0.5; // time for a full cycle
+    public static double kSlapdownShakeUpAngle = 0.8;
+    public static double kSlapdownShakePeriodSec = 1; // time for a full cycle
     
     public static enum IntakeStates {
         /** list of opereational states of the intake and thier inputs */
         RETRACTED(kSlapdownUpAngle,0),
         EXTENDED(kSlapdownDownAngle, 0),
-        INTAKING(kSlapdownDownAngle, kIntakeRollerVelocity),
-        SHOOTING(true, 200),
-        REVERSE(kSlapdownDownAngle, -kIntakeRollerVelocity);
+        INTAKING(kSlapdownDownAngle, kIntakeRollerVoltage),
+        //INTAKING(true, kSlapdownDownAngle, 1.3, 0.5, kIntakeRollerVoltage),
+        SHOOTING(true, kSlapdownDownAngle, 0.8, 1, 12),
+        RUN_KICK(true, kSlapdownDownAngle, 0.8, 0.8, 12),
+        REVERSE(kSlapdownDownAngle, -kIntakeRollerVoltage);
 
         public final double kSlapdownAngle;
         public final boolean kRunSlapdownShake;
-        public final double kRollerVelocity;
+        public final double kSlapdownShakeUpAngle;
+        public final double kSlapdownShakePeriodSecs;
+        public final double kRollerVoltage;
 
         /** Constructor for intake states */
         private IntakeStates(
             double slapdownAngle,
-            double rollerVelocity
+            double rollerVoltage
         ) {
             this.kSlapdownAngle = slapdownAngle;
             this.kRunSlapdownShake = false;
-            this.kRollerVelocity = rollerVelocity;
+            this.kSlapdownShakeUpAngle = slapdownAngle;
+            this.kSlapdownShakePeriodSecs = Double.MAX_VALUE;
+            this.kRollerVoltage = rollerVoltage;
         }
 
         private IntakeStates(
             boolean runSlapdownShake,
-            double rollerVelocity
+            double shakeDownAngle,
+            double slapdownShakeUpAngle,
+            double slapdownShakePeriodSecs,
+            double rollerVoltage
         ) {
             this.kRunSlapdownShake = runSlapdownShake;
-            this.kSlapdownAngle = kSlapdownDownAngle;
-            this.kRollerVelocity = rollerVelocity;
+            this.kSlapdownAngle = shakeDownAngle;
+            this.kSlapdownShakeUpAngle = slapdownShakeUpAngle;
+            this.kSlapdownShakePeriodSecs = slapdownShakePeriodSecs;
+            this.kRollerVoltage = rollerVoltage;
         }
     }
 
-    public static double kSpindexerIndexerVoltage = 7.2;
+    public static double kSpindexerIndexerVoltage = 12;
     public static double kKickerIndexVoltage = 12;
     
     public static enum IndexStates {

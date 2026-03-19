@@ -12,6 +12,7 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -26,6 +27,7 @@ import lib.units.TalonFXUnitConverter;
 
 public class TurretIOKraken implements TurretIO {
     private final TalonFX m_motor;
+    private final CANcoder m_encoder;
 
     private final TalonFXConfiguration m_motorConfig;
     private final TalonFXUnitConverter m_unitConverter;
@@ -47,6 +49,7 @@ public class TurretIOKraken implements TurretIO {
 
     public TurretIOKraken() {
         m_motor = new TalonFX(TurretConstants.kCANId, TurretConstants.kCANBus);
+        m_encoder = new CANcoder(TurretConstants.kCANcoderCANId, TurretConstants.kCANBus);
         m_motorConfig = new TalonFXConfiguration();
         m_unitConverter = new TalonFXUnitConverter();
 
@@ -96,7 +99,7 @@ public class TurretIOKraken implements TurretIO {
 
         // Apply configs
         m_motor.getConfigurator().apply(m_motorConfig);
-        m_motor.setPosition(0); // Start pointing forward
+        //m_motor.setPosition(0); // Start pointing forward
 
         // Status signals
         m_voltageSignal = m_motor.getMotorVoltage();
@@ -139,12 +142,12 @@ public class TurretIOKraken implements TurretIO {
 
     @Override
     public void resetPosition() {
-        m_motor.setPosition(0);
+        m_encoder.setPosition(0);
     }
 
     @Override
     public void resetPositionTo(double position) {
-        m_motor.setPosition(position);
+        m_encoder.setPosition(m_unitConverter.fromSIPos(position));
     }
 
     @Override

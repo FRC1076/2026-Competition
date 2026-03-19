@@ -16,8 +16,8 @@ public class RollerConstants {
     public static final CANBus kCANBus = CANConstants.kCANivoreBus;
 
     // Current limits
-    public static final int kSupplyCurrentLimit = 30;
-    public static final int kStatorCurrentLimit = 45;
+    public static final int kSupplyCurrentLimit = 40;
+    public static final int kStatorCurrentLimit = 60;
 
     public static final InvertedValue kInverted = InvertedValue.CounterClockwise_Positive;
     public static final NeutralModeValue kNeutralMode = NeutralModeValue.Brake;

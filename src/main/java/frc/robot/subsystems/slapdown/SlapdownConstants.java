@@ -22,10 +22,10 @@ public class SlapdownConstants {
 
     public static final boolean kUseFOC = true;
 
-    public static final double kGearRatio = 25;
-    public static final double kRotorOffsetRot = -0.241699 + 0.014648 + 0.013916;
+    public static final double kGearRatio = 25 * (48.0/32.0);
+    public static final double kRotorOffsetRot = -0.307617;
 
-    public static final double kP = 10;
+    public static final double kP = 12;
     public static final double kI = 0;
     public static final double kD = 0;
 

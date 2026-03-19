@@ -31,9 +31,9 @@ public class CommonLookupTable {
         hubTable.hoodAngle.put(6.0, 0.18); // Extrapolated by Gemini
         hubTable.hoodAngle.put(8.0, 0.24); // Extrapolated by Gemini
 
-        hubTable.flywheelSpeed.put(1.0, 180.0);
-        hubTable.flywheelSpeed.put(2.0, 195.0);
-        hubTable.flywheelSpeed.put(2.4, 204.0);
+        hubTable.flywheelSpeed.put(1.0, 179.0);
+        hubTable.flywheelSpeed.put(2.0, 191.0);
+        hubTable.flywheelSpeed.put(2.4, 198.0);
         hubTable.flywheelSpeed.put(2.7, 212.0);
         hubTable.flywheelSpeed.put(3.0, 220.0);
         hubTable.flywheelSpeed.put(4.0, 236.0);
@@ -60,7 +60,7 @@ public class CommonLookupTable {
 
         passingTable.flywheelSpeed.put(1.0, 200.0);
         passingTable.flywheelSpeed.put(4.0, 240.0);
-        passingTable.flywheelSpeed.put(8.0, 340.0);
+        passingTable.flywheelSpeed.put(8.0, 310.0);
         passingTable.flywheelSpeed.put(12.0, 450.0);
 
         // Estimated Time of Flight for Passing by Gemini

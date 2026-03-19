@@ -200,12 +200,13 @@ public class Superstructure {
                 )
             );
 
-        final double halfShakePeriod = SuperstructureConstants.kSlapdownShakePeriodSec / 2.0;
         Trigger runSlapdownShake = new Trigger(() -> m_superState.getIntakeState().kRunSlapdownShake);
         runSlapdownShake
             .whileTrue(
                 m_slapdown.runPosition(
-                    () -> Timer.getFPGATimestamp() % SuperstructureConstants.kSlapdownShakePeriodSec < halfShakePeriod ? SuperstructureConstants.kSlapdownDownAngle : SuperstructureConstants.kSlapdownShakeUpAngle
+                    () -> (Timer.getFPGATimestamp() % m_superState.getIntakeState().kSlapdownShakePeriodSecs
+                        < m_superState.getIntakeState().kSlapdownShakePeriodSecs / 2.0)
+                            ? m_superState.getIntakeState().kSlapdownAngle : m_superState.getIntakeState().kSlapdownShakeUpAngle
                 )
             );
             
@@ -314,7 +315,7 @@ public class Superstructure {
     public Command applyIntakeStateRollerOnly(IntakeStates state) {
         return Commands.parallel(
             setIntakeState(state),
-            m_roller.applyVelocity(state.kRollerVelocity)
+            m_roller.applyVoltage(state.kRollerVoltage)
         );
     }
 
@@ -323,7 +324,7 @@ public class Superstructure {
             Commands.parallel(
                 setIntakeState(state),
                 m_slapdown.applyPosition(state.kSlapdownAngle),
-                m_roller.applyVelocity(state.kRollerVelocity)
+                m_roller.applyVoltage(state.kRollerVoltage)
             ),
             Commands.waitUntil(() -> m_slapdown.withinTolerance(state.kSlapdownAngle)),
             m_slapdown.holdPositionWeak(state.kSlapdownAngle)
@@ -515,6 +516,20 @@ public class Superstructure {
                 ), 
                 stopIntakeAndIndexToShoot(), 
                 () -> m_superstructure.getSuperState().getTurretState().kIsAutoAim
+            );
+        }
+
+        /** Start kicking the intake */
+        public Command startSlapdownShake() {
+            return applyIntakeStateAllParallel(IntakeStates.RUN_KICK);
+        }
+
+        /** Stop kicking the intake */
+        public Command stopSlapdownShake(Trigger continueRollersSelector) {
+            return Commands.either(
+                intake(),
+                applyIntakeExtended(),
+                continueRollersSelector
             );
         }
 

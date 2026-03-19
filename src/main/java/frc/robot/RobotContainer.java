@@ -136,8 +136,8 @@ public class RobotContainer {
             m_flywheel = new FlywheelSubsystem(new FlywheelIOKraken());
             m_hood = new HoodSubsystem(new HoodIONeo());
 
-            m_rollers = new RollerSubsystem(new RollerIODisabled());
-            m_slapdown = new SlapdownSubsystem(new SlapdownIODisabled());
+            m_rollers = new RollerSubsystem(new RollerIOKraken());
+            m_slapdown = new SlapdownSubsystem(new SlapdownIOKraken());
             m_spindexer = new SpindexerSubsystem(new SpindexerIOKraken());
             m_kicker = new KickerSubsystem(new KickerIOKraken());
 
@@ -271,12 +271,8 @@ public class RobotContainer {
 
         m_drive.setDefaultCommand(teleopDriveCommand);
 
-        // Double clutch
-        m_driverController.L1().and(m_driverController.R1().negate())
-            .whileTrue(teleopDriveCommand.applyDoubleClutch());
-
         // Single clutch
-        m_driverController.R1().or(m_driverController.R2()).and(m_driverController.L1().negate())
+        m_driverController.R1().or(m_driverController.R2())
             .whileTrue(teleopDriveCommand.applySingleClutch());
 
         // Reset the heading of the gyro
@@ -292,6 +288,11 @@ public class RobotContainer {
         m_driverController.L2()
             .onTrue(superstructureCommands.intake())
             .onFalse(superstructureCommands.applyIntakeExtended());
+
+        // Double clutch
+        m_driverController.L1()
+            .onTrue(superstructureCommands.startSlapdownShake())
+            .onFalse(superstructureCommands.stopSlapdownShake(m_driverController.L2()));
 
         m_driverController.R2().and(m_superstructure.isReadyToShoot())
             .onTrue(superstructureCommands.shoot())
@@ -382,7 +383,7 @@ public class RobotContainer {
 
         m_operatorController.leftActive().and(joystickTriggers.getToggledTrigger(1))
             .whileTrue(m_slapdown.runVoltageUnrestricted(
-                () -> -m_operatorController.getLeftX() * SlapdownConstants.kMaxOperatorControlVolts))
+                () -> -m_operatorController.getLeftY() * SlapdownConstants.kMaxOperatorControlVolts))
             .onFalse(m_slapdown.applyVoltageUnrestricted(0));
 
         m_operatorController.leftActive().and(joystickTriggers.getToggledTrigger(2))
