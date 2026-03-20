@@ -25,13 +25,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Srt2 to Outpost"
+            "pathName": "Srt2 to Depot"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 8.0
+            "waitTime": 12.0
           }
         },
         {

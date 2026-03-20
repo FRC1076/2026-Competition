@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.3644222222222226,
-        "y": 7.3
+        "x": 3.5722051282051295,
+        "y": 7.360666666666666
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.5644222222222226,
-        "y": 7.3
+        "x": 2.7722051282051297,
+        "y": 7.360666666666666
       },
       "isLocked": false,
-      "linkedName": "Move Back"
+      "linkedName": "Far Shoot Left"
     },
     {
       "anchor": {
@@ -28,12 +28,7 @@
       "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": -90.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [
     {
       "name": "Constraints Zone",
@@ -52,7 +47,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
+    "maxVelocity": 1.5,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -67,7 +62,7 @@
   "folder": "Disrupt",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }
