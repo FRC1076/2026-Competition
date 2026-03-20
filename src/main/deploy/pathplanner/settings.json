@@ -3,10 +3,9 @@
   "robotLength": 0.851,
   "holonomicMode": true,
   "pathFolders": [
-    "Depot",
+    "Center",
     "Disrupt",
     "Lazy",
-    "Center",
     "Post Disrupt Climb"
   ],
   "autoFolders": [

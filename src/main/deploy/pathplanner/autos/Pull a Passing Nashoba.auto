@@ -11,12 +11,6 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.4
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "Start Intake"
@@ -29,9 +23,15 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "Post Disrupt Left to Move Back"
+            "pathName": "Post Disrupt Left to Shoot"
           }
         },
         {
@@ -43,19 +43,19 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 3.0
+            "waitTime": 1.5
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Move Back to Left Outpost (needs mirroring)"
+            "pathName": "Shoot to Back Corner"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 4.0
+            "waitTime": 8.0
           }
         },
         {
