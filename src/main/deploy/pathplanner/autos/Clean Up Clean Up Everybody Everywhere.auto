@@ -19,7 +19,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Srt1 to Center Disrupt"
+            "pathName": "Srt1 to Center Disrupt Alt"
           }
         },
         {
@@ -31,7 +31,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Post Disrupt Left to Shoot"
+            "pathName": "Post Distrupt Clean Up"
           }
         },
         {
@@ -43,19 +43,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.5
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Shoot to Back Corner"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 8.0
+            "waitTime": 7.0
           }
         },
         {
