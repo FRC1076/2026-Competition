@@ -279,16 +279,15 @@ public class Superstructure {
     }
 
     /** Returns whether or not the slapdown is too high to move the turret */
-    public BooleanSupplier safeToMoveTurret() {
+    public BooleanSupplier safeToSpinRollers() {
         return () -> m_slapdown.getSlapdownAngleRadians() > SuperstructureConstants.kTurretMoveSlapdownAngleLimitRad; // For some reason down is larger number
     }
 
-    /** Applies the target state to the turret if it is safe to do so. If unsafe, does nothing. */
-    public Command applyTurretPositionSafe(double radians) {
-        return Commands.either(
-            m_turret.applyPosition(radians),
-            Commands.none(),
-            safeToMoveTurret()
+    /** Applies the target state to the rollers when safe */
+    public Command applyRollerVoltageUponSafe(double voltage) {
+        return Commands.sequence(
+            Commands.waitUntil(safeToSpinRollers()),
+            m_roller.applyVoltage(voltage)
         );
     }
 
@@ -315,7 +314,7 @@ public class Superstructure {
     public Command applyIntakeStateRollerOnly(IntakeStates state) {
         return Commands.parallel(
             setIntakeState(state),
-            m_roller.applyVoltage(state.kRollerVoltage)
+            applyRollerVoltageUponSafe(state.kRollerVoltage)
         );
     }
 
@@ -324,7 +323,7 @@ public class Superstructure {
             Commands.parallel(
                 setIntakeState(state),
                 m_slapdown.applyPosition(state.kSlapdownAngle),
-                m_roller.applyVoltage(state.kRollerVoltage)
+                applyRollerVoltageUponSafe(state.kRollerVoltage)
             ),
             Commands.waitUntil(() -> m_slapdown.withinTolerance(state.kSlapdownAngle)),
             m_slapdown.holdPositionWeak(state.kSlapdownAngle)

@@ -69,8 +69,8 @@ public class SuperstructureConstants {
         EXTENDED(kSlapdownDownAngle, 0),
         INTAKING(kSlapdownDownAngle, kIntakeRollerVoltage),
         //INTAKING(true, kSlapdownDownAngle, 1.3, 0.5, kIntakeRollerVoltage),
-        SHOOTING(true, kSlapdownDownAngle, 0.8, 1, 12),
-        RUN_KICK(true, kSlapdownDownAngle, 0.8, 0.8, 12),
+        SHOOTING(true, kSlapdownDownAngle, 0.8, 1, 0),
+        RUN_KICK(true, kSlapdownDownAngle, 0.8, 0.8, 0),
         REVERSE(kSlapdownDownAngle, -kIntakeRollerVoltage);
 
         public final double kSlapdownAngle;
@@ -148,7 +148,7 @@ public class SuperstructureConstants {
         }
     }
 
-    public static final double kTurretMoveSlapdownAngleLimitRad = Math.PI - 0.5;    
+    public static final double kTurretMoveSlapdownAngleLimitRad = 1;    
     public static final double kClimbSlapdownMaxAngleRad = 0.5;
     public static final double kMinFlywheelShootingVelocity = 50;
 

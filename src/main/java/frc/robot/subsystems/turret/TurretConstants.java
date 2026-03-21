@@ -57,8 +57,8 @@ public class TurretConstants {
     public static final boolean kEnableFOC = true;
 
     // Software stops
-    public static final double kMaxPositionRad = 4.7 - ((4.7+1.7) - 2*Math.PI); // Cutting off a little bit of extra range of motion so wrapping works
-    public static final double kMinPositionRad = -1.7;
+    public static final double kMaxPositionRad = 4; // Cutting off a little bit of extra range of motion so wrapping works
+    public static final double kMinPositionRad = 4-(2*Math.PI);
     public static final double kAngleRange = kMaxPositionRad - kMinPositionRad;
 
     // SysId
