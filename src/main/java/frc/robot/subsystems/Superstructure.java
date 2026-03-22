@@ -231,7 +231,7 @@ public class Superstructure {
         ), shooterPose.getRotation().toRotation2d());
         
         // TODO: check tolerance (+ 0.25) on alliance zone (otherwise we'll ram into the trench)
-        if (shooterPoseAllianceColorCoordinates.getX() <= PhysicalConstants.FieldConstants.LinesVertical.allianceZone + 0.25) {
+        if (shooterPoseAllianceColorCoordinates.getX() <= PhysicalConstants.FieldConstants.LinesVertical.allianceZone + 0.2) {
             m_shootingParams = SOTMLaunchCalculator.calculateHub(shooterPose.toPose2d(), fieldTargets.kHubTarget().toPose2d(), turretVelocity);
             return;
         } else if (shooterPoseAllianceColorCoordinates.getX() <= PhysicalConstants.FieldConstants.LinesVertical.neutralZoneNear
@@ -239,17 +239,21 @@ public class Superstructure {
             m_shootingParams = SOTMLaunchCalculator.calculateHub(shooterPose.toPose2d(), fieldTargets.kHubTarget().toPose2d(), turretVelocity);
             m_shootingParams = CommonShotSolution.withZeroPitch(m_shootingParams); // Don't ram into the trench
             return;
-        } else if (shooterPoseAllianceColorCoordinates.getX() >= PhysicalConstants.FieldConstants.LinesVertical.neutralZoneFar
+        }
+
+        // Not in the alliance zone, resort to passing
+        Pose2d passingTarget =
+            shooterPoseAllianceColorCoordinates.getY() <= PhysicalConstants.FieldConstants.LinesHorizontal.center // Are we on right side?
+                ? fieldTargets.kRightPassingTarget().toPose2d() // Yes
+                : fieldTargets.kLeftPassingTarget().toPose2d(); // No
+        
+        if (shooterPoseAllianceColorCoordinates.getX() >= PhysicalConstants.FieldConstants.LinesVertical.neutralZoneFar
                 && shooterPoseAllianceColorCoordinates.getX() <= PhysicalConstants.FieldConstants.LinesVertical.oppAllianceZone) {
-            // TODO: actually have this point at the passing targets
-            m_shootingParams = SOTMLaunchCalculator.calculatePass(shooterPose.toPose2d(), fieldTargets.kHubTarget().toPose2d(), turretVelocity);
-            m_shootingParams = CommonShotSolution.withZeroPitch(m_shootingParams); // Don't ram into the trench
-            return;
-        } else if (shooterPoseAllianceColorCoordinates.getY() <= PhysicalConstants.FieldConstants.LinesHorizontal.center) {
-            m_shootingParams = SOTMLaunchCalculator.calculatePass(shooterPose.toPose2d(), fieldTargets.kRightPassingTarget().toPose2d(), turretVelocity);
+            // Zero out pitch so we don't ram into the trench
+            m_shootingParams = CommonShotSolution.withZeroPitch(SOTMLaunchCalculator.calculatePass(shooterPose.toPose2d(), passingTarget, turretVelocity));
             return;
         } else {
-            m_shootingParams = SOTMLaunchCalculator.calculatePass(shooterPose.toPose2d(), fieldTargets.kLeftPassingTarget().toPose2d(), turretVelocity);
+            m_shootingParams = SOTMLaunchCalculator.calculatePass(shooterPose.toPose2d(), passingTarget, turretVelocity);
             return;
         }
     }
