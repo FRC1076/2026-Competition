@@ -5,7 +5,6 @@
 package frc.robot.subsystems.drive;
 
 import frc.robot.PhysicalConstants.FieldConstants;
-import frc.robot.Constants.GameConstants;
 import frc.robot.commands.drive.PPDriveToPose;
 import frc.robot.commands.drive.TeleopDriveCommand;
 import frc.robot.subsystems.Elastic;
