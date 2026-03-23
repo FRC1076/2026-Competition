@@ -22,7 +22,7 @@ import edu.wpi.first.math.util.Units;
 
 public class PhysicalConstants {
     public static final Transform3d kBotRelativeTurretPose = new Transform3d(
-        new Translation3d(Units.inchesToMeters(-5), Units.inchesToMeters(5.5), Units.inchesToMeters(11.929)),
+        new Translation3d(Units.inchesToMeters(-3), Units.inchesToMeters(5.5), Units.inchesToMeters(11.25)),
         new Rotation3d()
     );
 
