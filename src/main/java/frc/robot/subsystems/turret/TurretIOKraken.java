@@ -99,7 +99,7 @@ public class TurretIOKraken implements TurretIO {
 
         // Apply configs
         m_motor.getConfigurator().apply(m_motorConfig);
-        //m_motor.setPosition(0); // Start pointing forward
+        m_encoder.setPosition(0); // Start pointing forward
 
         // Status signals
         m_voltageSignal = m_motor.getMotorVoltage();
