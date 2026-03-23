@@ -323,6 +323,13 @@ public class Superstructure {
     }
 
     public Command applyIntakeStateAllParallel(IntakeStates state) {
+        return Commands.parallel(
+            setIntakeState(state),
+            m_slapdown.applyPosition(state.kSlapdownAngle),
+            applyRollerVoltageUponSafe(state.kRollerVoltage)
+        );
+
+        /*
         return Commands.sequence(
             Commands.parallel(
                 setIntakeState(state),
@@ -332,6 +339,7 @@ public class Superstructure {
             Commands.waitUntil(() -> m_slapdown.withinTolerance(state.kSlapdownAngle)),
             m_slapdown.holdPositionWeak(state.kSlapdownAngle)
         );
+        */
     }
 
     public Command applyIndexStateAllParallel(IndexStates state) {
