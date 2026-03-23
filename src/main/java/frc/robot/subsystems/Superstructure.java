@@ -479,17 +479,24 @@ public class Superstructure {
         }
 
         public Command intakeAndIndexToShoot() {
+            return startIndexing();
+
+            /*
             return Commands.parallel(
                 startIndexing(),
                 applyIntakeStateRollerOnly(IntakeStates.SHOOTING)
-            );
+            ); */
         }
 
         public Command stopIntakeAndIndexToShoot() {
+            return stopIndexing();
+
+            /*
             return Commands.parallel(
                 stopIndexing(),
                 applyIntakeStateRollerOnly(IntakeStates.EXTENDED)
             );
+            */
         }
 
 
