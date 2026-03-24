@@ -56,7 +56,7 @@
   "reversed": false,
   "folder": "Disrupt",
   "idealStartingState": {
-    "velocity": 0.9,
+    "velocity": 2.15,
     "rotation": 0.0
   },
   "useDefaultConstraints": true
