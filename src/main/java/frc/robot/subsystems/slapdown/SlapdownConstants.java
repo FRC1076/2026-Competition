@@ -34,9 +34,9 @@ public class SlapdownConstants {
     public static final double kG = 0;
     public static final double kA = 0;
 
-    public static final double kCruiseVelocityRadPerSec = 4 * Math.PI;
-    public static final double kMaxAccelRadPerSec2 = 6 * Math.PI;
-    public static final double kMaxJerkRadPerSec3 = 100 * Math.PI;
+    public static final double kCruiseVelocityRadPerSec = 40 * Math.PI;
+    public static final double kMaxAccelRadPerSec2 = 60 * Math.PI;
+    public static final double kMaxJerkRadPerSec3 = 1000 * Math.PI;
 
     public static final double kAngleToleranceRadians = 0.1;
     public static final double kMinAngleRadians = 0;

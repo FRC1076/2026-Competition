@@ -539,7 +539,11 @@ public class Superstructure {
 
         /** Start kicking the intake */
         public Command startSlapdownShake() {
-            return applyIntakeStateAllParallel(IntakeStates.RUN_KICK);
+            return applyIntakeStateRollerOnly(IntakeStates.RUN_KICK);
+        }
+
+        public Command stopSlapdownShakeAutonomous() {
+            return applyIntakeStateRollerOnly(IntakeStates.INTAKING);
         }
 
         /** Stop kicking the intake */

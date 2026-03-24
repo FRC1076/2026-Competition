@@ -480,6 +480,8 @@ public class RobotContainer {
         NamedCommands.registerCommand("Hub Prealigned", commandFactory.applyTurretStatesLeftTrenchPrealigned());
         NamedCommands.registerCommand("Shoot", commandFactory.shoot());
         NamedCommands.registerCommand("Stop Shooting", commandFactory.stopShooting());
+        NamedCommands.registerCommand("Shake Slapdown", commandFactory.startSlapdownShake());
+        NamedCommands.registerCommand("Stop Slapdown Shake", commandFactory.stopSlapdownShakeAutonomous());
         NamedCommands.registerCommand("End", Commands.runOnce(() -> isAutonDone(true)));
     }
 

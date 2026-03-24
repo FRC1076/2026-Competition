@@ -46,6 +46,12 @@
                 }
               },
               {
+                "type": "named",
+                "data": {
+                  "name": "Shake Slapdown"
+                }
+              },
+              {
                 "type": "path",
                 "data": {
                   "pathName": "Shoot to Srt1"
@@ -55,6 +61,12 @@
                 "type": "named",
                 "data": {
                   "name": "Stop Shooting"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Stop Slapdown Shake"
                 }
               }
             ]
@@ -83,6 +95,12 @@
                 }
               },
               {
+                "type": "named",
+                "data": {
+                  "name": "Shake Slapdown"
+                }
+              },
+              {
                 "type": "wait",
                 "data": {
                   "waitTime": 3.5
@@ -92,6 +110,12 @@
                 "type": "named",
                 "data": {
                   "name": "Stop Shooting"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Stop Slapdown Shake"
                 }
               }
             ]

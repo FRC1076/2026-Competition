@@ -71,7 +71,7 @@ public class TurretIOKraken implements TurretIO {
 
         // CANcoder
         m_motorConfig.Feedback.FeedbackRemoteSensorID = TurretConstants.kCANcoderCANId;
-        m_motorConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
+        m_motorConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder; // TODO: Consider using FusedCANcoder or Sync
         m_motorConfig.Feedback.RotorToSensorRatio = TurretConstants.kRotorToSensorRatio;
 
         // Offset from internal absolute encoder

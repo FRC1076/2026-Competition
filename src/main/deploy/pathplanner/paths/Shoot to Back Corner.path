@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 3.5722051282051295,
-        "y": 7.360666666666666
+        "y": 7.28
       },
       "prevControl": null,
       "nextControl": {
         "x": 2.7722051282051297,
-        "y": 7.360666666666666
+        "y": 7.28
       },
       "isLocked": false,
       "linkedName": "Far Shoot Left"
