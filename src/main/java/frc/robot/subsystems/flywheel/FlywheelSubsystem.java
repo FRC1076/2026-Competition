@@ -14,6 +14,7 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
@@ -46,8 +47,8 @@ public class FlywheelSubsystem extends SubsystemBase {
 
     }
 
-    public boolean readyToShoot(double minimumVelocityRPS) {
-        return (minimumVelocityRPS - inputs.velocityRadiansPerSecond) < FlywheelConstants.kSetpointToleranceRadPerSec;
+    public boolean readyToShoot(double targetVelocityRadPerSec) {
+        return (targetVelocityRadPerSec - inputs.velocityRadiansPerSecond) < FlywheelConstants.kSetpointToleranceRadPerSec;
     }
 
     @Override
@@ -129,5 +130,12 @@ public class FlywheelSubsystem extends SubsystemBase {
 
     public double getLinearVelocityMPS() {
         return inputs.velocityRadiansPerSecond * FlywheelConstants.angularToLinearVelocityConversionFactor;
+    }
+
+    public Trigger hasStoppedShooting(double targetVelocityRadPerSec) {
+        return new Trigger(() -> 
+            readyToShoot(targetVelocityRadPerSec) &&
+            inputs.leadCurrentAmps + inputs.followCurrentAmps > FlywheelConstants.kSumCurrentForShootingAmps)
+        .debounce(FlywheelConstants.kMaxShootingDelaySecs);
     }
 }
