@@ -278,6 +278,10 @@ public class RobotContainer {
         m_driverController.R1().or(m_driverController.R2())
             .whileTrue(teleopDriveCommand.applySingleClutch());
 
+        // Brake
+        m_driverController.L3()
+            .whileTrue(teleopDriveCommand.applySwerveBrake());
+
         // Reset the heading of the gyro
         m_driverController.create()
             .onTrue(Commands.runOnce(() ->

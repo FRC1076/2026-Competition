@@ -66,6 +66,7 @@ public class TeleopDriveCommand extends Command {
 
     private SwerveRequest.FieldCentric defaultDriveRequest;
     private SwerveRequest.FieldCentricFacingAngle defaultHeadingLockedDriveRequest;
+    private SwerveRequest.SwerveDriveBrake brakeRequest;
 
     // Request Generator declarations
 
@@ -92,6 +93,7 @@ public class TeleopDriveCommand extends Command {
         defaultHeadingLockedDriveRequest = new FieldCentricFacingAngle()
             .withForwardPerspective(ForwardPerspectiveValue.OperatorPerspective)
             .withHeadingPID(5.0,0.0,0.0);
+        brakeRequest = new SwerveRequest.SwerveDriveBrake();
         defaultHeadingLockedDriveRequest.HeadingController.enableContinuousInput(-Math.PI,Math.PI);
         addRequirements(drive);
     }
@@ -270,4 +272,10 @@ public class TeleopDriveCommand extends Command {
         return applyHeadingLock(Rotation2d.fromDegrees(0));
     }
 
+    public Command applySwerveBrake() {
+        return Commands.startEnd(
+            () -> setRequestGenerator((vx, vy, omega) -> brakeRequest),
+            () -> clearRequestGeneratorOverride()
+        );
+    }
 }
