@@ -73,12 +73,25 @@
   "eventMarkers": [
     {
       "name": "Shoot",
-      "waypointRelativePos": 1.005537098560358,
+      "waypointRelativePos": 1.1383577052868357,
       "endWaypointRelativePos": null,
       "command": {
-        "type": "named",
+        "type": "parallel",
         "data": {
-          "name": "Shoot"
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Shoot"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "Shake Slapdown"
+              }
+            }
+          ]
         }
       }
     }
@@ -93,7 +106,7 @@
   },
   "goalEndState": {
     "velocity": 0.0,
-    "rotation": 0.0
+    "rotation": -90.0
   },
   "reversed": false,
   "folder": "Disrupt",

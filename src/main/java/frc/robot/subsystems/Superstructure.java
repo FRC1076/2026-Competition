@@ -210,8 +210,13 @@ public class Superstructure {
                 )
             );
             
-            new Trigger(() -> DriverStation.isAutonomousEnabled()).and(runSlapdownShake.negate())
-                .onTrue(m_slapdown.applyPosition(SuperstructureConstants.kSlapdownDownAngle));
+        Trigger autonRunSlapdown = new Trigger(() -> DriverStation.isAutonomousEnabled()).and(runSlapdownShake.negate());
+        Trigger slapdownInPosition = new Trigger(() -> m_slapdown.withinTolerance(() -> m_superState.getIntakeState().kSlapdownAngle));
+        autonRunSlapdown.and(slapdownInPosition.negate())
+            .whileTrue(m_slapdown.runPosition(() -> m_superState.getIntakeState().kSlapdownAngle));
+        autonRunSlapdown.and(slapdownInPosition)
+            .whileTrue(m_slapdown.runHoldPositionStrong(() -> m_superState.getIntakeState().kSlapdownAngle));
+
     }
 
     /** Update parameters saved to m_shootingParams and flywheelTargetRadiansPerSecond
@@ -231,7 +236,7 @@ public class Superstructure {
         ), shooterPose.getRotation().toRotation2d());
         
         // TODO: check tolerance (+ 0.25) on alliance zone (otherwise we'll ram into the trench)
-        if (shooterPoseAllianceColorCoordinates.getX() <= PhysicalConstants.FieldConstants.LinesVertical.allianceZone + 0.2) {
+        if (shooterPoseAllianceColorCoordinates.getX() <= PhysicalConstants.FieldConstants.LinesVertical.allianceZone + 0.2 || DriverStation.isAutonomous()) {
             m_shootingParams = SOTMLaunchCalculator.calculateHub(shooterPose.toPose2d(), fieldTargets.kHubTarget().toPose2d(), turretVelocity);
             return;
         } else if (shooterPoseAllianceColorCoordinates.getX() <= PhysicalConstants.FieldConstants.LinesVertical.neutralZoneNear
@@ -323,13 +328,13 @@ public class Superstructure {
     }
 
     public Command applyIntakeStateAllParallel(IntakeStates state) {
+        /*
         return Commands.parallel(
             setIntakeState(state),
             m_slapdown.applyPosition(state.kSlapdownAngle),
             applyRollerVoltageUponSafe(state.kRollerVoltage)
-        );
+        ); */
 
-        /*
         return Commands.sequence(
             Commands.parallel(
                 setIntakeState(state),
@@ -337,9 +342,8 @@ public class Superstructure {
                 applyRollerVoltageUponSafe(state.kRollerVoltage)
             ),
             Commands.waitUntil(() -> m_slapdown.withinTolerance(state.kSlapdownAngle)),
-            m_slapdown.holdPositionWeak(state.kSlapdownAngle)
+            m_slapdown.holdPositionStrong(state.kSlapdownAngle)
         );
-        */
     }
 
     public Command applyIndexStateAllParallel(IndexStates state) {
@@ -537,8 +541,16 @@ public class Superstructure {
             );
         }
 
+        public Command waitUntilDoneShooting() {
+            return Commands.waitUntil(m_flywheel.hasStoppedShooting(() -> m_shootingParams.launchSpeedRadPerSec()));
+        }
+
         /** Start kicking the intake */
         public Command startSlapdownShake() {
+            return applyIntakeStateRollerOnly(IntakeStates.RUN_KICK);
+        }
+
+        public Command startSlapdownShakeAutonomous() {
             return applyIntakeStateRollerOnly(IntakeStates.RUN_KICK);
         }
 
@@ -577,6 +589,15 @@ public class Superstructure {
         /** Climb! */
         public Command applyClimbStateClimbed() {
             return applyClimbStateAllParallel(ClimbStates.CLIMBED);
+        }
+
+        /* AUTON COMMANDS */
+        public Command autonExtendIntake() {
+            return applyIntakeStateRollerOnly(IntakeStates.EXTENDED);
+        }
+
+        public Command autonRetractIntake() {
+            return applyIntakeStateRollerOnly(IntakeStates.RETRACTED);
         }
     }
 }

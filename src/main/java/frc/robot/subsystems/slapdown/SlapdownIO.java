@@ -25,7 +25,7 @@ public interface SlapdownIO {
 
     public abstract void setPosition(double radians);
 
-    public default void setPositionWeak(double radians) {
+    public default void setPositionStrong(double radians) {
         setPosition(radians);
     }
 

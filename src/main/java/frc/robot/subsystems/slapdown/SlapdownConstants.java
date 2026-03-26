@@ -42,7 +42,7 @@ public class SlapdownConstants {
     public static final double kMinAngleRadians = 0;
     public static final double kMaxAngleRadians = 5.5;
 
-    public static final double kPWeak = 0.1;
+    public static final double kPStrong = 20;
 
     public static final double kMaxOperatorControlVolts = 1;
 

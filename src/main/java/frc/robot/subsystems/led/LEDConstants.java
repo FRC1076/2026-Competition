@@ -14,7 +14,7 @@ public class LEDConstants {
         public static final int kLength = 87;
 
         public static final double kFlashSeconds = 0.1;
-        public static final int kBrightnessPercentage = 40;
+        public static final int kBrightnessPercentage = 0;
     }
 
     public static enum LEDStates {

@@ -105,7 +105,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Pre-Climb",
+      "name": "",
       "waypointRelativePos": 2.834063526834611,
       "endWaypointRelativePos": null,
       "command": null

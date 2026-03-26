@@ -132,10 +132,10 @@ public class FlywheelSubsystem extends SubsystemBase {
         return inputs.velocityRadiansPerSecond * FlywheelConstants.angularToLinearVelocityConversionFactor;
     }
 
-    public Trigger hasStoppedShooting(double targetVelocityRadPerSec) {
+    public Trigger hasStoppedShooting(DoubleSupplier targetVelocityRadPerSec) {
         return new Trigger(() -> 
-            readyToShoot(targetVelocityRadPerSec) &&
-            inputs.leadCurrentAmps + inputs.followCurrentAmps > FlywheelConstants.kSumCurrentForShootingAmps)
+            readyToShoot(targetVelocityRadPerSec.getAsDouble()) &&
+            inputs.leadCurrentAmps + inputs.followCurrentAmps < FlywheelConstants.kSumCurrentForShootingAmps)
         .debounce(FlywheelConstants.kMaxShootingDelaySecs);
     }
 }

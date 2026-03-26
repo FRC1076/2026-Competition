@@ -13,12 +13,6 @@
                 "data": {
                   "name": "Initiate Autoaim"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Start Intake"
-                }
               }
             ]
           }
@@ -55,6 +49,12 @@
                 "type": "named",
                 "data": {
                   "name": "Stop Shooting"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Retract Intake"
                 }
               }
             ]

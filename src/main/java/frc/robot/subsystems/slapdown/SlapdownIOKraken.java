@@ -30,7 +30,7 @@ public class SlapdownIOKraken implements SlapdownIO {
     private final VoltageOut m_voltageRequest;
     private final VoltageOut m_voltageNoSoftStopsRequest;
     private final MotionMagicVoltage m_positionRequest;
-    private final PositionVoltage m_positionRequestWeak;
+    private final PositionVoltage m_positionRequestStrong;
 
     private final StatusSignal<Voltage> m_voltageSignal;
     private final StatusSignal<Current> m_currentSignal;
@@ -80,7 +80,7 @@ public class SlapdownIOKraken implements SlapdownIO {
         m_motorConfig.MotionMagic.MotionMagicJerk = m_unitConverter.fromSIJerk(SlapdownConstants.kMaxJerkRadPerSec3);
 
         // Weak PID
-        m_motorConfig.Slot1.kP = m_unitConverter.fromSIkP(SlapdownConstants.kPWeak);
+        m_motorConfig.Slot1.kP = m_unitConverter.fromSIkP(SlapdownConstants.kPStrong);
         m_motorConfig.Slot1.kS = m_unitConverter.fromSIkS(SlapdownConstants.kS);
         m_motorConfig.Slot1.kG = m_unitConverter.fromSIkG(SlapdownConstants.kG);
 
@@ -93,7 +93,7 @@ public class SlapdownIOKraken implements SlapdownIO {
             .withIgnoreSoftwareLimits(true);
         m_positionRequest = new MotionMagicVoltage(0)
             .withEnableFOC(SlapdownConstants.kUseFOC);
-        m_positionRequestWeak = new PositionVoltage(0)
+        m_positionRequestStrong = new PositionVoltage(0)
             .withEnableFOC(SlapdownConstants.kUseFOC);
 
         m_voltageSignal = m_motor.getMotorVoltage();
@@ -122,9 +122,9 @@ public class SlapdownIOKraken implements SlapdownIO {
     }
 
     @Override
-    public void setPositionWeak(double positionRadians) {
-        m_positionRequestWeak.withPosition(m_unitConverter.fromSIPos(positionRadians));
-        m_motor.setControl(m_positionRequestWeak);
+    public void setPositionStrong(double positionRadians) {
+        m_positionRequestStrong.withPosition(m_unitConverter.fromSIPos(positionRadians));
+        m_motor.setControl(m_positionRequestStrong);
     }
 
     @Override

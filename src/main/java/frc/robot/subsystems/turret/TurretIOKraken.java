@@ -39,6 +39,7 @@ public class TurretIOKraken implements TurretIO {
     private final StatusSignal<Voltage> m_voltageSignal;
     private final StatusSignal<Current> m_currentSignal;
     private final StatusSignal<Angle> m_motorPositionSignal;
+    private final StatusSignal<Angle> m_rotorPositionSignal;
     private final StatusSignal<AngularVelocity> m_velocitySignal;
     private final StatusSignal<Temperature> m_temperatureSignal;
 
@@ -99,12 +100,14 @@ public class TurretIOKraken implements TurretIO {
 
         // Apply configs
         m_motor.getConfigurator().apply(m_motorConfig);
+        m_motor.setPosition(0);
         m_encoder.setPosition(0); // Start pointing forward
 
         // Status signals
         m_voltageSignal = m_motor.getMotorVoltage();
         m_currentSignal = m_motor.getTorqueCurrent();
         m_motorPositionSignal = m_motor.getPosition();
+        m_rotorPositionSignal = m_motor.getRotorPosition();
         m_velocitySignal = m_motor.getVelocity();
         m_temperatureSignal = m_motor.getDeviceTemp();
 
@@ -142,11 +145,13 @@ public class TurretIOKraken implements TurretIO {
 
     @Override
     public void resetPosition() {
+        m_motor.setPosition(0);
         m_encoder.setPosition(0);
     }
 
     @Override
     public void resetPositionTo(double position) {
+        m_motor.setPosition(m_unitConverter.fromSIPos(position));
         m_encoder.setPosition(m_unitConverter.fromSIPos(position));
     }
 
@@ -155,7 +160,7 @@ public class TurretIOKraken implements TurretIO {
         // Rezero the turret if it passes by the beam break
         if (m_rezeroingBeamBreak.isBeamBroken()) {
             // TODO: uncomment this if we want to test it
-            //m_motor.setPosition(TurretConstants.kBeamBreakRezeroingPosition, 0.01);
+            //m_encoder.setPosition(TurretConstants.kBeamBreakRezeroingPosition, 0.01);
         }
     }
 
@@ -165,6 +170,7 @@ public class TurretIOKraken implements TurretIO {
             m_voltageSignal,
             m_currentSignal,
             m_motorPositionSignal,
+            m_rotorPositionSignal,
             m_velocitySignal,
             m_temperatureSignal
         );
@@ -172,6 +178,7 @@ public class TurretIOKraken implements TurretIO {
         inputs.motorAppliedVoltage = m_voltageSignal.getValueAsDouble();
         inputs.motorCurrentAmps = m_currentSignal.getValueAsDouble();
         inputs.motorPositionRad = m_unitConverter.toSIPos(m_motorPositionSignal.getValueAsDouble());
+        inputs.rotorPositionRad = m_unitConverter.toSIPos(m_rotorPositionSignal.getValueAsDouble());
         inputs.motorVelocityRadPerSec = m_unitConverter.toSIVel(m_velocitySignal.getValueAsDouble());
         inputs.motorTempDegC = m_temperatureSignal.getValueAsDouble();
         inputs.beamBroken = m_rezeroingBeamBreak.isBeamBroken();

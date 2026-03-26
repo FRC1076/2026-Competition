@@ -63,7 +63,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Pre-Climb",
+      "name": "",
       "waypointRelativePos": 0.95,
       "endWaypointRelativePos": null,
       "command": null
@@ -85,7 +85,7 @@
   "folder": "Lazy",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -90.0
   },
   "useDefaultConstraints": true
 }

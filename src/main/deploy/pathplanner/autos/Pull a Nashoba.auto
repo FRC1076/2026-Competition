@@ -13,12 +13,6 @@
                 "data": {
                   "name": "Initiate Autoaim"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Start Intake"
-                }
               }
             ]
           }
@@ -52,21 +46,40 @@
                 }
               },
               {
-                "type": "path",
+                "type": "sequential",
                 "data": {
-                  "pathName": "Shoot to Srt1"
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 2.0
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Wait Until Done Shooting"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Retract Intake"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.5
                 }
               },
               {
                 "type": "named",
                 "data": {
                   "name": "Stop Shooting"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Stop Slapdown Shake"
                 }
               }
             ]
@@ -115,7 +128,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Stop Slapdown Shake"
+                  "name": "Extend Intake"
                 }
               }
             ]

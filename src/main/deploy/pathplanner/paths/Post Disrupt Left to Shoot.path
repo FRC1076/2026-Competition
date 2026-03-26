@@ -50,8 +50,8 @@
       "rotationDegrees": 107.57938052776443
     },
     {
-      "waypointRelativePos": 0.9719298245614021,
-      "rotationDegrees": 180.0
+      "waypointRelativePos": 0.97,
+      "rotationDegrees": 0.0
     }
   ],
   "constraintZones": [],
@@ -67,7 +67,7 @@
   },
   "goalEndState": {
     "velocity": 0.0,
-    "rotation": 180.0
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": "Disrupt",

@@ -20,12 +20,12 @@
         "y": 7.28
       },
       "prevControl": {
-        "x": 5.623238434163702,
-        "y": 7.359618030842231
+        "x": 5.659855555555555,
+        "y": 7.290122222222222
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Far Shoot Left"
+      "linkedName": null
     }
   ],
   "rotationTargets": [
@@ -50,7 +50,7 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
+    "velocity": 0.0,
     "rotation": 180.0
   },
   "reversed": false,

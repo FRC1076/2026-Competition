@@ -23,9 +23,9 @@
           {
             "title": "Field",
             "x": 1440.0,
-            "y": 240.0,
+            "y": 320.0,
             "width": 680.0,
-            "height": 360.0,
+            "height": 320.0,
             "type": "Field",
             "properties": {
               "topic": "/SmartDashboard/Field",
@@ -44,8 +44,8 @@
           {
             "title": "FlywheelVelocityTarget",
             "x": 880.0,
-            "y": 440.0,
-            "width": 480.0,
+            "y": 480.0,
+            "width": 400.0,
             "height": 160.0,
             "type": "Number Slider",
             "properties": {
@@ -140,8 +140,12 @@
               "topic": "/CameraPublisher/photonvision1_Port_1184_Output_MJPEG_Server",
               "period": 0.06,
               "rotation_turns": 0,
-              "compression": 30,
-              "fps": 20
+              "compression": 61,
+              "fps": 20,
+              "resolution": [
+                320.0,
+                200.0
+              ]
             }
           },
           {
@@ -181,6 +185,122 @@
               "topic": "/SmartDashboard/Team Color",
               "period": 0.06,
               "sort_options": false
+            }
+          },
+          {
+            "title": "FL",
+            "x": 1280.0,
+            "y": 480.0,
+            "width": 80.0,
+            "height": 80.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/PhotonVision/FRONT_LEFT/tagsDetected",
+              "period": 0.06,
+              "data_type": "int",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "FR",
+            "x": 1360.0,
+            "y": 480.0,
+            "width": 80.0,
+            "height": 80.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/PhotonVision/FRONT_RIGHT/tagsDetected",
+              "period": 0.06,
+              "data_type": "int",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "RL",
+            "x": 1280.0,
+            "y": 560.0,
+            "width": 80.0,
+            "height": 80.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/PhotonVision/REAR_LEFT/tagsDetected",
+              "period": 0.06,
+              "data_type": "int",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "RR",
+            "x": 1360.0,
+            "y": 560.0,
+            "width": 80.0,
+            "height": 80.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/PhotonVision/REAR_RIGHT/tagsDetected",
+              "period": 0.06,
+              "data_type": "int",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "Flywheel Velocity",
+            "x": 880.0,
+            "y": 240.0,
+            "width": 240.0,
+            "height": 240.0,
+            "type": "Radial Gauge",
+            "properties": {
+              "topic": "/AdvantageKit/Flywheel/VelocityRadiansPerSecond",
+              "period": 0.06,
+              "data_type": "double",
+              "start_angle": -140.0,
+              "end_angle": 140.0,
+              "min_value": 0.0,
+              "max_value": 500.0,
+              "number_of_labels": 8,
+              "wrap_value": false,
+              "show_pointer": true,
+              "show_ticks": true
+            }
+          },
+          {
+            "title": "Turret Position",
+            "x": 1120.0,
+            "y": 240.0,
+            "width": 240.0,
+            "height": 240.0,
+            "type": "Radial Gauge",
+            "properties": {
+              "topic": "/AdvantageKit/Turret/MotorPositionRad",
+              "period": 0.06,
+              "data_type": "double",
+              "start_angle": 180.0,
+              "end_angle": -180.0,
+              "min_value": -3.14,
+              "max_value": 3.14,
+              "number_of_labels": 8,
+              "wrap_value": true,
+              "show_pointer": true,
+              "show_ticks": false
+            }
+          },
+          {
+            "title": "BatteryVoltage",
+            "x": 1960.0,
+            "y": 200.0,
+            "width": 160.0,
+            "height": 120.0,
+            "type": "Voltage View",
+            "properties": {
+              "topic": "/AdvantageKit/SystemStats/BatteryVoltage",
+              "period": 0.06,
+              "data_type": "double",
+              "min_value": 6.75,
+              "max_value": 13.0,
+              "divisions": 2,
+              "inverted": false,
+              "orientation": "horizontal"
             }
           }
         ]

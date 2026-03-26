@@ -473,13 +473,15 @@ public class RobotContainer {
 
     public void registerNamedCommands() {
         final SuperstructureCommandFactory commandFactory = m_superstructure.getCommandFactory();
-        NamedCommands.registerCommand("Extend Intake", commandFactory.applyIntakeExtended());
+        NamedCommands.registerCommand("Extend Intake", commandFactory.autonExtendIntake());
+        NamedCommands.registerCommand("Retract Intake", commandFactory.autonRetractIntake());
         NamedCommands.registerCommand("Start Intake", commandFactory.runRollers());
         NamedCommands.registerCommand("Turret Idle", commandFactory.applyTurretIdle());
         NamedCommands.registerCommand("Initiate Autoaim", commandFactory.initiateAutoaim());
         NamedCommands.registerCommand("Hub Prealigned", commandFactory.applyTurretStatesLeftTrenchPrealigned());
         NamedCommands.registerCommand("Shoot", commandFactory.shoot());
         NamedCommands.registerCommand("Stop Shooting", commandFactory.stopShooting());
+        NamedCommands.registerCommand("Wait Until Done Shooting", commandFactory.waitUntilDoneShooting());
         NamedCommands.registerCommand("Shake Slapdown", commandFactory.startSlapdownShake());
         NamedCommands.registerCommand("Stop Slapdown Shake", commandFactory.stopSlapdownShakeAutonomous());
         NamedCommands.registerCommand("End", Commands.runOnce(() -> isAutonDone(true)));
