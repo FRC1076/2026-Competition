@@ -599,5 +599,12 @@ public class Superstructure {
         public Command autonRetractIntake() {
             return applyIntakeStateRollerOnly(IntakeStates.RETRACTED);
         }
+
+        public Command teleopInit() {
+            return Commands.parallel(
+                stopShooting(),
+                applyIntakeStateRollerOnly(IntakeStates.EXTENDED)
+            );
+        }
     }
 }

@@ -257,6 +257,10 @@ public class RobotContainer {
         new Trigger(() -> DriverStation.isAutonomousEnabled())
             .onTrue(Commands.runOnce(() -> isAutonDone(false)));
 
+        // Idle the turret and rollers upon end of auto
+        new Trigger(() -> DriverStation.isTeleopEnabled())
+            .onTrue(m_superstructure.getCommandFactory().teleopInit());
+
         // Update alliance from Elastic
         new Trigger(() -> m_elastic.getSelectedTeamColor() == Alliance.Blue)
             .onTrue(Commands.runOnce(() -> setAlliance(Alliance.Blue)).ignoringDisable(true));
