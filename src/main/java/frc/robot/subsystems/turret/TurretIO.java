@@ -19,6 +19,7 @@ public interface TurretIO {
         public double rotorPositionRad = 0;
 
         public boolean beamBroken = false;
+        public boolean hasReset = false;
     }
 
     public abstract void setVoltage(double volts);

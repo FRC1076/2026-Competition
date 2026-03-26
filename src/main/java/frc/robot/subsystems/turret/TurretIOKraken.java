@@ -6,6 +6,8 @@ package frc.robot.subsystems.turret;
 
 import static edu.wpi.first.units.Units.Radians;
 
+import java.util.function.BooleanSupplier;
+
 import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.StatusSignal;
@@ -42,6 +44,7 @@ public class TurretIOKraken implements TurretIO {
     private final StatusSignal<Angle> m_rotorPositionSignal;
     private final StatusSignal<AngularVelocity> m_velocitySignal;
     private final StatusSignal<Temperature> m_temperatureSignal;
+    private final BooleanSupplier m_encoderResetSignal;
 
     // Control requests
     private final VoltageOut m_voltageRequest;
@@ -110,6 +113,7 @@ public class TurretIOKraken implements TurretIO {
         m_rotorPositionSignal = m_motor.getRotorPosition();
         m_velocitySignal = m_motor.getVelocity();
         m_temperatureSignal = m_motor.getDeviceTemp();
+        m_encoderResetSignal = m_encoder.getResetOccurredChecker();
 
         // Set up control requests
         m_voltageRequest = new VoltageOut(0)
@@ -182,6 +186,7 @@ public class TurretIOKraken implements TurretIO {
         inputs.motorVelocityRadPerSec = m_unitConverter.toSIVel(m_velocitySignal.getValueAsDouble());
         inputs.motorTempDegC = m_temperatureSignal.getValueAsDouble();
         inputs.beamBroken = m_rezeroingBeamBreak.isBeamBroken();
+        inputs.hasReset = m_encoderResetSignal.getAsBoolean();
 
         Logger.recordOutput("Turret/PositionTargetRad", m_positionRequest.getPositionMeasure().in(Radians));
     }
