@@ -292,6 +292,10 @@ public class Superstructure {
         return () -> m_slapdown.getSlapdownAngleRadians() > SuperstructureConstants.kTurretMoveSlapdownAngleLimitRad; // For some reason down is larger number
     }
 
+    public Trigger isDoneShooting() {
+        return m_flywheel.hasStoppedShooting(() -> m_shootingParams.launchSpeedRadPerSec());
+    }
+
     /** Applies the target state to the rollers when safe */
     public Command applyRollerVoltageUponSafe(double voltage) {
         return Commands.sequence(
@@ -542,7 +546,7 @@ public class Superstructure {
         }
 
         public Command waitUntilDoneShooting() {
-            return Commands.waitUntil(m_flywheel.hasStoppedShooting(() -> m_shootingParams.launchSpeedRadPerSec()));
+            return Commands.waitUntil(isDoneShooting());
         }
 
         /** Start kicking the intake */

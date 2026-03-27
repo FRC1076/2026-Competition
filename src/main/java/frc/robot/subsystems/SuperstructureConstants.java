@@ -57,7 +57,7 @@ public class SuperstructureConstants {
     }
     /* intitalizes numerical values for the FuelManagmentStates enum */
     public static double kSlapdownUpAngle = 0;
-    public static double kSlapdownDownAngle = 1.73;
+    public static double kSlapdownDownAngle = 1.58;
     public static double kIntakeRollerVoltage = 10;
 
     public static double kSlapdownShakeUpAngle = 0.8;

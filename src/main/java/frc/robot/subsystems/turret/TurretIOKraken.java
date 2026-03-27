@@ -6,8 +6,6 @@ package frc.robot.subsystems.turret;
 
 import static edu.wpi.first.units.Units.Radians;
 
-import java.util.function.BooleanSupplier;
-
 import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.StatusSignal;
@@ -25,6 +23,7 @@ import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
 import lib.hardware.BeamBreak;
+import lib.hardware.ResettingDualEncoder;
 import lib.units.TalonFXUnitConverter;
 
 public class TurretIOKraken implements TurretIO {
@@ -36,6 +35,7 @@ public class TurretIOKraken implements TurretIO {
 
     // Beam break to rezero turret
     private final BeamBreak m_rezeroingBeamBreak;
+    private final ResettingDualEncoder m_resettingEncoder;
 
     // Status signals
     private final StatusSignal<Voltage> m_voltageSignal;
@@ -44,7 +44,7 @@ public class TurretIOKraken implements TurretIO {
     private final StatusSignal<Angle> m_rotorPositionSignal;
     private final StatusSignal<AngularVelocity> m_velocitySignal;
     private final StatusSignal<Temperature> m_temperatureSignal;
-    private final BooleanSupplier m_encoderResetSignal;
+    private final StatusSignal<Boolean> m_encoderResetSignal;
 
     // Control requests
     private final VoltageOut m_voltageRequest;
@@ -113,7 +113,15 @@ public class TurretIOKraken implements TurretIO {
         m_rotorPositionSignal = m_motor.getRotorPosition();
         m_velocitySignal = m_motor.getVelocity();
         m_temperatureSignal = m_motor.getDeviceTemp();
-        m_encoderResetSignal = m_encoder.getResetOccurredChecker();
+        m_encoderResetSignal = m_encoder.getStickyFault_BootDuringEnable();
+
+        m_resettingEncoder = new ResettingDualEncoder(
+            25,
+            () -> m_motorPositionSignal.getValueAsDouble(),
+            () -> m_rotorPositionSignal.getValueAsDouble() / TurretConstants.kSensorToMechanismRatio,
+            () -> m_encoderResetSignal.getValue(),
+            (newPrimary) -> resetPositionTo(newPrimary)
+        );
 
         // Set up control requests
         m_voltageRequest = new VoltageOut(0)
@@ -176,18 +184,20 @@ public class TurretIOKraken implements TurretIO {
             m_motorPositionSignal,
             m_rotorPositionSignal,
             m_velocitySignal,
+            m_encoderResetSignal,
             m_temperatureSignal
         );
         
         inputs.motorAppliedVoltage = m_voltageSignal.getValueAsDouble();
         inputs.motorCurrentAmps = m_currentSignal.getValueAsDouble();
         inputs.motorPositionRad = m_unitConverter.toSIPos(m_motorPositionSignal.getValueAsDouble());
-        inputs.rotorPositionRad = m_unitConverter.toSIPos(m_rotorPositionSignal.getValueAsDouble());
+        inputs.rotorPositionRad = m_unitConverter.toSIPos(m_rotorPositionSignal.getValueAsDouble() / TurretConstants.kSensorToMechanismRatio);
         inputs.motorVelocityRadPerSec = m_unitConverter.toSIVel(m_velocitySignal.getValueAsDouble());
         inputs.motorTempDegC = m_temperatureSignal.getValueAsDouble();
         inputs.beamBroken = m_rezeroingBeamBreak.isBeamBroken();
-        inputs.hasReset = m_encoderResetSignal.getAsBoolean();
+        inputs.hasReset = m_encoderResetSignal.getValue();
 
+        m_resettingEncoder.update();
         Logger.recordOutput("Turret/PositionTargetRad", m_positionRequest.getPositionMeasure().in(Radians));
     }
 }

@@ -135,7 +135,7 @@ public class FlywheelSubsystem extends SubsystemBase {
     public Trigger hasStoppedShooting(DoubleSupplier targetVelocityRadPerSec) {
         return new Trigger(() -> 
             readyToShoot(targetVelocityRadPerSec.getAsDouble()) &&
-            inputs.leadCurrentAmps + inputs.followCurrentAmps < FlywheelConstants.kSumCurrentForShootingAmps)
+            (inputs.leadCurrentAmps + inputs.followCurrentAmps) < FlywheelConstants.kSumCurrentForShootingAmps)
         .debounce(FlywheelConstants.kMaxShootingDelaySecs);
     }
 }

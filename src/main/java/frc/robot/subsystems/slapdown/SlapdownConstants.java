@@ -25,7 +25,7 @@ public class SlapdownConstants {
     public static final double kGearRatio = 25 * (48.0/32.0);
     public static final double kRotorOffsetRot = -0.307617;
 
-    public static final double kP = 12;
+    public static final double kP = 8;
     public static final double kI = 0;
     public static final double kD = 0;
 
@@ -40,9 +40,9 @@ public class SlapdownConstants {
 
     public static final double kAngleToleranceRadians = 0.1;
     public static final double kMinAngleRadians = 0;
-    public static final double kMaxAngleRadians = 5.5;
+    public static final double kMaxAngleRadians = 1.6;
 
-    public static final double kPStrong = 20;
+    public static final double kPStrong = 16;
 
     public static final double kMaxOperatorControlVolts = 1;
 

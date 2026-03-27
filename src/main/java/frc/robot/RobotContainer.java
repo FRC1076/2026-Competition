@@ -117,6 +117,8 @@ public class RobotContainer {
     TeleopDriveCommand teleopDriveCommand;
 
     boolean endAuto = false;
+    Trigger doneShooting; // For logging
+
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -204,6 +206,7 @@ public class RobotContainer {
             () -> m_drive.getPose(),
             () -> m_drive.getChassisSpeeds()
         );
+        doneShooting = m_superstructure.isDoneShooting();
 
         // Set the alliance color
         setAlliance(m_elastic.getSelectedTeamColor());
@@ -511,6 +514,11 @@ public class RobotContainer {
     @AutoLogOutput(key = "Match/Auton Winner Color Hex")
     public String getAutonWinnerColorHex() {
         return ShiftUtil.autonWinnerColorHex();
+    }
+
+    @AutoLogOutput(key = "Flywheel/Is Done Shooting")
+    public boolean isDoneShooting() {
+        return doneShooting.getAsBoolean();
     }
 
     /** Command to raise thread priority */
