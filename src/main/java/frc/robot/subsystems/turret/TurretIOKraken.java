@@ -22,6 +22,7 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
+import edu.wpi.first.wpilibj.DriverStation;
 import lib.hardware.BeamBreak;
 import lib.hardware.ResettingDualEncoder;
 import lib.units.TalonFXUnitConverter;
@@ -103,8 +104,8 @@ public class TurretIOKraken implements TurretIO {
 
         // Apply configs
         m_motor.getConfigurator().apply(m_motorConfig);
-        m_motor.setPosition(0);
-        m_encoder.setPosition(0); // Start pointing forward
+        m_motor.setPosition(TurretConstants.kStartingPosition);
+        m_encoder.setPosition(TurretConstants.kStartingPosition); // Start pointing forward
 
         // Status signals
         m_voltageSignal = m_motor.getMotorVoltage();
@@ -120,7 +121,11 @@ public class TurretIOKraken implements TurretIO {
             () -> m_motorPositionSignal.getValueAsDouble(),
             () -> m_rotorPositionSignal.getValueAsDouble() / TurretConstants.kSensorToMechanismRatio,
             () -> m_encoderResetSignal.getValue(),
-            (newPrimary) -> resetPositionTo(newPrimary)
+            (newPrimary) -> {
+                resetPositionTo(newPrimary);
+                m_encoder.clearStickyFault_BootDuringEnable();
+                DriverStation.reportWarning("Turret CANcoder encountered a boot during enable fault. Rezeroing to rotor encoder.", false);
+            }
         );
 
         // Set up control requests

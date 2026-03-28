@@ -18,6 +18,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
@@ -140,6 +141,14 @@ public class TurretSubsystem extends SubsystemBase {
 
     public Command rezeroTurret() {
         return Commands.runOnce(() -> io.resetPosition());
+    }
+
+    public Command autoHome() {
+        return Commands.sequence(
+            applyVoltage(-0.5),
+            Commands.waitUntil(new Trigger(() -> inputs.motorCurrentAmps > 30).debounce(0.2)),
+            resetTurretEncoderTo(TurretConstants.kStartingPosition)
+        );
     }
 
     public Command resetTurretEncoderTo(double posRadPerSec) {

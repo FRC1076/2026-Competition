@@ -8,6 +8,7 @@
 
 package frc.robot;
 
+import frc.robot.Constants.CANConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.SystemConstants;
 import frc.robot.Constants.SystemConstants.RobotMode;
@@ -65,6 +66,7 @@ import lib.vision.VisionLocalizationSystem;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.photonvision.PhotonCamera;
 
+import com.ctre.phoenix6.CANBus.CANBusStatus;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -519,6 +521,10 @@ public class RobotContainer {
     @AutoLogOutput(key = "Flywheel/Is Done Shooting")
     public boolean isDoneShooting() {
         return doneShooting.getAsBoolean();
+    }
+
+    public CANBusStatus getCANivoreBusStatus() {
+        return CANConstants.kCANivoreBus.getStatus();
     }
 
     /** Command to raise thread priority */
