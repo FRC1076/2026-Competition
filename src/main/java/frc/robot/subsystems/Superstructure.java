@@ -42,6 +42,7 @@ public class Superstructure {
         private IntakeStates intake = IntakeStates.RETRACTED;
         private IndexStates index = IndexStates.IDLE;
         private ClimbStates climb = ClimbStates.IDLE;
+        private boolean turretRotationEnabled = true;
         
         /** Returns the state of the turret assembly */
         public TurretStates getTurretState() {
@@ -88,6 +89,12 @@ public class Superstructure {
             return intake;
         }
 
+        /** Returns whether or not the turret is on */
+        @AutoLogOutput(key = "SuperState/turretRotationEnabled")
+        public boolean getturretRotationEnabled() {
+            return turretRotationEnabled;
+        }
+
         /** Returns the intake state as a string */
         @AutoLogOutput(key = "SuperState/IntakeState")
         public String getIntakeStateString() {
@@ -113,6 +120,11 @@ public class Superstructure {
          */
         public void setClimbState(ClimbStates newClimbState) {
             climb = newClimbState;
+        }
+
+        /** Sets whether or not the turret should be run */
+        public void setEnableTurretRotation(boolean state) {
+            turretRotationEnabled = state;
         }
 
         /** Default constructor. Sets all variables to IDLE */
@@ -196,7 +208,7 @@ public class Superstructure {
                     Commands.run(() -> updateShootingParams()),
                     m_flywheel.runVelocity(() -> m_shootingParams.launchSpeedRadPerSec()),
                     m_hood.runPosition(() -> m_shootingParams.launchPitchRad()),
-                    m_turret.runPosition(() -> m_shootingParams.launchYawRad())
+                    m_turret.runPositionSafe(() -> m_shootingParams.launchYawRad(), () -> m_superState.getturretRotationEnabled())
                 )
             );
 
@@ -322,6 +334,11 @@ public class Superstructure {
     /** Sets the climb state to the desired target in Super State. Does not affect the physical robot. */
     public Command setClimbState(ClimbStates state) {
         return Commands.runOnce(() -> m_superState.setClimbState(state));
+    }
+
+    /** Sets the state of whether or not to run the turret for auto-aim */
+    public Command setTurretRotationEnabledState(boolean state) {
+        return Commands.runOnce(() -> m_superState.setEnableTurretRotation(state));
     }
 
     public Command applyIntakeStateRollerOnly(IntakeStates state) {

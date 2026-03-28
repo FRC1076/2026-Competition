@@ -58,6 +58,7 @@ import frc.robot.subsystems.turret.TurretIOKraken;
 import frc.robot.subsystems.turret.TurretSubsystem;
 import frc.robot.utils.ShiftUtil;
 import lib.extendedcommands.MultiToggleableTrigger;
+import lib.extendedcommands.ToggleableTrigger;
 import lib.hardware.hid.SamuraiPS5Controller;
 import lib.hardware.hid.SamuraiXboxController;
 import lib.vision.PhotonVisionLocalizerWithTagPrioritization;
@@ -366,6 +367,11 @@ public class RobotContainer {
         m_driverController.povDown()
             .onTrue(superstructureCommands.reverseSpindexer())
             .onFalse(superstructureCommands.stopReverseSpindexer());
+
+        // Turn off the turret if we don't want it as a redundancy
+        new ToggleableTrigger(m_driverController.R3(), true).getToggledTrigger()
+            .onTrue(m_superstructure.setTurretRotationEnabledState(true))
+            .onFalse(m_superstructure.setTurretRotationEnabledState(false));
     }
 
     /** Bind triggers on operator controller to commands */
