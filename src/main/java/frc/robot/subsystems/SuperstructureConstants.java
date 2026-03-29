@@ -16,7 +16,7 @@ public class SuperstructureConstants {
         /* list of possible operational states the turret can be set to */
         IDLE(0,0,0),
         MANUAL(false, 0),
-        AUTOAIM_IDLE(true, 0.5),
+        AUTOAIM_IDLE(true, 0.3),
         AUTOAIM_SHOOT(true, 1),
         HUB_PREALIGNED_LOCATION(0,0.01,245),
         POINT_DIRECTLY_BACK_FOR_PASSING(0,0.1,350),
@@ -58,7 +58,7 @@ public class SuperstructureConstants {
     /* intitalizes numerical values for the FuelManagmentStates enum */
     public static double kSlapdownUpAngle = 0;
     public static double kSlapdownDownAngle = 1.58;
-    public static double kIntakeRollerVoltage = 10;
+    public static double kIntakeRollerVoltage = 11;
 
     public static double kSlapdownShakeUpAngle = 0.8;
     public static double kSlapdownShakePeriodSec = 1; // time for a full cycle
@@ -69,8 +69,8 @@ public class SuperstructureConstants {
         EXTENDED(kSlapdownDownAngle, 0),
         INTAKING(kSlapdownDownAngle, kIntakeRollerVoltage),
         //INTAKING(true, kSlapdownDownAngle, 1.3, 0.5, kIntakeRollerVoltage),
-        SHOOTING(true, kSlapdownDownAngle, 0.8, 1, 0),
-        RUN_KICK(true, kSlapdownDownAngle, 0.8, 0.8, 0),
+        SHOOTING(true, kSlapdownDownAngle, 0.8, 1, 5),
+        RUN_KICK(true, kSlapdownDownAngle, 0.8, 0.8, 5),
         REVERSE(kSlapdownDownAngle, -kIntakeRollerVoltage);
 
         public final double kSlapdownAngle;

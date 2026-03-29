@@ -46,19 +46,32 @@
                 }
               },
               {
-                "type": "sequential",
+                "type": "race",
                 "data": {
                   "commands": [
                     {
-                      "type": "wait",
+                      "type": "sequential",
                       "data": {
-                        "waitTime": 2.0
+                        "commands": [
+                          {
+                            "type": "wait",
+                            "data": {
+                              "waitTime": 2.0
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "Wait Until Done Shooting"
+                            }
+                          }
+                        ]
                       }
                     },
                     {
-                      "type": "named",
+                      "type": "wait",
                       "data": {
-                        "name": "Wait Until Done Shooting"
+                        "waitTime": 5.0
                       }
                     }
                   ]
