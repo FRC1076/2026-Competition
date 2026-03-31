@@ -17,8 +17,8 @@ public interface TurretIO {
         public double motorVelocityRadPerSec = 0;
 
         public double rotorPositionRad = 0;
+        public double encoderPositionRad = 0;
 
-        public boolean beamBroken = false;
         public boolean hasReset = false;
     }
 

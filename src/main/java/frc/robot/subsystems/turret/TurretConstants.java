@@ -7,6 +7,7 @@ package frc.robot.subsystems.turret;
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 import frc.robot.Constants.CANConstants;
 
@@ -37,6 +38,7 @@ public class TurretConstants {
     public static final double kSensorToMechanismRatio = 10;
     public static final double kRotorToSensorRatio = 1;
     public static final double kStartingPosition = 0;
+    public static final SensorDirectionValue kEncoderForwardDirection = SensorDirectionValue.Clockwise_Positive;
 
     // Closed loop configs
     public static final double kP = 10;

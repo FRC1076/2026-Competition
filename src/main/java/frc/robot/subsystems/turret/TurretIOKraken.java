@@ -9,6 +9,7 @@ import static edu.wpi.first.units.Units.Radians;
 import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
@@ -22,9 +23,6 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Temperature;
 import edu.wpi.first.units.measure.Voltage;
-import edu.wpi.first.wpilibj.DriverStation;
-import lib.hardware.BeamBreak;
-import lib.hardware.ResettingDualEncoder;
 import lib.units.TalonFXUnitConverter;
 
 public class TurretIOKraken implements TurretIO {
@@ -32,17 +30,15 @@ public class TurretIOKraken implements TurretIO {
     private final CANcoder m_encoder;
 
     private final TalonFXConfiguration m_motorConfig;
+    private final CANcoderConfiguration m_encoderConfig;
     private final TalonFXUnitConverter m_unitConverter;
-
-    // Beam break to rezero turret
-    private final BeamBreak m_rezeroingBeamBreak;
-    private final ResettingDualEncoder m_resettingEncoder;
 
     // Status signals
     private final StatusSignal<Voltage> m_voltageSignal;
     private final StatusSignal<Current> m_currentSignal;
     private final StatusSignal<Angle> m_motorPositionSignal;
     private final StatusSignal<Angle> m_rotorPositionSignal;
+    private final StatusSignal<Angle> m_encoderPositionSignal;
     private final StatusSignal<AngularVelocity> m_velocitySignal;
     private final StatusSignal<Temperature> m_temperatureSignal;
     private final StatusSignal<Boolean> m_encoderResetSignal;
@@ -56,9 +52,8 @@ public class TurretIOKraken implements TurretIO {
         m_motor = new TalonFX(TurretConstants.kCANId, TurretConstants.kCANBus);
         m_encoder = new CANcoder(TurretConstants.kCANcoderCANId, TurretConstants.kCANBus);
         m_motorConfig = new TalonFXConfiguration();
+        m_encoderConfig = new CANcoderConfiguration();
         m_unitConverter = new TalonFXUnitConverter();
-
-        m_rezeroingBeamBreak = new BeamBreak(TurretConstants.kBeamBreakPort);
 
         // Voltage and current configs
         m_motorConfig.Voltage.PeakForwardVoltage = TurretConstants.kMaxVoltage;
@@ -74,13 +69,10 @@ public class TurretIOKraken implements TurretIO {
         // Set brake mode
         m_motorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
-        // CANcoder
+        // Encoder
         m_motorConfig.Feedback.FeedbackRemoteSensorID = TurretConstants.kCANcoderCANId;
-        m_motorConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder; // TODO: Consider using FusedCANcoder or Sync
+        m_motorConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
         m_motorConfig.Feedback.RotorToSensorRatio = TurretConstants.kRotorToSensorRatio;
-
-        // Offset from internal absolute encoder
-        // m_motorConfig.Feedback.FeedbackRotorOffset = TurretConstants.kEncoderOffsetRot; // We'll just start at zero
         m_motorConfig.Feedback.SensorToMechanismRatio = TurretConstants.kSensorToMechanismRatio;
 
         // Closed loop
@@ -102,8 +94,12 @@ public class TurretIOKraken implements TurretIO {
         m_motorConfig.SoftwareLimitSwitch.ReverseSoftLimitThreshold = m_unitConverter.fromSIPos(TurretConstants.kMinPositionRad);
         m_motorConfig.SoftwareLimitSwitch.ReverseSoftLimitEnable = false;
 
+        // CANcoder
+        m_encoderConfig.MagnetSensor.SensorDirection = TurretConstants.kEncoderForwardDirection;
+
         // Apply configs
         m_motor.getConfigurator().apply(m_motorConfig);
+        m_encoder.getConfigurator().apply(m_encoderConfig);
         m_motor.setPosition(TurretConstants.kStartingPosition);
         m_encoder.setPosition(TurretConstants.kStartingPosition); // Start pointing forward
 
@@ -112,21 +108,10 @@ public class TurretIOKraken implements TurretIO {
         m_currentSignal = m_motor.getTorqueCurrent();
         m_motorPositionSignal = m_motor.getPosition();
         m_rotorPositionSignal = m_motor.getRotorPosition();
+        m_encoderPositionSignal = m_encoder.getPosition();
         m_velocitySignal = m_motor.getVelocity();
         m_temperatureSignal = m_motor.getDeviceTemp();
         m_encoderResetSignal = m_encoder.getStickyFault_BootDuringEnable();
-
-        m_resettingEncoder = new ResettingDualEncoder(
-            25,
-            () -> m_motorPositionSignal.getValueAsDouble(),
-            () -> m_rotorPositionSignal.getValueAsDouble() / TurretConstants.kSensorToMechanismRatio,
-            () -> m_encoderResetSignal.getValue(),
-            (newPrimary) -> {
-                resetPositionTo(newPrimary);
-                m_encoder.clearStickyFault_BootDuringEnable();
-                DriverStation.reportWarning("Turret CANcoder encountered a boot during enable fault. Rezeroing to rotor encoder.", false);
-            }
-        );
 
         // Set up control requests
         m_voltageRequest = new VoltageOut(0)
@@ -174,11 +159,7 @@ public class TurretIOKraken implements TurretIO {
 
     @Override
     public void periodic() {
-        // Rezero the turret if it passes by the beam break
-        if (m_rezeroingBeamBreak.isBeamBroken()) {
-            // TODO: uncomment this if we want to test it
-            //m_encoder.setPosition(TurretConstants.kBeamBreakRezeroingPosition, 0.01);
-        }
+        // Nothing for now
     }
 
     @Override
@@ -188,6 +169,7 @@ public class TurretIOKraken implements TurretIO {
             m_currentSignal,
             m_motorPositionSignal,
             m_rotorPositionSignal,
+            m_encoderPositionSignal,
             m_velocitySignal,
             m_encoderResetSignal,
             m_temperatureSignal
@@ -197,12 +179,11 @@ public class TurretIOKraken implements TurretIO {
         inputs.motorCurrentAmps = m_currentSignal.getValueAsDouble();
         inputs.motorPositionRad = m_unitConverter.toSIPos(m_motorPositionSignal.getValueAsDouble());
         inputs.rotorPositionRad = m_unitConverter.toSIPos(m_rotorPositionSignal.getValueAsDouble() / TurretConstants.kSensorToMechanismRatio);
+        inputs.encoderPositionRad = m_unitConverter.toSIPos(m_encoderPositionSignal.getValueAsDouble() / TurretConstants.kSensorToMechanismRatio);
         inputs.motorVelocityRadPerSec = m_unitConverter.toSIVel(m_velocitySignal.getValueAsDouble());
         inputs.motorTempDegC = m_temperatureSignal.getValueAsDouble();
-        inputs.beamBroken = m_rezeroingBeamBreak.isBeamBroken();
         inputs.hasReset = m_encoderResetSignal.getValue();
 
-        m_resettingEncoder.update();
         Logger.recordOutput("Turret/PositionTargetRad", m_positionRequest.getPositionMeasure().in(Radians));
     }
 }
