@@ -38,7 +38,7 @@ public class TurretConstants {
     public static final double kSensorToMechanismRatio = 10;
     public static final double kRotorToSensorRatio = 1;
     public static final double kStartingPosition = 0;
-    public static final SensorDirectionValue kEncoderForwardDirection = SensorDirectionValue.Clockwise_Positive;
+    public static final SensorDirectionValue kEncoderForwardDirection = SensorDirectionValue.CounterClockwise_Positive;
 
     // Closed loop configs
     public static final double kP = 10;
