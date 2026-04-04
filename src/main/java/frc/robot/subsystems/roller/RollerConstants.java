@@ -6,13 +6,15 @@ package frc.robot.subsystems.roller;
 
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import frc.robot.Constants.CANConstants;
 
 public class RollerConstants {
     // CAN configs
-    public static final int kMotorPort = 41;
+    public static final int kLeadMotorPort = 41;
+    public static final int kFollowMotorPort = 45;
     public static final CANBus kCANBus = CANConstants.kCANivoreBus;
 
     // Current limits
@@ -20,6 +22,7 @@ public class RollerConstants {
     public static final int kStatorCurrentLimit = 60;
 
     public static final InvertedValue kInverted = InvertedValue.CounterClockwise_Positive;
+    public static final MotorAlignmentValue kFollowerAlignment = MotorAlignmentValue.Opposed;
     public static final NeutralModeValue kNeutralMode = NeutralModeValue.Brake;
 
     // Gear ratio

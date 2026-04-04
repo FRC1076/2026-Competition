@@ -63,6 +63,6 @@ public class RollerSubsystem  extends SubsystemBase {
 
     /** Gets the roller motor's voltage */
     public double getVoltage() {
-        return inputs.appliedVoltage;
+        return inputs.leadMotorAppliedVoltage;
     }
 }

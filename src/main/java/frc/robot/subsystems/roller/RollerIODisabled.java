@@ -20,7 +20,7 @@ public class RollerIODisabled implements RollerIO {
     
     @Override 
     public void updateInputs(RollerIOInputs inputs) {
-        inputs.appliedVoltage = voltageTarget;
-        inputs.velocityRadPerSec = velocityTargetRadPerSec;
+        inputs.leadMotorAppliedVoltage = voltageTarget;
+        inputs.leadMotorVelocityRadPerSec = velocityTargetRadPerSec;
     }
 }
