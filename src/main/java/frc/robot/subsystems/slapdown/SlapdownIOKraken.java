@@ -147,5 +147,10 @@ public class SlapdownIOKraken implements SlapdownIO {
         inputs.angleRadians = m_unitConverter.toSIPos(m_positionSignal.getValueAsDouble());
         inputs.velocityRadiansPerSecond = m_unitConverter.toSIVel(m_velocitySignal.getValueAsDouble());
         inputs.motorTempDegC = m_temperatureSignal.getValueAsDouble();
+
+        var appliedControl = m_motor.getAppliedControl();
+        if (appliedControl instanceof PositionVoltage pv) {
+            inputs.PIDTargetRadians = pv.Position;
+        }
     }
 }
