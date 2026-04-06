@@ -1,6 +1,6 @@
 {
   "version": 1.0,
-  "grid_size": 40,
+  "grid_size": 20,
   "tabs": [
     {
       "name": "Teleop",
@@ -9,10 +9,10 @@
         "containers": [
           {
             "title": "Shift Time",
-            "x": 1640.0,
+            "x": 1620.0,
             "y": 0.0,
             "width": 200.0,
-            "height": 200.0,
+            "height": 180.0,
             "type": "Large Text Display",
             "properties": {
               "topic": "/AdvantageKit/RealOutputs/Match/ShiftTime",
@@ -22,10 +22,10 @@
           },
           {
             "title": "Field",
-            "x": 1440.0,
-            "y": 320.0,
-            "width": 680.0,
-            "height": 320.0,
+            "x": 1540.0,
+            "y": 360.0,
+            "width": 580.0,
+            "height": 280.0,
             "type": "Field",
             "properties": {
               "topic": "/SmartDashboard/Field",
@@ -43,10 +43,10 @@
           },
           {
             "title": "FlywheelVelocityTarget",
-            "x": 880.0,
-            "y": 480.0,
-            "width": 400.0,
-            "height": 160.0,
+            "x": 1880.0,
+            "y": 220.0,
+            "width": 240.0,
+            "height": 140.0,
             "type": "Number Slider",
             "properties": {
               "topic": "/SmartDashboard/FlywheelVelocityTarget",
@@ -54,16 +54,16 @@
               "data_type": "double",
               "min_value": 0.0,
               "max_value": 500.0,
-              "divisions": 5,
+              "divisions": 3,
               "update_continuously": false
             }
           },
           {
             "title": "ActiveHubColor",
-            "x": 1440.0,
+            "x": 1460.0,
             "y": 0.0,
-            "width": 200.0,
-            "height": 200.0,
+            "width": 160.0,
+            "height": 180.0,
             "type": "Single Color View",
             "properties": {
               "topic": "/AdvantageKit/RealOutputs/Match/ActiveHubColor",
@@ -73,7 +73,7 @@
           },
           {
             "title": "ActiveHubColor",
-            "x": 480.0,
+            "x": 0.0,
             "y": 280.0,
             "width": 160.0,
             "height": 160.0,
@@ -86,9 +86,9 @@
           },
           {
             "title": "ShiftTime",
-            "x": 640.0,
+            "x": 160.0,
             "y": 280.0,
-            "width": 200.0,
+            "width": 220.0,
             "height": 160.0,
             "type": "Large Text Display",
             "properties": {
@@ -99,10 +99,10 @@
           },
           {
             "title": "MatchTime",
-            "x": 1840.0,
+            "x": 1820.0,
             "y": 0.0,
             "width": 280.0,
-            "height": 200.0,
+            "height": 180.0,
             "type": "Match Time",
             "properties": {
               "topic": "/AdvantageKit/DriverStation/MatchTime",
@@ -115,9 +115,9 @@
           },
           {
             "title": "MatchTime",
-            "x": 480.0,
+            "x": 0.0,
             "y": 0.0,
-            "width": 360.0,
+            "width": 380.0,
             "height": 280.0,
             "type": "Match Time",
             "properties": {
@@ -130,27 +130,8 @@
             }
           },
           {
-            "title": "photonvision1_Port_1184_Output_MJPEG_Server",
-            "x": 0.0,
-            "y": 0.0,
-            "width": 480.0,
-            "height": 440.0,
-            "type": "Camera Stream",
-            "properties": {
-              "topic": "/CameraPublisher/photonvision1_Port_1184_Output_MJPEG_Server",
-              "period": 0.06,
-              "rotation_turns": 0,
-              "compression": 61,
-              "fps": 20,
-              "resolution": [
-                320.0,
-                200.0
-              ]
-            }
-          },
-          {
             "title": "Auton Side Chooser",
-            "x": 1240.0,
+            "x": 1260.0,
             "y": 0.0,
             "width": 160.0,
             "height": 120.0,
@@ -165,7 +146,7 @@
             "title": "Auto Chooser",
             "x": 1000.0,
             "y": 0.0,
-            "width": 240.0,
+            "width": 260.0,
             "height": 120.0,
             "type": "ComboBox Chooser",
             "properties": {
@@ -188,67 +169,11 @@
             }
           },
           {
-            "title": "FL",
-            "x": 1280.0,
-            "y": 480.0,
-            "width": 80.0,
-            "height": 80.0,
-            "type": "Text Display",
-            "properties": {
-              "topic": "/AdvantageKit/RealOutputs/PhotonVision/FRONT_LEFT/tagsDetected",
-              "period": 0.06,
-              "data_type": "int",
-              "show_submit_button": false
-            }
-          },
-          {
-            "title": "FR",
-            "x": 1360.0,
-            "y": 480.0,
-            "width": 80.0,
-            "height": 80.0,
-            "type": "Text Display",
-            "properties": {
-              "topic": "/AdvantageKit/RealOutputs/PhotonVision/FRONT_RIGHT/tagsDetected",
-              "period": 0.06,
-              "data_type": "int",
-              "show_submit_button": false
-            }
-          },
-          {
-            "title": "RL",
-            "x": 1280.0,
-            "y": 560.0,
-            "width": 80.0,
-            "height": 80.0,
-            "type": "Text Display",
-            "properties": {
-              "topic": "/AdvantageKit/RealOutputs/PhotonVision/REAR_LEFT/tagsDetected",
-              "period": 0.06,
-              "data_type": "int",
-              "show_submit_button": false
-            }
-          },
-          {
-            "title": "RR",
-            "x": 1360.0,
-            "y": 560.0,
-            "width": 80.0,
-            "height": 80.0,
-            "type": "Text Display",
-            "properties": {
-              "topic": "/AdvantageKit/RealOutputs/PhotonVision/REAR_RIGHT/tagsDetected",
-              "period": 0.06,
-              "data_type": "int",
-              "show_submit_button": false
-            }
-          },
-          {
             "title": "Flywheel Velocity",
-            "x": 880.0,
-            "y": 240.0,
-            "width": 240.0,
-            "height": 240.0,
+            "x": 620.0,
+            "y": 220.0,
+            "width": 220.0,
+            "height": 220.0,
             "type": "Radial Gauge",
             "properties": {
               "topic": "/AdvantageKit/Flywheel/VelocityRadiansPerSecond",
@@ -258,7 +183,7 @@
               "end_angle": 140.0,
               "min_value": 0.0,
               "max_value": 500.0,
-              "number_of_labels": 8,
+              "number_of_labels": 5,
               "wrap_value": false,
               "show_pointer": true,
               "show_ticks": true
@@ -266,10 +191,10 @@
           },
           {
             "title": "Turret Position",
-            "x": 1120.0,
-            "y": 240.0,
-            "width": 240.0,
-            "height": 240.0,
+            "x": 620.0,
+            "y": 0.0,
+            "width": 220.0,
+            "height": 220.0,
             "type": "Radial Gauge",
             "properties": {
               "topic": "/AdvantageKit/Turret/MotorPositionRad",
@@ -287,20 +212,96 @@
           },
           {
             "title": "BatteryVoltage",
-            "x": 1960.0,
-            "y": 200.0,
-            "width": 160.0,
-            "height": 120.0,
+            "x": 420.0,
+            "y": 0.0,
+            "width": 200.0,
+            "height": 140.0,
             "type": "Voltage View",
             "properties": {
               "topic": "/AdvantageKit/SystemStats/BatteryVoltage",
-              "period": 0.06,
+              "period": 0.033,
               "data_type": "double",
               "min_value": 6.75,
               "max_value": 13.0,
-              "divisions": 2,
+              "divisions": 3,
               "inverted": false,
               "orientation": "horizontal"
+            }
+          },
+          {
+            "title": "photonvision0_Port_1182_Output_MJPEG_Server",
+            "x": 880.0,
+            "y": 120.0,
+            "width": 260.0,
+            "height": 260.0,
+            "type": "Camera Stream",
+            "properties": {
+              "topic": "/CameraPublisher/photonvision0_Port_1182_Output_MJPEG_Server",
+              "period": 0.06,
+              "rotation_turns": 0,
+              "compression": 60,
+              "fps": 10,
+              "resolution": [
+                160.0,
+                100.0
+              ]
+            }
+          },
+          {
+            "title": "photonvision0_Port_1184_Output_MJPEG_Server",
+            "x": 1140.0,
+            "y": 120.0,
+            "width": 260.0,
+            "height": 260.0,
+            "type": "Camera Stream",
+            "properties": {
+              "topic": "/CameraPublisher/photonvision0_Port_1184_Output_MJPEG_Server",
+              "period": 0.06,
+              "rotation_turns": 0,
+              "compression": 60,
+              "fps": 10,
+              "resolution": [
+                160.0,
+                100.0
+              ]
+            }
+          },
+          {
+            "title": "photonvision1_Port_1182_Output_MJPEG_Server",
+            "x": 880.0,
+            "y": 380.0,
+            "width": 260.0,
+            "height": 260.0,
+            "type": "Camera Stream",
+            "properties": {
+              "topic": "/CameraPublisher/photonvision1_Port_1182_Output_MJPEG_Server",
+              "period": 0.06,
+              "rotation_turns": 0,
+              "compression": 60,
+              "fps": 10,
+              "resolution": [
+                160.0,
+                100.0
+              ]
+            }
+          },
+          {
+            "title": "photonvision1_Port_1184_Output_MJPEG_Server",
+            "x": 1140.0,
+            "y": 380.0,
+            "width": 260.0,
+            "height": 260.0,
+            "type": "Camera Stream",
+            "properties": {
+              "topic": "/CameraPublisher/photonvision1_Port_1184_Output_MJPEG_Server",
+              "period": 0.06,
+              "rotation_turns": 0,
+              "compression": 60,
+              "fps": 10,
+              "resolution": [
+                160.0,
+                100.0
+              ]
             }
           }
         ]
@@ -369,7 +370,7 @@
         "containers": [
           {
             "title": "CAN Utilization",
-            "x": 1840.0,
+            "x": 1820.0,
             "y": 0.0,
             "width": 280.0,
             "height": 280.0,
@@ -475,7 +476,7 @@
             "title": "Console",
             "x": 1680.0,
             "y": 320.0,
-            "width": 440.0,
+            "width": 460.0,
             "height": 280.0,
             "type": "Large Text Display",
             "properties": {
