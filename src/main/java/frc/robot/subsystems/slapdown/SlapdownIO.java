@@ -17,6 +17,7 @@ public interface SlapdownIO {
         public double motorTempDegC = 0;
 
         public double PIDTargetRadians = 0;
+        public boolean PIDActive = false;
     }
 
     public abstract void setVoltage(double volts);

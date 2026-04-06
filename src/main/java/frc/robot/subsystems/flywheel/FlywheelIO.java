@@ -19,7 +19,8 @@ public interface FlywheelIO {
 
         public double velocityRadiansPerSecond = 0;
 
-        
+        public double velocityPIDTargetRadPerSec = 0;
+        public boolean PIDActive = false;
     }
 
     public abstract void updateInputs(FlywheelIOInputs inputs);

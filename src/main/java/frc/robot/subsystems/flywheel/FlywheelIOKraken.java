@@ -6,10 +6,6 @@ package frc.robot.subsystems.flywheel;
 
 import lib.units.TalonFXUnitConverter;
 
-import static edu.wpi.first.units.Units.RadiansPerSecond;
-
-import org.littletonrobotics.junction.Logger;
-
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -150,7 +146,12 @@ public class FlywheelIOKraken implements FlywheelIO {
 
         inputs.velocityRadiansPerSecond = m_unitConverter.toSIVel(m_velocitySignal.getValueAsDouble());
 
-
-        Logger.recordOutput("Flywheel/MagicMotionVelocitySetpoint", m_velocityRequest.getVelocityMeasure().in(RadiansPerSecond));
+        if (m_leadMotor.getAppliedControl() instanceof VelocityTorqueCurrentFOC vtcf) {
+            inputs.PIDActive = true;
+            inputs.velocityPIDTargetRadPerSec = m_unitConverter.fromSIVel(vtcf.Velocity);
+        } else {
+            inputs.PIDActive = false;
+            inputs.velocityPIDTargetRadPerSec = 0;
+        }
     }
 }
