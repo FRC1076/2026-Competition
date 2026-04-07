@@ -15,7 +15,7 @@ public class SpindexerConstants {
     public static final CANBus kCANBus = CANConstants.kCANivoreBus;
     
     public static final int kSupplyCurrentLimit = 40;
-    public static final int kStatorCurrentLimit = 60;
+    public static final int kStatorCurrentLimit = 70;
 
     public static final InvertedValue kInverted = InvertedValue.CounterClockwise_Positive;
     public static final NeutralModeValue kNeutralMode = NeutralModeValue.Coast;

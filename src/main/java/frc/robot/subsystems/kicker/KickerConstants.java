@@ -27,7 +27,7 @@ public class KickerConstants {
     // Voltage compensation and current limit
     public static final double kVoltageCompensation = 12;
     public static final int kSupplyCurrentLimit = 40;
-    public static final int kStatorCurrentLimit = 50;
+    public static final int kStatorCurrentLimit = 70;
 
     // NEO
     public static final boolean kInverted = true;
