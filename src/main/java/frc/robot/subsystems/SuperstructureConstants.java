@@ -167,7 +167,7 @@ public class SuperstructureConstants {
     public static final FieldTargets kBlueAllianceTargets = new FieldTargets(
         new Pose3d(),
         new Pose3d(PhysicalConstants.FieldConstants.Hub.topCenterPoint, Rotation3d.kZero),
-        new Pose3d(new Translation3d(2, kLeftPassingTargetYCoordinate, 0), Rotation3d.kZero),
+        new Pose3d(new Translation3d(1, kLeftPassingTargetYCoordinate, 0), Rotation3d.kZero),
         new Pose3d(new Translation3d(2, kRightPassingTargetYCoordinate, 0), Rotation3d.kZero)
     );
 
@@ -178,7 +178,7 @@ public class SuperstructureConstants {
         new Pose3d(PhysicalConstants.FieldConstants.Hub.oppTopCenterPoint, Rotation3d.kZero),
         // Left and right are swapped for red due to rotating 180 degrees
         new Pose3d(new Translation3d(PhysicalConstants.FieldConstants.fieldLength - 2, kRightPassingTargetYCoordinate, 0), Rotation3d.kZero),
-        new Pose3d(new Translation3d(PhysicalConstants.FieldConstants.fieldLength - 2, kLeftPassingTargetYCoordinate, 0), Rotation3d.kZero)
+        new Pose3d(new Translation3d(PhysicalConstants.FieldConstants.fieldLength - 1, kLeftPassingTargetYCoordinate, 0), Rotation3d.kZero)
     );
 
     public static final int kAutoAimMaxIterations = 5;
