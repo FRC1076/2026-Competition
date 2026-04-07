@@ -128,6 +128,10 @@ public class FlywheelSubsystem extends SubsystemBase {
         return inputs.velocityRadiansPerSecond;
     }
 
+    public double getPIDTargetRadPerSec() {
+        return  inputs.velocityPIDTargetRadPerSec;
+    }
+
     public double getLinearVelocityMPS() {
         return inputs.velocityRadiansPerSecond * FlywheelConstants.angularToLinearVelocityConversionFactor;
     }

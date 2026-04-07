@@ -17,6 +17,7 @@ import frc.robot.subsystems.SuperstructureConstants.IntakeStates;
 import frc.robot.subsystems.SuperstructureConstants.TurretStates;
 import frc.robot.subsystems.climb.climber.ClimberSubsystem;
 import frc.robot.subsystems.climb.hook.HookSubsystem;
+import frc.robot.subsystems.flywheel.FlywheelConstants;
 import frc.robot.subsystems.flywheel.FlywheelSubsystem;
 import frc.robot.subsystems.hood.HoodSubsystem;
 import frc.robot.subsystems.kicker.KickerSubsystem;
@@ -24,6 +25,7 @@ import frc.robot.subsystems.roller.RollerSubsystem;
 import frc.robot.subsystems.slapdown.SlapdownSubsystem;
 import frc.robot.subsystems.spindexer.SpindexerSubsystem;
 import frc.robot.subsystems.turret.TurretSubsystem;
+import lib.ballistic.BallCounter;
 import lib.ballistic.CommonShotSolution;
 import lib.ballistic.SOTMLaunchCalculator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -151,7 +153,6 @@ public class Superstructure {
 
     private final ClimberSubsystem m_climber;
     private final HookSubsystem m_climbHook;
-    
 
     private final Supplier<Pose2d> m_robotPoseSupplier;
     private final Supplier<ChassisSpeeds> m_robotVelocitySupplier;
@@ -161,6 +162,9 @@ public class Superstructure {
 
     private CommonShotSolution m_shootingParams;
     private FieldTargets fieldTargets = SuperstructureConstants.kBlueAllianceTargets;
+    private boolean targetIsHub = true;
+
+    private final BallCounter ballCounter;
 
     public Superstructure(
         TurretSubsystem turret,
@@ -193,6 +197,13 @@ public class Superstructure {
         this.m_commandFactory = new SuperstructureCommandFactory(this);
 
         m_shootingParams = new CommonShotSolution(0, 0, 0);
+    
+        this.ballCounter = new BallCounter(
+            () -> m_flywheel.getVelocityRadPerSec(),
+            () -> m_flywheel.getPIDTargetRadPerSec(), 
+            FlywheelConstants.kSetpointTolerancePercent, 
+            () -> targetIsHub
+        );
     }
 
     /** Get the Command factory */
@@ -222,13 +233,15 @@ public class Superstructure {
                 )
             );
             
-        Trigger autonRunSlapdown = new Trigger(() -> DriverStation.isAutonomousEnabled()).and(runSlapdownShake.negate());
+        Trigger isAutonomous = new Trigger(() -> DriverStation.isAutonomousEnabled());
+        Trigger autonRunSlapdown = isAutonomous.and(runSlapdownShake.negate());
         Trigger slapdownInPosition = new Trigger(() -> m_slapdown.withinTolerance(() -> m_superState.getIntakeState().kSlapdownAngle));
         autonRunSlapdown.and(slapdownInPosition.negate())
             .whileTrue(m_slapdown.runPosition(() -> m_superState.getIntakeState().kSlapdownAngle));
         autonRunSlapdown.and(slapdownInPosition)
             .whileTrue(m_slapdown.runHoldPositionStrong(() -> m_superState.getIntakeState().kSlapdownAngle));
 
+        isAutonomous.onTrue(Commands.runOnce(() -> ballCounter.resetCount()));
     }
 
     /** Update parameters saved to m_shootingParams and flywheelTargetRadiansPerSecond
@@ -247,6 +260,7 @@ public class Superstructure {
             robotVelocity.omegaRadiansPerSecond
         ), shooterPose.getRotation().toRotation2d());
         
+        targetIsHub = true;
         // TODO: check tolerance (+ 0.25) on alliance zone (otherwise we'll ram into the trench)
         if (shooterPoseAllianceColorCoordinates.getX() <= PhysicalConstants.FieldConstants.LinesVertical.allianceZone + 0.2 || DriverStation.isAutonomous()) {
             m_shootingParams = SOTMLaunchCalculator.calculateHub(shooterPose.toPose2d(), fieldTargets.kHubTarget().toPose2d(), turretVelocity);
@@ -263,6 +277,7 @@ public class Superstructure {
             shooterPoseAllianceColorCoordinates.getY() <= PhysicalConstants.FieldConstants.LinesHorizontal.center // Are we on right side?
                 ? fieldTargets.kRightPassingTarget().toPose2d() // Yes
                 : fieldTargets.kLeftPassingTarget().toPose2d(); // No
+        targetIsHub = false;
         
         if (shooterPoseAllianceColorCoordinates.getX() >= PhysicalConstants.FieldConstants.LinesVertical.neutralZoneFar
                 && shooterPoseAllianceColorCoordinates.getX() <= PhysicalConstants.FieldConstants.LinesVertical.oppAllianceZone) {
@@ -627,5 +642,15 @@ public class Superstructure {
                 applyIntakeStateRollerOnly(IntakeStates.EXTENDED)
             );
         }
+    }
+
+    @AutoLogOutput(key = "FuelCount/Hub")
+    public int getHubFuelCount() {
+        return ballCounter.getHubCount();
+    }
+
+    @AutoLogOutput(key = "FuelCount/Passing")
+    public int getPassingFuelCount() {
+        return ballCounter.getPassCount();
     }
 }
