@@ -34,7 +34,6 @@ public class TurretConstants {
     public static final NeutralModeValue kNeutralMode = NeutralModeValue.Brake;
 
     // Internal absolute encoder stuff
-    public static final double kEncoderOffsetRot = -0.683105;
     public static final double kSensorToMechanismRatio = 10;
     public static final double kRotorToSensorRatio = 1;
     public static final double kStartingPosition = 0;
