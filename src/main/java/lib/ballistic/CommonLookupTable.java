@@ -44,11 +44,11 @@ public class CommonLookupTable {
         hubTable.timeOfFlight.put(1.0, 0.4);
         hubTable.timeOfFlight.put(2.0, 0.68);
         hubTable.timeOfFlight.put(3.0, 0.9);
-        hubTable.timeOfFlight.put(3.56, 1.0);
+        hubTable.timeOfFlight.put(3.5, 1.0);
         hubTable.timeOfFlight.put(4.0, 1.11);
         hubTable.timeOfFlight.put(5.0, 1.29);
         hubTable.timeOfFlight.put(6.0, 1.5);
-        hubTable.timeOfFlight.put(8.0, 1.9);
+        hubTable.timeOfFlight.put(8.0, 1.95);
 
 
         /* *****PASSING***** */
