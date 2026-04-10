@@ -58,10 +58,10 @@ public class CommonLookupTable {
         passingTable.hoodAngle.put(8.0, 0.18);
         passingTable.hoodAngle.put(12.0, 0.25);
 
-        passingTable.flywheelSpeed.put(1.0, 190.0);
-        passingTable.flywheelSpeed.put(4.0, 230.0);
-        passingTable.flywheelSpeed.put(8.0, 290.0);
-        passingTable.flywheelSpeed.put(12.0, 425.0);
+        passingTable.flywheelSpeed.put(1.0, 190.0); // 194
+        passingTable.flywheelSpeed.put(4.0, 230.0); // 220
+        passingTable.flywheelSpeed.put(8.0, 290.0); // 298
+        passingTable.flywheelSpeed.put(12.0, 425.0); // 442
 
         // Estimated Time of Flight for Passing by Gemini
         passingTable.timeOfFlight.put(1.0, 0.28);
