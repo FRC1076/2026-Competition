@@ -242,6 +242,9 @@ public class Superstructure {
             .whileTrue(m_slapdown.runHoldPositionStrong(() -> m_superState.getIntakeState().kSlapdownAngle));
 
         isAutonomous.onTrue(Commands.runOnce(() -> ballCounter.resetCount()));
+
+        new Trigger(() -> DriverStation.isEnabled())
+            .whileTrue(Commands.run(() -> ballCounter.update()));
     }
 
     /** Update parameters saved to m_shootingParams and flywheelTargetRadiansPerSecond

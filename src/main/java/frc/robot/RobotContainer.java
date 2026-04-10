@@ -536,7 +536,7 @@ public class RobotContainer {
     /** Command to raise thread priority */
     public static Command threadCommand() {
         return Commands.sequence(
-            Commands.waitSeconds(20),
+            Commands.waitSeconds(25),
             Commands.runOnce(() -> Threads.setCurrentThreadPriority(true, 1)),
             Commands.print("Main Thread Priority raised to RT1 at " + Timer.getFPGATimestamp())
         ).ignoringDisable(true);

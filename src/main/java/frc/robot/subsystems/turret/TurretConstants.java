@@ -41,7 +41,7 @@ public class TurretConstants {
     public static final SensorDirectionValue kEncoderForwardDirection = SensorDirectionValue.CounterClockwise_Positive;
 
     // Closed loop configs
-    public static final double kP = 10;
+    public static final double kP = 11;
     public static final double kI = 0;
     public static final double kD = 0.5;
     public static final double kS = 0;

@@ -71,7 +71,7 @@ public class TurretIOKraken implements TurretIO {
 
         // Encoder
         m_motorConfig.Feedback.FeedbackRemoteSensorID = TurretConstants.kCANcoderCANId;
-        m_motorConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
+        m_motorConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
         m_motorConfig.Feedback.RotorToSensorRatio = TurretConstants.kRotorToSensorRatio;
         m_motorConfig.Feedback.SensorToMechanismRatio = TurretConstants.kSensorToMechanismRatio;
 

@@ -32,9 +32,9 @@ public class CommonLookupTable {
         hubTable.hoodAngle.put(8.0, 0.23); // Extrapolated by Gemini
 
         hubTable.flywheelSpeed.put(1.0, 184.0);
-        hubTable.flywheelSpeed.put(2.0, 193.0);
+        hubTable.flywheelSpeed.put(2.0, 195.0);
         hubTable.flywheelSpeed.put(2.3, 199.0);
-        hubTable.flywheelSpeed.put(2.7, 215.0);
+        hubTable.flywheelSpeed.put(2.7, 212.0);
         hubTable.flywheelSpeed.put(3.0, 218.0);
         hubTable.flywheelSpeed.put(4.0, 236.0);
         hubTable.flywheelSpeed.put(5.0, 264.0);

@@ -34,7 +34,7 @@ public class KickerConstants {
     public static final IdleMode kIdleMode = IdleMode.kBrake;
 
     // KRAKEN
-    public static final InvertedValue kPositiveDirection = InvertedValue.CounterClockwise_Positive;
+    public static final InvertedValue kPositiveDirection = InvertedValue.Clockwise_Positive;
     public static final NeutralModeValue kNeutralMode = NeutralModeValue.Brake;
     public static final boolean kUseFOC = true;
 
