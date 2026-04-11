@@ -17,7 +17,6 @@ public class BallCounter {
 
     private final BooleanSupplier targetIsHubSupplier;
 
-    private double previousVelocity;
     private boolean hasRecovered;
 
     public BallCounter(
@@ -31,7 +30,6 @@ public class BallCounter {
         this.minimumVelocityPercentDrop = minimumVelocityPercentDrop;
         this.targetIsHubSupplier = targetIsHubSupplier;
 
-        this.previousVelocity = velocitySupplier.getAsDouble();
         this.hasRecovered = false;
     }
 
@@ -39,9 +37,13 @@ public class BallCounter {
         final double currentVelocity = velocitySupplier.getAsDouble();
         final double currentTargetVelocity = targetVelocitySupplier.getAsDouble();
 
-        if (withinTolerance(currentTargetVelocity, currentVelocity, minimumVelocityPercentDrop)) {
+        final double velocityRatio = currentVelocity / currentTargetVelocity;
+
+        if (velocityRatio > (1-minimumVelocityPercentDrop)) {
             hasRecovered = true;
-        } else if (hasRecovered && previousVelocity > currentVelocity) {
+        }
+
+        if (hasRecovered && velocityRatio < (1-minimumVelocityPercentDrop)) {
             if (targetIsHubSupplier.getAsBoolean()) {
                 hubCount++;
             } else {
@@ -49,8 +51,6 @@ public class BallCounter {
             }
             hasRecovered = false;
         }
-
-        previousVelocity = currentVelocity;
     }
 
     public int getHubCount() {
@@ -64,9 +64,5 @@ public class BallCounter {
     public void resetCount() {
         hubCount = 0;
         passCount = 0;
-    }
-
-    private boolean withinTolerance(double target, double actual, double toleranceAsDecimal) {
-        return (target * toleranceAsDecimal) - actual < 0;
     }
 }
