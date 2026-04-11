@@ -7,7 +7,6 @@ package frc.robot.subsystems.drive;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -132,7 +131,7 @@ public class DriveIOSim extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
             inputs.odometrySpeeds[i] = odomDrain[i].Speeds;
         }
         
-        BaseStatusSignal.refreshAll(
+        StatusSignal.refreshAll(
             m_gyroAccelerationXSignal,
             m_gyroAccelerationYSignal,
             m_gyroAccelerationZSignal

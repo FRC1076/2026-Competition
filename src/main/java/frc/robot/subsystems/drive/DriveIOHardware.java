@@ -20,7 +20,6 @@ import edu.wpi.first.units.measure.LinearAcceleration;
 import edu.wpi.first.units.measure.Voltage;
 import frc.robot.Constants.SystemConstants;
 
-import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
@@ -134,7 +133,7 @@ public class DriveIOHardware extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
             }
         }
 
-        BaseStatusSignal.refreshAll(
+        StatusSignal.refreshAll(
             m_gyroAccelerationXSignal,
             m_gyroAccelerationYSignal,
             m_gyroAccelerationZSignal
