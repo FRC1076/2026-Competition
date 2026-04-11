@@ -75,6 +75,7 @@ public class DriveSubsystem extends SubsystemBase {
     private LinearAccelerationState currentAccel;
     private LinearAccelerationState previousAccel;
     private boolean isSlipping;
+    private boolean impactDetected;
 
     public DriveSubsystem(DriveIO io, VisionLocalizationSystem vision, Elastic elastic) {
         this.io = io;
@@ -133,6 +134,9 @@ public class DriveSubsystem extends SubsystemBase {
         if (Math.abs(currentAccel.getAcceleration() - previousAccel.getAcceleration()) > AntiDefenseConstants.minimumJerk) {
             // We just had a big impact, so the pose probably didn't move that much as odometry and the cameras think
             io.addVisionMeasurement(getPose(), Timer.getFPGATimestamp(), AntiDefenseConstants.impactPreviousStateStdDev);
+            impactDetected = true;
+        } else {
+            impactDetected = false;
         }
 
         ChassisSpeeds odometrySpeeds = getChassisSpeeds();
@@ -149,6 +153,9 @@ public class DriveSubsystem extends SubsystemBase {
         } else {
             isSlipping = false;
         }
+
+        Logger.recordOutput("Drive/ImpactDetected", impactDetected);
+        Logger.recordOutput("Drive/IsSlipping", isSlipping);
     }
 
     public void configureAutoBuilder() {
