@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.704766666666667,
-        "y": 4.024922222222221
+        "x": 0.4547852630721323,
+        "y": 4.0139278468557436
       },
       "isLocked": false,
       "linkedName": "Srt2"
@@ -20,7 +20,7 @@
         "y": 5.982
       },
       "prevControl": {
-        "x": 2.75,
+        "x": 3.25,
         "y": 5.981999999999999
       },
       "nextControl": null,
