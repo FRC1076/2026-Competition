@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems.turret;
 
-import static edu.wpi.first.units.Units.Radians;
-
 import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.StatusSignal;
@@ -184,6 +182,6 @@ public class TurretIOKraken implements TurretIO {
         inputs.motorTempDegC = m_temperatureSignal.getValueAsDouble();
         inputs.hasReset = m_encoderResetSignal.getValue();
 
-        Logger.recordOutput("Turret/PositionTargetRad", m_positionRequest.getPositionMeasure().in(Radians));
+        Logger.recordOutput("Turret/PositionTargetRad", m_unitConverter.toSIPos(m_positionRequest.Position));
     }
 }
