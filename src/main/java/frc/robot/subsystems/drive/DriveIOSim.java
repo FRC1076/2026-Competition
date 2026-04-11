@@ -7,6 +7,7 @@ package frc.robot.subsystems.drive;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -44,6 +45,7 @@ public class DriveIOSim extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
 
     private final StatusSignal<LinearAcceleration> m_gyroAccelerationXSignal;
     private final StatusSignal<LinearAcceleration> m_gyroAccelerationYSignal;
+    private final StatusSignal<LinearAcceleration> m_gyroAccelerationZSignal;
 
     @Override
     public void addVisionMeasurement(Pose2d visionRobotPoseMeters, double timestampSeconds,
@@ -91,6 +93,7 @@ public class DriveIOSim extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
 
         m_gyroAccelerationXSignal = super.getPigeon2().getAccelerationX();
         m_gyroAccelerationYSignal = super.getPigeon2().getAccelerationY();
+        m_gyroAccelerationZSignal = super.getPigeon2().getAccelerationZ();
     }
 
     public DriveIOSim(CommandSwerveDrivetrain constants){
@@ -128,9 +131,15 @@ public class DriveIOSim extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
             inputs.odometryPoses[i] = odomDrain[i].Pose;
             inputs.odometrySpeeds[i] = odomDrain[i].Speeds;
         }
-
+        
+        BaseStatusSignal.refreshAll(
+            m_gyroAccelerationXSignal,
+            m_gyroAccelerationYSignal,
+            m_gyroAccelerationZSignal
+        );
         inputs.gyroAccelerationX = m_gyroAccelerationXSignal.getValueAsDouble() * 9.81;
         inputs.gyroAccelerationY = m_gyroAccelerationYSignal.getValueAsDouble() * 9.81;
+        inputs.gyroAccelerationZ = m_gyroAccelerationZSignal.getValueAsDouble() * 9.81;
     }
 
     @Override

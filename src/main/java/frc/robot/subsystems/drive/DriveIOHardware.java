@@ -20,6 +20,7 @@ import edu.wpi.first.units.measure.LinearAcceleration;
 import edu.wpi.first.units.measure.Voltage;
 import frc.robot.Constants.SystemConstants;
 
+import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
@@ -44,6 +45,7 @@ public class DriveIOHardware extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
 
     private final StatusSignal<LinearAcceleration> m_gyroAccelerationXSignal;
     private final StatusSignal<LinearAcceleration> m_gyroAccelerationYSignal;
+    private final StatusSignal<LinearAcceleration> m_gyroAccelerationZSignal;
 
     // A non-blocking atomic queue where high-speed odometry readings are cached until they can be logged by the main thread
     private ConcurrentLinkedQueue<SwerveDriveState> odometryCache = new ConcurrentLinkedQueue<>();
@@ -81,6 +83,7 @@ public class DriveIOHardware extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
 
         m_gyroAccelerationXSignal = super.getPigeon2().getAccelerationX();
         m_gyroAccelerationYSignal = super.getPigeon2().getAccelerationY();
+        m_gyroAccelerationZSignal = super.getPigeon2().getAccelerationZ();
     }
 
     public DriveIOHardware(CommandSwerveDrivetrain constants){
@@ -131,8 +134,14 @@ public class DriveIOHardware extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder
             }
         }
 
+        BaseStatusSignal.refreshAll(
+            m_gyroAccelerationXSignal,
+            m_gyroAccelerationYSignal,
+            m_gyroAccelerationZSignal
+        );
         inputs.gyroAccelerationX = m_gyroAccelerationXSignal.getValueAsDouble() * 9.81;
         inputs.gyroAccelerationY = m_gyroAccelerationYSignal.getValueAsDouble() * 9.81;
+        inputs.gyroAccelerationZ = m_gyroAccelerationZSignal.getValueAsDouble() * 9.81;
     }
 
     /** Updates module inputs, all of the things that will be logged into AdvantageKit */

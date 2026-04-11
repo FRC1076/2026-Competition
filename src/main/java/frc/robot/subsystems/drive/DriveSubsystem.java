@@ -8,8 +8,9 @@ import frc.robot.PhysicalConstants.FieldConstants;
 import frc.robot.commands.drive.PPDriveToPose;
 import frc.robot.commands.drive.TeleopDriveCommand;
 import frc.robot.subsystems.Elastic;
+import frc.robot.subsystems.drive.DriveConstants.AntiDefenseConstants;
 import frc.robot.subsystems.drive.DriveConstants.PathPlannerConstants;
-
+import lib.data.Pose2dFilter;
 import lib.vision.VisionLocalizationSystem;
 
 import java.util.function.DoubleSupplier;
@@ -17,6 +18,7 @@ import java.util.function.Supplier;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -52,17 +54,49 @@ public class DriveSubsystem extends SubsystemBase {
     private final VisionLocalizationSystem vision;
     private final Elastic elastic;
 
+    /** Record to hold the acceleration of the drivetrain */
+    private record LinearAccelerationState(
+        double xAccel,
+        double yAccel,
+        double zAccel
+    ) {
+        @SuppressWarnings("unused")
+        private double getXYAccel() {
+            return Math.hypot(xAccel, yAccel);
+        }
+
+        @SuppressWarnings("unused")
+        private double getAcceleration() {
+            return Math.sqrt((xAccel * xAccel) + (yAccel * yAccel) + (zAccel * zAccel));
+        }
+    }
+
+    private final Pose2dFilter visionOnlyPoseFilter;
+    private LinearAccelerationState currentAccel;
+    private LinearAccelerationState previousAccel;
+    private boolean isSlipping;
+
     public DriveSubsystem(DriveIO io, VisionLocalizationSystem vision, Elastic elastic) {
         this.io = io;
         this.vision = vision;
         this.elastic = elastic;
-        vision.registerMeasurementConsumer(this.io::addVisionMeasurement); // In DriveIOHardware, addVisionMeasurement is built into the SwerveDrivetrain class
+
+        visionOnlyPoseFilter = new Pose2dFilter(AntiDefenseConstants.visionOnlyPoseTaps);
+        vision.registerMeasurementConsumer(
+            (poseEstimate, timestampSeconds, StdDevs) -> {
+                io.addVisionMeasurement(poseEstimate, timestampSeconds, StdDevs);
+                visionOnlyPoseFilter.update(poseEstimate, timestampSeconds);
+            }
+        );
 
        setAllianceRotation(elastic.getSelectedTeamColor());
 
         io.resetHeading();
         
-        CommandBuilder = new DriveCommandFactory(this);        
+        CommandBuilder = new DriveCommandFactory(this);   
+        
+        currentAccel = new LinearAccelerationState(0, 0, 0);
+        previousAccel = new LinearAccelerationState(0, 0, 0);
     }
 
     @Override
@@ -92,6 +126,29 @@ public class DriveSubsystem extends SubsystemBase {
             } 
         }*/
         elastic.updateField(driveInputs.Pose); // Update the robot's pose on Elastic
+
+        // Reduce pose jumping under defense
+        currentAccel = new LinearAccelerationState(driveInputs.gyroAccelerationX, driveInputs.gyroAccelerationY, driveInputs.gyroAccelerationZ);
+        
+        if (Math.abs(currentAccel.getAcceleration() - previousAccel.getAcceleration()) > AntiDefenseConstants.minimumJerk) {
+            // We just had a big impact, so the pose probably didn't move that much as odometry and the cameras think
+            io.addVisionMeasurement(getPose(), Timer.getFPGATimestamp(), AntiDefenseConstants.impactPreviousStateStdDev);
+        }
+
+        ChassisSpeeds odometrySpeeds = getChassisSpeeds();
+        ChassisSpeeds visionSpeeds = visionOnlyPoseFilter.getSpeeds();
+        if (
+            visionOnlyPoseFilter.getLatency() <= AntiDefenseConstants.maxVisionLatency && (
+                odometrySpeeds.vxMetersPerSecond - visionSpeeds.vxMetersPerSecond > AntiDefenseConstants.minDiffInLinearVel ||
+                odometrySpeeds.vyMetersPerSecond - visionSpeeds.vyMetersPerSecond > AntiDefenseConstants.minDiffInLinearVel ||
+                odometrySpeeds.omegaRadiansPerSecond - visionSpeeds.omegaRadiansPerSecond > AntiDefenseConstants.minDiffInAngularVel
+            )
+        ) {
+            // Odom is moving much faster than vision
+            isSlipping = true;
+        } else {
+            isSlipping = false;
+        }
     }
 
     public void configureAutoBuilder() {
@@ -228,6 +285,20 @@ public class DriveSubsystem extends SubsystemBase {
     @AutoLogOutput
     public ChassisSpeeds getChassisSpeeds() {
         return io.getChassisSpeeds();
+    }
+
+    @AutoLogOutput
+    public Pose2d getSlippingAdjustedPose() {
+        return isSlipping
+            ? visionOnlyPoseFilter.getFilteredVelocityAdjustedPose()
+            : getPose();
+    }
+
+    @AutoLogOutput
+    public ChassisSpeeds getSlippingAdjustedSpeeds() {
+        return isSlipping
+            ? visionOnlyPoseFilter.getSpeeds()
+            : getChassisSpeeds();
     }
 
     /** Returns the pose of the robot, but mirrored */

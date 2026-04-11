@@ -206,8 +206,8 @@ public class RobotContainer {
             m_kicker,
             m_climber,
             m_climbHook,
-            () -> m_drive.getPose(),
-            () -> m_drive.getChassisSpeeds()
+            () -> m_drive.getSlippingAdjustedPose(),
+            () -> m_drive.getSlippingAdjustedSpeeds()
         );
         doneShooting = m_superstructure.isDoneShooting();
 
