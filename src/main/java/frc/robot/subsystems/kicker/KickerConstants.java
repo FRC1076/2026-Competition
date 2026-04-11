@@ -13,7 +13,8 @@ import frc.robot.Constants.CANConstants;
 
 public class KickerConstants {
     // CAN Id
-    public static final int kCanId = 44;
+    public static final int kLeadMotorCANId = 44;
+    public static final int kFollowMotorCANId = 46;
     public static final CANBus kCANBus = CANConstants.kCANivoreBus;
 
     // PID Constants

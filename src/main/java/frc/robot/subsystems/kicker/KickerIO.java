@@ -9,10 +9,14 @@ import org.littletonrobotics.junction.AutoLog;
 public interface KickerIO {
     @AutoLog
     public static class KickerIOInputs {
-        public double appliedVoltage = 0;
-        public double currentAmps = 0;
+        public double leadMotorAppliedVoltage = 0;
+        public double followMotorAppliedVoltage = 0;
+
+        public double leadMotorCurrentAmps = 0;
+        public double followMotorCurrentAmps = 0;
         
-        public double velocityRadPerSec = 0;
+        public double leadMotorVelocityRadPerSec = 0;
+        public double followMotorVelocityRadPerSec = 0;
     }
 
     public abstract void setVoltage(double volts);
