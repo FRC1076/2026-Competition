@@ -16,8 +16,8 @@ public class DriveConstants {
     public static class DriverControlConstants {
         public static final double singleClutchTranslationFactor = 0.5;
         public static final double singleClutchRotationFactor = 0.5;
-        public static final double doubleClutchTranslationFactor = 0.3;
-        public static final double doubleClutchRotationFactor = 0.35;
+        public static final double doubleClutchTranslationFactor = 0.35;
+        public static final double doubleClutchRotationFactor = 0.4;
         public static final double FPVClutchTranslationFactor = 0.1;
         public static final double FPVClutchRotationFactor = 0.1;
         public static final double maxTranslationSpeedMPS = 6.0; // 5.0 is default
