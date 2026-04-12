@@ -2,6 +2,7 @@ package frc.robot.subsystems.kicker;
 
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -24,6 +25,7 @@ public class KickerIOKraken implements KickerIO {
     // Control signals
     private final VelocityTorqueCurrentFOC m_velocityRequest = new VelocityTorqueCurrentFOC(0);
     private final VoltageOut m_voltageRequest = new VoltageOut(0);
+    private final Follower m_followRequest;
 
     // Status Signals
     private final StatusSignal<Voltage> m_leadVoltageSignal;
@@ -78,6 +80,9 @@ public class KickerIOKraken implements KickerIO {
         m_followVoltageSignal = m_followMotor.getMotorVoltage();
         m_followVelocitySignal = m_followMotor.getVelocity();
         m_followCurrentSignal = m_followMotor.getTorqueCurrent();
+
+        m_followRequest = new Follower(KickerConstants.kLeadMotorCANId, KickerConstants.kLeadFollowerAlignment);
+        m_followMotor.setControl(m_followRequest);
     }
 
     @Override
