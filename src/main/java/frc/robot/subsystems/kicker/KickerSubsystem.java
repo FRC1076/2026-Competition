@@ -56,6 +56,6 @@ public class KickerSubsystem extends SubsystemBase {
 
     /** returns current voltage */
     public double getVoltage() {
-        return inputs.appliedVoltage;
+        return inputs.leadMotorAppliedVoltage;
     }
 }

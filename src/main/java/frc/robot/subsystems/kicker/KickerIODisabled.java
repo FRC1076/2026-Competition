@@ -14,7 +14,7 @@ public class KickerIODisabled implements KickerIO {
 
     @Override
     public void updateInputs(KickerIOInputs inputs) {
-        inputs.appliedVoltage = voltageTarget;
+        inputs.leadMotorAppliedVoltage = voltageTarget;
     }
     
     @Override
