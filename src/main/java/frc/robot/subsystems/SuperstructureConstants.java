@@ -105,7 +105,7 @@ public class SuperstructureConstants {
         }
     }
 
-    public static double kSpindexerIndexerVoltage = 9;
+    public static double kSpindexerIndexerVoltage = 11;
     public static double kKickerIndexVelocity = 400;
     
     public static enum IndexStates {
