@@ -40,9 +40,22 @@
                 }
               },
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "Shake Slapdown"
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 2.0
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Shake Slapdown"
+                      }
+                    }
+                  ]
                 }
               },
               {
@@ -56,7 +69,7 @@
                           {
                             "type": "wait",
                             "data": {
-                              "waitTime": 3.0
+                              "waitTime": 2.0
                             }
                           },
                           {
@@ -71,7 +84,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 5.0
+                        "waitTime": 6.0
                       }
                     }
                   ]
@@ -93,6 +106,12 @@
                 "type": "named",
                 "data": {
                   "name": "Stop Shooting"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Start Intake"
                 }
               }
             ]

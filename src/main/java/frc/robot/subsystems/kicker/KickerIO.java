@@ -17,6 +17,9 @@ public interface KickerIO {
         
         public double leadMotorVelocityRadPerSec = 0;
         public double followMotorVelocityRadPerSec = 0;
+
+        public double leadMotorTargetVelocityRadPerSec = 0;
+        public double followMotorTargetVelocityRadPerSec = 0;
     }
 
     public abstract void setVoltage(double volts);

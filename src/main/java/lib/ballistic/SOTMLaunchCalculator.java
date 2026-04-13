@@ -2,6 +2,7 @@ package lib.ballistic;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -13,6 +14,8 @@ public class SOTMLaunchCalculator {
     private static final double latencySecs = 0.02;
     /** Number of iterations recurse through the time of flight calculation */
     private static final int iterations = 5;
+
+    private static final LinearFilter distanceFilter = LinearFilter.movingAverage(3);
 
     public static CommonShotSolution calculate(
         Pose2d turretPose,
@@ -41,6 +44,12 @@ public class SOTMLaunchCalculator {
                     new Rotation2d()
                 )
             );
+        }
+
+        if (turretVelocity.vyMetersPerSecond + turretVelocity.vyMetersPerSecond + (turretVelocity.omegaRadiansPerSecond / 2) > 1) {
+            distanceFilter.calculate(turretToTargetDistanceMeters);
+        } else {
+            turretToTargetDistanceMeters = distanceFilter.calculate(turretToTargetDistanceMeters);
         }
 
         double turretAngleRadians = turretToTarget.getAngle().getRadians();

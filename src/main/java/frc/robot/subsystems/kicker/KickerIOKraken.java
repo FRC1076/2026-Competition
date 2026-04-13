@@ -2,7 +2,6 @@ package frc.robot.subsystems.kicker;
 
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -12,6 +11,8 @@ import lib.units.TalonFXUnitConverter;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Voltage;
+import frc.robot.subsystems.kicker.KickerConstants.FollowControl;
+import frc.robot.subsystems.kicker.KickerConstants.LeadControl;
 
 public class KickerIOKraken implements KickerIO {
     private final TalonFX m_leadMotor;
@@ -23,9 +24,9 @@ public class KickerIOKraken implements KickerIO {
     private final TalonFXUnitConverter m_unitConverter;
 
     // Control signals
-    private final VelocityTorqueCurrentFOC m_velocityRequest = new VelocityTorqueCurrentFOC(0);
+    private final VelocityTorqueCurrentFOC m_leadVelocityRequest = new VelocityTorqueCurrentFOC(0);
+    private final VelocityTorqueCurrentFOC m_followVelocityRequest = new VelocityTorqueCurrentFOC(0);
     private final VoltageOut m_voltageRequest = new VoltageOut(0);
-    private final Follower m_followRequest;
 
     // Status Signals
     private final StatusSignal<Voltage> m_leadVoltageSignal;
@@ -58,14 +59,23 @@ public class KickerIOKraken implements KickerIO {
         m_leadMotorConfig.Feedback.SensorToMechanismRatio = KickerConstants.kGearRatio;
         
         // Closed loop
-        m_leadMotorConfig.Slot0.kP = m_unitConverter.fromSIkP(KickerConstants.kP);
-        m_leadMotorConfig.Slot0.kI = m_unitConverter.fromSIkI(KickerConstants.kI);
-        m_leadMotorConfig.Slot0.kD = m_unitConverter.fromSIkD(KickerConstants.kD);
-        m_leadMotorConfig.Slot0.kS = m_unitConverter.fromSIkS(KickerConstants.kS);
-        m_leadMotorConfig.Slot0.kV = m_unitConverter.fromSIkV(KickerConstants.kV);
-        m_leadMotorConfig.Slot0.kA = m_unitConverter.fromSIkA(KickerConstants.kA);
+        m_leadMotorConfig.Slot0.kP = m_unitConverter.fromSIkP(LeadControl.kP);
+        m_leadMotorConfig.Slot0.kI = m_unitConverter.fromSIkI(LeadControl.kI);
+        m_leadMotorConfig.Slot0.kD = m_unitConverter.fromSIkD(LeadControl.kD);
+        m_leadMotorConfig.Slot0.kS = m_unitConverter.fromSIkS(LeadControl.kS);
+        m_leadMotorConfig.Slot0.kV = m_unitConverter.fromSIkV(LeadControl.kV);
+        m_leadMotorConfig.Slot0.kA = m_unitConverter.fromSIkA(LeadControl.kA);
 
         m_followMotorConfig = m_leadMotorConfig.clone();
+
+        // Closed loop
+        m_followMotorConfig.Slot0.kP = m_unitConverter.fromSIkP(FollowControl.kP);
+        m_followMotorConfig.Slot0.kI = m_unitConverter.fromSIkI(FollowControl.kI);
+        m_followMotorConfig.Slot0.kD = m_unitConverter.fromSIkD(FollowControl.kD);
+        m_followMotorConfig.Slot0.kS = m_unitConverter.fromSIkS(FollowControl.kS);
+        m_followMotorConfig.Slot0.kV = m_unitConverter.fromSIkV(FollowControl.kV);
+        m_followMotorConfig.Slot0.kA = m_unitConverter.fromSIkA(FollowControl.kA);
+
 
         // configure the motors
         m_leadMotor.getConfigurator().apply(m_leadMotorConfig);
@@ -80,25 +90,25 @@ public class KickerIOKraken implements KickerIO {
         m_followVoltageSignal = m_followMotor.getMotorVoltage();
         m_followVelocitySignal = m_followMotor.getVelocity();
         m_followCurrentSignal = m_followMotor.getTorqueCurrent();
-
-        m_followRequest = new Follower(KickerConstants.kLeadMotorCANId, KickerConstants.kLeadFollowerAlignment);
-        m_followMotor.setControl(m_followRequest);
     }
 
     @Override
     public void setVoltage(double volts) {
-        m_leadMotor.setVoltage((volts));
+        m_leadMotor.setVoltage(volts);
+        m_followMotor.setVoltage(volts * KickerConstants.kBackToFrontSpeedRatio);
     }
 
     @Override
     public void setVelocityRadPerSec(double velocity) {
         if(velocity != 0) {
-            m_velocityRequest.Velocity = m_unitConverter.fromSIVel(velocity);
-            m_leadMotor.setControl(m_velocityRequest);
+            m_leadVelocityRequest.Velocity = m_unitConverter.fromSIVel(velocity);
+            m_followVelocityRequest.Velocity = m_unitConverter.fromSIVel(velocity * 1.25);
+            m_leadMotor.setControl(m_leadVelocityRequest);
+            m_followMotor.setControl(m_followVelocityRequest);
         } else {
             m_leadMotor.setVoltage(0);
+            m_followMotor.setVoltage(0);
         }
-    
     }
 
     @Override
@@ -115,10 +125,12 @@ public class KickerIOKraken implements KickerIO {
 
         inputs.leadMotorAppliedVoltage = m_leadVoltageSignal.getValueAsDouble();
         inputs.leadMotorVelocityRadPerSec = m_unitConverter.toSIVel(m_leadVelocitySignal.getValueAsDouble());
+        inputs.leadMotorTargetVelocityRadPerSec = m_unitConverter.toSIVel(m_leadVelocityRequest.Velocity);
         inputs.leadMotorCurrentAmps = (m_leadCurrentSignal.getValueAsDouble());
 
         inputs.followMotorAppliedVoltage = m_followVoltageSignal.getValueAsDouble();
         inputs.followMotorVelocityRadPerSec = m_unitConverter.toSIVel(m_followVelocitySignal.getValueAsDouble());
+        inputs.followMotorTargetVelocityRadPerSec = m_unitConverter.toSIVel(m_followVelocityRequest.Velocity);
         inputs.followMotorCurrentAmps = (m_followCurrentSignal.getValueAsDouble());
     }
 }

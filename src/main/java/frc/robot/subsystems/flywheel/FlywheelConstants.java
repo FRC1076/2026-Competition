@@ -15,7 +15,7 @@ public class FlywheelConstants {
 
     // Voltage and current limits
     public static final double kMaxVoltage = 12;
-    public static final double kStatorCurrentLimit = 70;
+    public static final double kStatorCurrentLimit = 80;
     public static final double kSupplyCurrentLimit = 40;
 
     public static final double kManualFlywheelVolts = 12;
@@ -25,12 +25,12 @@ public class FlywheelConstants {
     public static final NeutralModeValue kNeutralMode = NeutralModeValue.Coast;
     public static final MotorAlignmentValue kMotorAlignment = MotorAlignmentValue.Opposed;
 
-    public static final double kP = 1; //1
+    public static final double kP = 1.5; //1
     public static final double kI = 0;
-    public static final double kD = 0.01; //0.02
+    public static final double kD = 0.00;//25; //0.02
 
     public static final double kS = Math.PI*2;
-    public static final double kV = 0.015;
+    public static final double kV = 0.018;
     public static final double kA = 0;
 
     public static final double kMaxAcceleration = 20000;

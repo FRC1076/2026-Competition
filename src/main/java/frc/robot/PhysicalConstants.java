@@ -64,7 +64,7 @@ public class PhysicalConstants {
                     PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
                     PoseStrategy.PNP_DISTANCE_TRIG_SOLVE,
                     -10.722310, -13.231252, 5.748,
-                    0, 20, -137.5
+                    0, 20, -145
                 ),
                 REAR_LEFT(
                     "REAR_LEFT",

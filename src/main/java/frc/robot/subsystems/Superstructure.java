@@ -389,7 +389,7 @@ public class Superstructure {
         return Commands.parallel(
             setIndexState(state),
             m_spindexer.applyVoltage(state.kSpindexerVoltage),
-            m_kicker.applyVoltage(state.kKickerVoltage)
+            m_kicker.applyVelocity(state.kKickerVelocity)
         );
     }
 

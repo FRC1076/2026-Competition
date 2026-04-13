@@ -43,7 +43,7 @@
           },
           {
             "title": "FlywheelVelocityTarget",
-            "x": 1880.0,
+            "x": 1860.0,
             "y": 220.0,
             "width": 240.0,
             "height": 140.0,
@@ -229,7 +229,7 @@
             }
           },
           {
-            "title": "photonvision0_Port_1182_Output_MJPEG_Server",
+            "title": "Front Left",
             "x": 880.0,
             "y": 120.0,
             "width": 260.0,
@@ -248,9 +248,9 @@
             }
           },
           {
-            "title": "photonvision0_Port_1184_Output_MJPEG_Server",
-            "x": 1140.0,
-            "y": 120.0,
+            "title": "Rear Left",
+            "x": 880.0,
+            "y": 380.0,
             "width": 260.0,
             "height": 260.0,
             "type": "Camera Stream",
@@ -267,9 +267,9 @@
             }
           },
           {
-            "title": "photonvision1_Port_1182_Output_MJPEG_Server",
-            "x": 880.0,
-            "y": 380.0,
+            "title": "Front Right",
+            "x": 1140.0,
+            "y": 120.0,
             "width": 260.0,
             "height": 260.0,
             "type": "Camera Stream",
@@ -286,7 +286,7 @@
             }
           },
           {
-            "title": "photonvision1_Port_1184_Output_MJPEG_Server",
+            "title": "Rear Right",
             "x": 1140.0,
             "y": 380.0,
             "width": 260.0,
@@ -303,6 +303,49 @@
                 100.0
               ]
             }
+          },
+          {
+            "title": "Hub",
+            "x": 1540.0,
+            "y": 260.0,
+            "width": 140.0,
+            "height": 100.0,
+            "type": "Large Text Display",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/FuelCount/Hub",
+              "period": 0.06,
+              "data_type": "int"
+            }
+          },
+          {
+            "title": "Passing",
+            "x": 1680.0,
+            "y": 260.0,
+            "width": 140.0,
+            "height": 100.0,
+            "type": "Large Text Display",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/FuelCount/Passing",
+              "period": 0.06,
+              "data_type": "int"
+            }
+          },
+          {
+            "title": "Turret Rotation Enabled",
+            "x": 420.0,
+            "y": 320.0,
+            "width": 200.0,
+            "height": 120.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/SuperState/turretRotationEnabled",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
           }
         ]
       }
@@ -313,7 +356,7 @@
         "layouts": [
           {
             "title": "PathPlanner",
-            "x": 1320.0,
+            "x": 1280.0,
             "y": 320.0,
             "width": 360.0,
             "height": 280.0,
@@ -444,7 +487,7 @@
           },
           {
             "title": "PDH ChannelCount",
-            "x": 1680.0,
+            "x": 1660.0,
             "y": 120.0,
             "width": 160.0,
             "height": 160.0,
@@ -474,7 +517,7 @@
           },
           {
             "title": "Console",
-            "x": 1680.0,
+            "x": 1640.0,
             "y": 320.0,
             "width": 460.0,
             "height": 280.0,
@@ -515,7 +558,7 @@
           },
           {
             "title": "SuccessfulDaqs",
-            "x": 1520.0,
+            "x": 1500.0,
             "y": 0.0,
             "width": 160.0,
             "height": 120.0,
@@ -527,22 +570,8 @@
             }
           },
           {
-            "title": "SuccessfulDaqs",
-            "x": 1000.0,
-            "y": 200.0,
-            "width": 160.0,
-            "height": 160.0,
-            "type": "Text Display",
-            "properties": {
-              "topic": "/AdvantageKit/Drive/SuccessfulDaqs",
-              "period": 0.06,
-              "data_type": "int",
-              "show_submit_button": false
-            }
-          },
-          {
             "title": "FailedDaqs",
-            "x": 1680.0,
+            "x": 1660.0,
             "y": 0.0,
             "width": 160.0,
             "height": 120.0,
