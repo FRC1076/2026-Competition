@@ -8,7 +8,6 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import frc.robot.PhysicalConstants;
 
 public class SuperstructureConstants {    
@@ -184,10 +183,7 @@ public class SuperstructureConstants {
     public static final int kAutoAimMaxIterations = 5;
     public static final double kAutoAimTimeToleranceSeconds = 5;
 
-    public static final InterpolatingDoubleTreeMap kDistanceToFlywheelSpeedMap = new InterpolatingDoubleTreeMap();
-    static {
-        /**  Distance in meters, speed in rad/sec */
-        kDistanceToFlywheelSpeedMap.put(1.0, 300.0);
-        kDistanceToFlywheelSpeedMap.put(4.0, 500.0);
-    }
+    // Ratios for counting balls
+    public static final double kFlywheelVelocityRecoveryRatio = 0.95;
+    public static final double kFlywheelVelocityDropRatio = 0.9;
 }

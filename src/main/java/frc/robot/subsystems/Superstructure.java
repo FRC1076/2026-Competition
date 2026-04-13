@@ -17,7 +17,6 @@ import frc.robot.subsystems.SuperstructureConstants.IntakeStates;
 import frc.robot.subsystems.SuperstructureConstants.TurretStates;
 import frc.robot.subsystems.climb.climber.ClimberSubsystem;
 import frc.robot.subsystems.climb.hook.HookSubsystem;
-import frc.robot.subsystems.flywheel.FlywheelConstants;
 import frc.robot.subsystems.flywheel.FlywheelSubsystem;
 import frc.robot.subsystems.hood.HoodSubsystem;
 import frc.robot.subsystems.kicker.KickerSubsystem;
@@ -201,7 +200,8 @@ public class Superstructure {
         this.ballCounter = new BallCounter(
             () -> m_flywheel.getVelocityRadPerSec(),
             () -> m_flywheel.getPIDTargetRadPerSec(), 
-            FlywheelConstants.kSetpointTolerancePercent, 
+            SuperstructureConstants.kFlywheelVelocityDropRatio,
+            SuperstructureConstants.kFlywheelVelocityRecoveryRatio, 
             () -> targetIsHub
         );
     }

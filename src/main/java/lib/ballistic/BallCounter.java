@@ -3,6 +3,8 @@ package lib.ballistic;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.math.MathUtil;
+
 /** Class that counts the number of balls that go through a flywheel.
  * 
  * @apiNote Make sure to call update() periodically.
@@ -13,7 +15,8 @@ public class BallCounter {
 
     private final DoubleSupplier velocitySupplier;
     private final DoubleSupplier targetVelocitySupplier;
-    private final double minimumVelocityPercentDrop;
+    private final double velocityDropThresholdRatio;
+    private final double recoveryThresholdRatio;
 
     private final BooleanSupplier targetIsHubSupplier;
 
@@ -22,12 +25,14 @@ public class BallCounter {
     public BallCounter(
         DoubleSupplier velocitySupplier,
         DoubleSupplier targetVelocitySupplier,
-        double minimumVelocityPercentDrop,
+        double velocityDropThresholdRatio,
+        double recoveryThresholdRatio,
         BooleanSupplier targetIsHubSupplier
     ) {
         this.velocitySupplier = velocitySupplier;
         this.targetVelocitySupplier = targetVelocitySupplier;
-        this.minimumVelocityPercentDrop = minimumVelocityPercentDrop;
+        this.velocityDropThresholdRatio = velocityDropThresholdRatio;
+        this.recoveryThresholdRatio = recoveryThresholdRatio;
         this.targetIsHubSupplier = targetIsHubSupplier;
 
         this.hasRecovered = false;
@@ -37,13 +42,19 @@ public class BallCounter {
         final double currentVelocity = velocitySupplier.getAsDouble();
         final double currentTargetVelocity = targetVelocitySupplier.getAsDouble();
 
-        final double velocityRatio = currentVelocity / currentTargetVelocity;
+        if (currentTargetVelocity <= 1e-6) {
+            hasRecovered = false;
+            return;
+        }
 
-        if (velocityRatio > (1-minimumVelocityPercentDrop)) {
+
+        final double velocityRatio = MathUtil.clamp(currentVelocity / currentTargetVelocity, 0, 1.5);
+
+        if (velocityRatio > recoveryThresholdRatio) {
             hasRecovered = true;
         }
 
-        if (hasRecovered && velocityRatio < (1-minimumVelocityPercentDrop)) {
+        if (hasRecovered && velocityRatio < velocityDropThresholdRatio) {
             if (targetIsHubSupplier.getAsBoolean()) {
                 hubCount++;
             } else {
