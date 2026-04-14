@@ -24,8 +24,8 @@ public class CommonLookupTable {
     static {
         /* *****HUB***** */
         hubTable.hoodAngle.put(1.0, 0.0);
-        hubTable.hoodAngle.put(2.0, 0.05);
-        hubTable.hoodAngle.put(3.0, 0.09);
+        hubTable.hoodAngle.put(2.0, 0.04);
+        hubTable.hoodAngle.put(3.0, 0.08);
         hubTable.hoodAngle.put(4.0, 0.12);
         hubTable.hoodAngle.put(5.0, 0.14);
         hubTable.hoodAngle.put(6.0, 0.16);
@@ -33,9 +33,10 @@ public class CommonLookupTable {
 
         hubTable.flywheelSpeed.put(1.0, 176.0);
         hubTable.flywheelSpeed.put(2.0, 188.0);
-        hubTable.flywheelSpeed.put(2.3, 192.0);
-        hubTable.flywheelSpeed.put(2.7, 196.0);
-        hubTable.flywheelSpeed.put(3.0, 201.0);
+        hubTable.flywheelSpeed.put(2.3, 191.0);
+        hubTable.flywheelSpeed.put(2.7, 195.0);
+        hubTable.flywheelSpeed.put(3.0, 200.0);
+        hubTable.flywheelSpeed.put(3.5, 216.0);
         hubTable.flywheelSpeed.put(4.0, 225.0);
         hubTable.flywheelSpeed.put(5.0, 250.0);
         hubTable.flywheelSpeed.put(6.0, 275.0);
@@ -52,15 +53,13 @@ public class CommonLookupTable {
 
 
         /* *****PASSING***** */
-        passingTable.hoodAngle.put(1.0, 0.05);
-        passingTable.hoodAngle.put(5.0, 0.1);
-        passingTable.hoodAngle.put(8.0, 0.18);
-        passingTable.hoodAngle.put(12.0, 0.25);
+        passingTable.hoodAngle.put(1.0, 0.18);
+        passingTable.hoodAngle.put(8.0, 0.25);
 
-        passingTable.flywheelSpeed.put(1.0, 190.0); // 194
-        passingTable.flywheelSpeed.put(4.0, 230.0); // 220
-        passingTable.flywheelSpeed.put(8.0, 290.0); // 298
-        passingTable.flywheelSpeed.put(12.0, 425.0); // 442
+        passingTable.flywheelSpeed.put(1.0, 160.0); // 194
+        passingTable.flywheelSpeed.put(4.0, 200.0); // 220
+        passingTable.flywheelSpeed.put(8.0, 250.0); // 298
+        passingTable.flywheelSpeed.put(12.0, 380.0); // 442
 
         // Estimated Time of Flight for Passing by Gemini
         passingTable.timeOfFlight.put(1.0, 0.28);

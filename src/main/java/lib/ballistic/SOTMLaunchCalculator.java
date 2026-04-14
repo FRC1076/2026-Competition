@@ -15,7 +15,7 @@ public class SOTMLaunchCalculator {
     /** Number of iterations recurse through the time of flight calculation */
     private static final int iterations = 5;
 
-    private static final LinearFilter distanceFilter = LinearFilter.movingAverage(3);
+    private static final LinearFilter distanceFilter = LinearFilter.movingAverage(5);
 
     public static CommonShotSolution calculate(
         Pose2d turretPose,
@@ -46,7 +46,7 @@ public class SOTMLaunchCalculator {
             );
         }
 
-        if (turretVelocity.vyMetersPerSecond + turretVelocity.vyMetersPerSecond + (turretVelocity.omegaRadiansPerSecond / 2) > 1) {
+        if (turretVelocity.vyMetersPerSecond + turretVelocity.vyMetersPerSecond + (turretVelocity.omegaRadiansPerSecond / 2) > 0.5) {
             distanceFilter.calculate(turretToTargetDistanceMeters);
         } else {
             turretToTargetDistanceMeters = distanceFilter.calculate(turretToTargetDistanceMeters);

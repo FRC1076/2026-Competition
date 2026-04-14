@@ -36,7 +36,7 @@ public class PhysicalConstants {
         public static class PhotonVision {
             public static final Vector<N3> kDefaultSingleTagStdDevs = VecBuilder.fill(1.5, 1.5, 1.5);
             public static final Vector<N3> kDefaultMultiTagStdDevs = VecBuilder.fill(0.75, 0.75, 0.75);
-            public static final double kHubTagPriority = 4;
+            public static final double kHubTagPriority = 2;
 
             public static enum PhotonConfig {
                 FRONT_LEFT(
@@ -73,7 +73,7 @@ public class PhysicalConstants {
                     PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
                     PoseStrategy.PNP_DISTANCE_TRIG_SOLVE,
                     -10.722310, 13.231252, 11.811,
-                    0, 20, 140
+                    0, 20, 142
                 );
 
                 public final String name;

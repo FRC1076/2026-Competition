@@ -25,19 +25,49 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Srt2 to Outpost"
+            "pathName": "Srt2 to Depot"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 12.0
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shake Slapdown"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 10.0
           }
         },
         {
           "type": "named",
           "data": {
             "name": "Stop Shooting"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Extend Intake"
           }
         },
         {

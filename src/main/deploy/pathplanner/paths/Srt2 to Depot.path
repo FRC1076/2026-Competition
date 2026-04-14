@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 0.75,
-        "y": 5.982
+        "x": 0.73,
+        "y": 5.8
       },
       "prevControl": {
-        "x": 3.25,
-        "y": 5.981999999999999
+        "x": 3.2300000000000004,
+        "y": 5.799999999999999
       },
       "nextControl": null,
       "isLocked": false,
@@ -67,6 +67,17 @@
         "type": "named",
         "data": {
           "name": "Shoot"
+        }
+      }
+    },
+    {
+      "name": "Stop Shooting",
+      "waypointRelativePos": 0.8976377952755907,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Stop Shooting"
         }
       }
     }

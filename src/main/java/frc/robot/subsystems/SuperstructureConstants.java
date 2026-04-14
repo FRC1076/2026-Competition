@@ -59,7 +59,7 @@ public class SuperstructureConstants {
     public static double kSlapdownDownAngle = 1.8;
     public static double kIntakeRollerVoltage = 9;
 
-    public static double kSlapdownShakeUpAngle = 0.6;
+    public static double kSlapdownShakeUpAngle = 0.1;
     public static double kSlapdownShakePeriodSec = 1; // time for a full cycle
     
     public static enum IntakeStates {
@@ -105,24 +105,24 @@ public class SuperstructureConstants {
         }
     }
 
-    public static double kSpindexerIndexerVoltage = 11;
+    public static double kSpindexerIndexerVelocity = 180;
     public static double kKickerIndexVelocity = 400;
     
     public static enum IndexStates {
         /** list of all possible indexing states and their inputs */
         IDLE(0,0),
-        INDEXING(kSpindexerIndexerVoltage, kKickerIndexVelocity),
+        INDEXING(kSpindexerIndexerVelocity, kKickerIndexVelocity),
         REVERSE(-4, -kKickerIndexVelocity);
 
-        public final double kSpindexerVoltage;
+        public final double kSpindexerVelocity;
         public final double kKickerVelocity;
 
         /** construcor for indexStates */
         private IndexStates(
-            double spindexerVoltage,
+            double spindexerVelocity,
             double kickerVelocity
         ) {
-            this.kSpindexerVoltage = spindexerVoltage;
+            this.kSpindexerVelocity = spindexerVelocity;
             this.kKickerVelocity = kickerVelocity;
         }
     }

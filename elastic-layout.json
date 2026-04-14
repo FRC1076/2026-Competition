@@ -286,30 +286,11 @@
             }
           },
           {
-            "title": "Rear Right",
-            "x": 1140.0,
-            "y": 380.0,
-            "width": 260.0,
-            "height": 260.0,
-            "type": "Camera Stream",
-            "properties": {
-              "topic": "/CameraPublisher/photonvision1_Port_1184_Output_MJPEG_Server",
-              "period": 0.06,
-              "rotation_turns": 0,
-              "compression": 60,
-              "fps": 10,
-              "resolution": [
-                160.0,
-                100.0
-              ]
-            }
-          },
-          {
             "title": "Hub",
-            "x": 1540.0,
-            "y": 260.0,
+            "x": 1400.0,
+            "y": 520.0,
             "width": 140.0,
-            "height": 100.0,
+            "height": 120.0,
             "type": "Large Text Display",
             "properties": {
               "topic": "/AdvantageKit/RealOutputs/FuelCount/Hub",
@@ -319,10 +300,10 @@
           },
           {
             "title": "Passing",
-            "x": 1680.0,
-            "y": 260.0,
+            "x": 1400.0,
+            "y": 400.0,
             "width": 140.0,
-            "height": 100.0,
+            "height": 120.0,
             "type": "Large Text Display",
             "properties": {
               "topic": "/AdvantageKit/RealOutputs/FuelCount/Passing",
@@ -345,6 +326,60 @@
               "false_color": 4294198070,
               "true_icon": "None",
               "false_icon": "None"
+            }
+          },
+          {
+            "title": "Rear Right",
+            "x": 1140.0,
+            "y": 380.0,
+            "width": 260.0,
+            "height": 260.0,
+            "type": "Camera Stream",
+            "properties": {
+              "topic": "/CameraPublisher/photonvision1_Port_1184_Output_MJPEG_Server",
+              "period": 0.06,
+              "rotation_turns": 0,
+              "compression": 70,
+              "fps": 10,
+              "resolution": [
+                160.0,
+                100.0
+              ]
+            }
+          },
+          {
+            "title": "BrownedOut",
+            "x": 420.0,
+            "y": 140.0,
+            "width": 200.0,
+            "height": 100.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/SystemStats/BrownedOut",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4294901760,
+              "false_color": 4294967295,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "BatteryVoltage",
+            "x": 1680.0,
+            "y": 220.0,
+            "width": 180.0,
+            "height": 140.0,
+            "type": "Voltage View",
+            "properties": {
+              "topic": "/AdvantageKit/SystemStats/BatteryVoltage",
+              "period": 0.06,
+              "data_type": "double",
+              "min_value": 6.75,
+              "max_value": 13.0,
+              "divisions": 3,
+              "inverted": false,
+              "orientation": "horizontal"
             }
           }
         ]
