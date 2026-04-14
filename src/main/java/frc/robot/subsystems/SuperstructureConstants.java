@@ -17,10 +17,10 @@ public class SuperstructureConstants {
         MANUAL(false, 0),
         AUTOAIM_IDLE(true, 0.3),
         AUTOAIM_SHOOT(true, 1),
-        HUB_PREALIGNED_LOCATION(0,0.01,245),
-        POINT_DIRECTLY_BACK_FOR_PASSING(0,0.1,350),
-        TRENCH_PREALIGNED_LEFT(-1.5, 0.09, 235),
-        TRENCH_PREALIGNED_RIGHT(1.5, 0.09, 235),
+        HUB_PREALIGNED_LOCATION(0,0.135,208),
+        POINT_DIRECTLY_BACK_FOR_PASSING(0,0.25,250),
+        TRENCH_PREALIGNED_LEFT(-1.5, 0.1, 216),
+        TRENCH_PREALIGNED_RIGHT(1.5, 0.1, 216),
         REVERSE(0,0, -100);  
 
         double kTurretAngleRadians;
