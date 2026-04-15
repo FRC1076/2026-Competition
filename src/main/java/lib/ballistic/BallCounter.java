@@ -3,6 +3,8 @@ package lib.ballistic;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.MathUtil;
 
 /** Class that counts the number of balls that go through a flywheel.
@@ -62,6 +64,9 @@ public class BallCounter {
             }
             hasRecovered = false;
         }
+
+        Logger.recordOutput("FuelCount/VelocityRatio", velocityRatio);
+        Logger.recordOutput("FuelCount/FlywheelHasRecovered", hasRecovered);
     }
 
     public int getHubCount() {
