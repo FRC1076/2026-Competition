@@ -60,7 +60,7 @@ public class SuperstructureConstants {
     public static double kIntakeRollerVoltage = 9;
 
     public static double kSlapdownShakeUpAngle = 0.1;
-    public static double kSlapdownShakePeriodSec = 1; // time for a full cycle
+    public static double kSlapdownShakePeriodSec = 1.2; // time for a full cycle
     
     public static enum IntakeStates {
         /** list of opereational states of the intake and thier inputs */
@@ -105,7 +105,7 @@ public class SuperstructureConstants {
         }
     }
 
-    public static double kSpindexerIndexerVelocity = 180;
+    public static double kSpindexerIndexerVelocity = 80;
     public static double kKickerIndexVelocity = 400;
     
     public static enum IndexStates {

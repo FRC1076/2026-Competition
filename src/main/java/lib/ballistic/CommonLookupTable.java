@@ -24,23 +24,23 @@ public class CommonLookupTable {
     static {
         /* *****HUB***** */
         hubTable.hoodAngle.put(1.0, 0.0);
-        hubTable.hoodAngle.put(2.0, 0.045);
-        hubTable.hoodAngle.put(3.0, 0.08);
-        hubTable.hoodAngle.put(4.0, 0.11);
-        hubTable.hoodAngle.put(5.0, 0.13);
-        hubTable.hoodAngle.put(6.0, 0.145);
-        hubTable.hoodAngle.put(8.0, 0.17);
+        hubTable.hoodAngle.put(2.0, 0.015);
+        hubTable.hoodAngle.put(3.0, 0.03);
+        hubTable.hoodAngle.put(4.0, 0.045);
+        hubTable.hoodAngle.put(5.0, 0.06);
+        hubTable.hoodAngle.put(6.0, 0.75);
+        hubTable.hoodAngle.put(8.0, 0.105);
 
         hubTable.flywheelSpeed.put(1.0, 176.0);
-        hubTable.flywheelSpeed.put(2.0, 186.0);
-        hubTable.flywheelSpeed.put(2.3, 191.0);
-        hubTable.flywheelSpeed.put(2.7, 196.0);
-        hubTable.flywheelSpeed.put(3.0, 202.0);
-        hubTable.flywheelSpeed.put(3.5, 216.0);
-        hubTable.flywheelSpeed.put(4.0, 228.0);
-        hubTable.flywheelSpeed.put(5.0, 256.0);
-        hubTable.flywheelSpeed.put(6.0, 285.0);
-        hubTable.flywheelSpeed.put(8.0, 354.0);
+        hubTable.flywheelSpeed.put(2.0, 185.0);
+        hubTable.flywheelSpeed.put(2.3, 190.0);
+        hubTable.flywheelSpeed.put(2.7, 195.0);
+        hubTable.flywheelSpeed.put(3.0, 201.0);
+        hubTable.flywheelSpeed.put(3.5, 214.0);
+        hubTable.flywheelSpeed.put(4.0, 226.0);
+        hubTable.flywheelSpeed.put(5.0, 253.0);
+        hubTable.flywheelSpeed.put(6.0, 281.0);
+        hubTable.flywheelSpeed.put(8.0, 350.0);
         
         hubTable.timeOfFlight.put(1.0, 0.38);
         hubTable.timeOfFlight.put(2.0, 0.67);
