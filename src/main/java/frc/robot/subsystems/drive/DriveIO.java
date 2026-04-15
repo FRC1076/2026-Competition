@@ -51,6 +51,9 @@ public interface DriveIO {
             this.OdometryPeriod = stateIn.OdometryPeriod;
         }
 
+        public double gyroAccelerationX = 0; // m/s/s
+        public double gyroAccelerationY = 0; // m/s/s
+        public double gyroAccelerationZ = 0; // m/s/s
     }
 
     /**

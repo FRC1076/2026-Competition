@@ -26,6 +26,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.units.measure.Current;
+import edu.wpi.first.units.measure.LinearAcceleration;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -40,6 +41,10 @@ public class DriveIOSim extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
         public StatusSignal<Current> turnStatorCurrent;
         public StatusSignal<Current> driveStatorCurrent;
     }
+
+    private final StatusSignal<LinearAcceleration> m_gyroAccelerationXSignal;
+    private final StatusSignal<LinearAcceleration> m_gyroAccelerationYSignal;
+    private final StatusSignal<LinearAcceleration> m_gyroAccelerationZSignal;
 
     @Override
     public void addVisionMeasurement(Pose2d visionRobotPoseMeters, double timestampSeconds,
@@ -84,6 +89,10 @@ public class DriveIOSim extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
             sigStruct.turnStatorCurrent = module.getSteerMotor().getStatorCurrent(true);
             moduleSignals[i] = sigStruct;
         }
+
+        m_gyroAccelerationXSignal = super.getPigeon2().getAccelerationX();
+        m_gyroAccelerationYSignal = super.getPigeon2().getAccelerationY();
+        m_gyroAccelerationZSignal = super.getPigeon2().getAccelerationZ();
     }
 
     public DriveIOSim(CommandSwerveDrivetrain constants){
@@ -121,7 +130,15 @@ public class DriveIOSim extends SwerveDrivetrain<TalonFX, TalonFX, CANcoder> imp
             inputs.odometryPoses[i] = odomDrain[i].Pose;
             inputs.odometrySpeeds[i] = odomDrain[i].Speeds;
         }
-
+        
+        StatusSignal.refreshAll(
+            m_gyroAccelerationXSignal,
+            m_gyroAccelerationYSignal,
+            m_gyroAccelerationZSignal
+        );
+        inputs.gyroAccelerationX = m_gyroAccelerationXSignal.getValueAsDouble() * 9.81;
+        inputs.gyroAccelerationY = m_gyroAccelerationYSignal.getValueAsDouble() * 9.81;
+        inputs.gyroAccelerationZ = m_gyroAccelerationZSignal.getValueAsDouble() * 9.81;
     }
 
     @Override
