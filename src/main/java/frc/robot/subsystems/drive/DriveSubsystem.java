@@ -131,7 +131,8 @@ public class DriveSubsystem extends SubsystemBase {
         // Reduce pose jumping under defense
         currentAccel = new LinearAccelerationState(driveInputs.gyroAccelerationX, driveInputs.gyroAccelerationY, driveInputs.gyroAccelerationZ);
         
-        if (Math.abs(currentAccel.getAcceleration() - previousAccel.getAcceleration()) > AntiDefenseConstants.minimumJerk) {
+        final double currentJerk = Math.abs(currentAccel.getAcceleration() - previousAccel.getAcceleration()); 
+        if (currentJerk > AntiDefenseConstants.minimumJerk) {
             // We just had a big impact, so the pose probably didn't move that much as odometry and the cameras think
             io.addVisionMeasurement(getPose(), Timer.getFPGATimestamp(), AntiDefenseConstants.impactPreviousStateStdDev);
             impactDetected = true;
@@ -156,6 +157,7 @@ public class DriveSubsystem extends SubsystemBase {
 
         Logger.recordOutput("Drive/ImpactDetected", impactDetected);
         Logger.recordOutput("Drive/IsSlipping", isSlipping);
+        Logger.recordOutput("Drive/Jerk", currentJerk);
     }
 
     public void configureAutoBuilder() {
@@ -295,16 +297,26 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     @AutoLogOutput
+    public Pose2d getVisionOnlyPose() {
+        return visionOnlyPoseFilter.getFilteredVelocityAdjustedPose();
+    }
+
+    @AutoLogOutput
+    public ChassisSpeeds getVisionOnlySpeeds() {
+        return visionOnlyPoseFilter.getSpeeds();
+    }
+
+    @AutoLogOutput
     public Pose2d getSlippingAdjustedPose() {
         return isSlipping
-            ? visionOnlyPoseFilter.getFilteredVelocityAdjustedPose()
+            ? getVisionOnlyPose()
             : getPose();
     }
 
     @AutoLogOutput
     public ChassisSpeeds getSlippingAdjustedSpeeds() {
         return isSlipping
-            ? visionOnlyPoseFilter.getSpeeds()
+            ? getVisionOnlySpeeds()
             : getChassisSpeeds();
     }
 

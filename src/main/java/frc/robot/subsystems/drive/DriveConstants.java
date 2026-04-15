@@ -49,14 +49,14 @@ public class DriveConstants {
         /** When large imapcts are felt, this is the standard deviations to give to the previous pose */
         public static final Matrix<N3,N1> impactPreviousStateStdDev = VecBuilder.fill(0.3, 0.3, 0.5);
         /** Minimum jerk for an impact to be considered large in m/s^3 */
-        public static final double minimumJerk = 400;
+        public static final double minimumJerk = 1000;
 
         /** Taps to use for vision only pose linear filter */
         public static final int visionOnlyPoseTaps = 5;
         /** Minimum difference in linear velocity in m/s between between vision and odom to be considered slipping in any direction */
-        public static final double minDiffInLinearVel = 1;
+        public static final double minDiffInLinearVel = 3;
         /** Minimum difference in amgular velocity in rad/s between between vision and odom to be considered slipping in any direction */
-        public static final double minDiffInAngularVel = 1;
+        public static final double minDiffInAngularVel = 3;
         /** Maximum vision latency to still use vision-only pose in seconds */
         public static final double maxVisionLatency = 0.05;
     }
