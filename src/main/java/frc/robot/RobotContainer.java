@@ -369,8 +369,8 @@ public class RobotContainer {
             .onTrue(superstructureCommands.applyTurretStatesPointDirectlyBackForPassing());
 
         m_driverController.povDown()
-            .onTrue(superstructureCommands.reverseSpindexer())
-            .onFalse(superstructureCommands.stopReverseSpindexer());
+            .onTrue(superstructureCommands.reverseEverything())
+            .onFalse(superstructureCommands.stopReverseEverything());
 
         // Turn off the turret if we don't want it as a redundancy
         new ToggleableTrigger(m_driverController.R3(), true).getToggledTrigger()
