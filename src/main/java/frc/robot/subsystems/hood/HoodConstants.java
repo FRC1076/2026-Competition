@@ -16,8 +16,8 @@ public class HoodConstants {
     public static final boolean kMotorInverted = true;
 
     // Software stops and PID tolerance
-    public static final double kMaxHoodAngleRadians = 2;
-    public static final double kMinHoodAngleRadians = -2;
+    public static final double kMaxHoodAngleRadians = 0.25;
+    public static final double kMinHoodAngleRadians = 0;
     public static final double hoodAngleToleranceRadians = 0.1;
     
     // Absolute encoder stuff

@@ -23,13 +23,15 @@ public class CommonLookupTable {
     
     static {
         /* *****HUB***** */
+        hubTable.hoodAngle.put(-10000.0, 0.0);
         hubTable.hoodAngle.put(1.0, 0.0);
         hubTable.hoodAngle.put(2.0, 0.015);
         hubTable.hoodAngle.put(3.0, 0.03);
         hubTable.hoodAngle.put(4.0, 0.045);
         hubTable.hoodAngle.put(5.0, 0.06);
-        hubTable.hoodAngle.put(6.0, 0.75);
+        hubTable.hoodAngle.put(6.0, 0.075);
         hubTable.hoodAngle.put(8.0, 0.105);
+        hubTable.hoodAngle.put(10000.0, 0.105);
 
         hubTable.flywheelSpeed.put(1.0, 176.0);
         hubTable.flywheelSpeed.put(2.0, 185.0);
@@ -53,8 +55,10 @@ public class CommonLookupTable {
 
 
         /* *****PASSING***** */
+        passingTable.hoodAngle.put(-10000.0, 0.18);
         passingTable.hoodAngle.put(1.0, 0.18);
-        passingTable.hoodAngle.put(8.0, 0.25);
+        passingTable.hoodAngle.put(8.0, 0.23);
+        passingTable.hoodAngle.put(10000.0, 0.23);
 
         passingTable.flywheelSpeed.put(1.0, 160.0); // 194
         passingTable.flywheelSpeed.put(4.0, 200.0); // 220

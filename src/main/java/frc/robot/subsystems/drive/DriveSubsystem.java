@@ -308,16 +308,20 @@ public class DriveSubsystem extends SubsystemBase {
 
     @AutoLogOutput
     public Pose2d getSlippingAdjustedPose() {
+        /*
         return isSlipping
             ? getVisionOnlyPose()
-            : getPose();
+            : getPose(); */
+            return getPose();
     }
 
     @AutoLogOutput
     public ChassisSpeeds getSlippingAdjustedSpeeds() {
+        /*
         return isSlipping
             ? getVisionOnlySpeeds()
-            : getChassisSpeeds();
+            : getChassisSpeeds();*/
+        return getChassisSpeeds();
     }
 
     /** Returns the pose of the robot, but mirrored */
