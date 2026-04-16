@@ -66,6 +66,8 @@ public class SpindexerIOKraken implements SpindexerIO {
         m_motorConfig.Slot0.kV = m_unitConverter.fromSIkV(SpindexerConstants.kV);
         m_motorConfig.Slot0.kA = m_unitConverter.fromSIkA(SpindexerConstants.kA);
 
+        m_motorConfig.Feedback.VelocityFilterTimeConstant = SpindexerConstants.kVelocityFilterTimeConstant;
+
         m_motor.getConfigurator().apply(m_motorConfig);
 
         m_voltageRequest = new VoltageOut(0).withEnableFOC(SpindexerConstants.kUseFOC);
