@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.8814590747388475,
+        "x": 6.0,
         "y": 5.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.323190984578885,
-        "y": 7.784578884934756
+        "x": 7.4524911031970955,
+        "y": 7.720023724792409
       },
       "isLocked": false,
       "linkedName": "Collect More Left"
@@ -30,10 +30,6 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.15630550621669842,
-      "rotationDegrees": 81.17684915343179
-    },
-    {
       "waypointRelativePos": 0.6749555950266427,
       "rotationDegrees": 0.0
     }
@@ -43,9 +39,9 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
-    "maxAcceleration": 4.0,
-    "maxAngularVelocity": 600.0,
-    "maxAngularAcceleration": 800.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
@@ -57,7 +53,7 @@
   "folder": "Disrupt",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -91.7098140441416
+    "rotation": -98.82692202248951
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

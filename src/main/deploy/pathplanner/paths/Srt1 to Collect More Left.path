@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 5.8814590747388475,
+        "x": 6.0,
         "y": 5.0
       },
       "prevControl": {
-        "x": 6.258030842230131,
-        "y": 7.3219335705812565
+        "x": 6.376526810230176,
+        "y": 7.321665686781344
       },
       "nextControl": null,
       "isLocked": false,
@@ -51,7 +51,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -91.7098140441416
+    "rotation": -98.82692202248951
   },
   "reversed": false,
   "folder": "Disrupt",
