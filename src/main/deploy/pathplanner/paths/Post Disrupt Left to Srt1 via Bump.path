@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 7.9472241992882555,
-        "y": 4.9871886120996445
+        "y": 5.3
       },
       "prevControl": null,
       "nextControl": {
         "x": 6.556777777777777,
-        "y": 5.6071333333333335
+        "y": 5.919944721233689
       },
       "isLocked": false,
       "linkedName": "Post Disrupt-Left"

@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 5.8814590747388475,
-        "y": 4.825800711750319
+        "y": 5.0
       },
       "prevControl": null,
       "nextControl": {
         "x": 6.473214709371295,
-        "y": 5.847924080664294
+        "y": 6.022123368913975
       },
       "isLocked": false,
       "linkedName": "Collect More Left"
