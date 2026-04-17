@@ -148,7 +148,7 @@ public class FlywheelIOKraken implements FlywheelIO {
 
         if (m_leadMotor.getAppliedControl() instanceof VelocityTorqueCurrentFOC vtcf) {
             inputs.PIDActive = true;
-            inputs.velocityPIDTargetRadPerSec = m_unitConverter.fromSIVel(vtcf.Velocity);
+            inputs.velocityPIDTargetRadPerSec = m_unitConverter.toSIVel(vtcf.Velocity);
         } else {
             inputs.PIDActive = false;
             inputs.velocityPIDTargetRadPerSec = 0;

@@ -150,6 +150,7 @@ public class SuperstructureConstants {
     public static final double kTurretMoveSlapdownAngleLimitRad = 1;    
     public static final double kClimbSlapdownMaxAngleRad = 0.5;
     public static final double kMinFlywheelShootingVelocity = 50;
+    public static final double kMinSpindexerIndexerVelocity = 65;
 
     public static final double kLeftPassingTargetYCoordinate = 0.75 * PhysicalConstants.FieldConstants.fieldWidth;
     public static final double kRightPassingTargetYCoordinate = 0.25 * PhysicalConstants.FieldConstants.fieldWidth;

@@ -497,7 +497,17 @@ public class Superstructure {
 
         /** Index fuel for shooting */
         public Command startIndexing() {
-            return m_superstructure.applyIndexStateAllParallel(IndexStates.INDEXING);
+            return Commands.sequence(
+                m_superstructure.setIndexState(IndexStates.INDEXING),
+                m_spindexer.applyVelocity(() -> m_superState.getIndexState().kSpindexerVelocity),
+                Commands.race(
+                    Commands.waitUntil(() -> m_spindexer.getVelocityRadPerSec() > SuperstructureConstants.kMinSpindexerIndexerVelocity),
+                    Commands.waitSeconds(0.5)
+                ),
+                m_kicker.applyVelocity(() -> m_superState.getIndexState().kKickerVelocity)
+            );
+            
+            //m_superstructure.applyIndexStateAllParallel(IndexStates.INDEXING);
         }
 
         /** Set the spindexer and kicker to idle */

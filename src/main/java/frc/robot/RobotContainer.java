@@ -17,6 +17,7 @@ import frc.robot.PhysicalConstants.VisionConstants.PhotonVision.PhotonConfig;
 import frc.robot.commands.drive.TeleopDriveCommand;
 import frc.robot.subsystems.Elastic;
 import frc.robot.subsystems.Superstructure;
+import frc.robot.subsystems.SuperstructureConstants;
 import frc.robot.subsystems.Superstructure.SuperstructureCommandFactory;
 import frc.robot.subsystems.climb.climber.ClimberConstants;
 import frc.robot.subsystems.climb.climber.ClimberIODisabled;
@@ -445,7 +446,7 @@ public class RobotContainer {
         // Sets the rollers to do the opposite of their current state
         m_operatorController.leftTrigger()
             .onTrue(Commands.either(
-                m_rollers.applyVoltage(6),
+                m_rollers.applyVoltage(SuperstructureConstants.kIntakeRollerVoltage),
                 m_rollers.applyVoltage(0),
                 () -> m_rollers.getVoltage() < 0.5
             ));
@@ -453,7 +454,7 @@ public class RobotContainer {
         // Turns the kicker to the opposite of it's current state
         m_operatorController.rightTrigger()
             .onTrue(Commands.either(
-                m_kicker.applyVoltage(12),
+                m_kicker.applyVelocity(SuperstructureConstants.kKickerIndexVelocity),
                 m_kicker.applyVoltage(0),
                 () -> m_kicker.getVoltage() < 0.5
             ));
@@ -461,7 +462,7 @@ public class RobotContainer {
         // Turns the spindexer to the opposite of it's current state    
         m_operatorController.rightBumper()
             .onTrue(Commands.either(
-                m_spindexer.applyVoltage(7.2),
+                m_spindexer.applyVoltage(SuperstructureConstants.kSpindexerIndexerVelocity),
                 m_spindexer.applyVoltage(0),
                 () -> m_spindexer.getVoltage() < 0.5
         ));

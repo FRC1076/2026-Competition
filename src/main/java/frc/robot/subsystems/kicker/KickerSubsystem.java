@@ -49,6 +49,13 @@ public class KickerSubsystem extends SubsystemBase {
         );
     }
 
+    public Command applyVelocity(DoubleSupplier radPerSec) {
+        return Commands.runOnce(
+            () -> io.setVelocityRadPerSec(radPerSec.getAsDouble()),
+            this
+        );
+    }
+
     public Command runVelocity(DoubleSupplier radPerSec) {
         return Commands.run(
             () -> io.setVelocityRadPerSec(radPerSec.getAsDouble()),
