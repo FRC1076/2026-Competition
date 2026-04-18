@@ -208,7 +208,8 @@ public class RobotContainer {
             m_climber,
             m_climbHook,
             () -> m_drive.getSlippingAdjustedPose(),
-            () -> m_drive.getSlippingAdjustedSpeeds()
+            () -> m_drive.getSlippingAdjustedSpeeds(),
+            () -> m_elastic.passInAuto()
         );
         doneShooting = m_superstructure.isDoneShooting();
 

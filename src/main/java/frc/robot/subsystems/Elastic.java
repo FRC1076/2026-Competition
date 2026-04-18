@@ -97,4 +97,9 @@ public class Elastic {
     public Command getSelectedAutonomousCommand() {
         return autoChooser.getSelected();
     }
+
+    /** Returns if to pass in autonomous */
+    public boolean passInAuto() {
+        return autoChooser.getSelected().getName().contains("[PASS]");
+    }
 }

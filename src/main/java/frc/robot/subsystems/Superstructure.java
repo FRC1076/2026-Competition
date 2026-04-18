@@ -155,6 +155,7 @@ public class Superstructure {
 
     private final Supplier<Pose2d> m_robotPoseSupplier;
     private final Supplier<ChassisSpeeds> m_robotVelocitySupplier;
+    private final BooleanSupplier m_passInAutoSupplier;
 
     private final MutableSuperState m_superState;
     private final SuperstructureCommandFactory m_commandFactory;
@@ -176,7 +177,8 @@ public class Superstructure {
         ClimberSubsystem climber,
         HookSubsystem climbHook,
         Supplier<Pose2d> robotPoseSupplier,
-        Supplier<ChassisSpeeds> robotVelocitySupplier
+        Supplier<ChassisSpeeds> robotVelocitySupplier,
+        BooleanSupplier passInAutoSupplier
     ) {
         this.m_turret = turret;
         this.m_flywheel = flywheel;
@@ -204,6 +206,8 @@ public class Superstructure {
             SuperstructureConstants.kFlywheelVelocityRecoveryRatio, 
             () -> targetIsHub
         );
+
+        this.m_passInAutoSupplier = passInAutoSupplier;
     }
 
     /** Get the Command factory */
@@ -265,7 +269,7 @@ public class Superstructure {
         
         targetIsHub = true;
         // TODO: check tolerance (+ 0.25) on alliance zone (otherwise we'll ram into the trench)
-        if (shooterPoseAllianceColorCoordinates.getX() <= PhysicalConstants.FieldConstants.LinesVertical.allianceZone + 0.2 || DriverStation.isAutonomous()) {
+        if (shooterPoseAllianceColorCoordinates.getX() <= PhysicalConstants.FieldConstants.LinesVertical.allianceZone + 0.2 || (DriverStation.isAutonomous() && !m_passInAutoSupplier.getAsBoolean())) {
             m_shootingParams = SOTMLaunchCalculator.calculateHub(shooterPose.toPose2d(), fieldTargets.kHubTarget().toPose2d(), turretVelocity);
             return;
         } else if (shooterPoseAllianceColorCoordinates.getX() <= PhysicalConstants.FieldConstants.LinesVertical.neutralZoneNear
