@@ -46,7 +46,7 @@ public class SOTMLaunchCalculator {
             );
         }
 
-        if (turretVelocity.vyMetersPerSecond + turretVelocity.vyMetersPerSecond + (turretVelocity.omegaRadiansPerSecond / 2) > 0.5) {
+        if (Math.hypot(turretVelocity.vxMetersPerSecond, turretVelocity.vyMetersPerSecond) + (turretVelocity.omegaRadiansPerSecond / 2) > 0.5) {
             distanceFilter.calculate(turretToTargetDistanceMeters);
         } else {
             turretToTargetDistanceMeters = distanceFilter.calculate(turretToTargetDistanceMeters);
