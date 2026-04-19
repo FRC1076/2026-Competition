@@ -7,6 +7,12 @@
         {
           "type": "named",
           "data": {
+            "name": "Initiate Autoaim"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Start Intake"
           }
         },
@@ -37,7 +43,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 3.75
+            "waitTime": 4.0
           }
         },
         {
