@@ -15,7 +15,7 @@ public class RollerConstants {
     // CAN configs
     public static final int kLeadMotorPort = 41;
     public static final int kFollowMotorPort = 45;
-    public static final CANBus kCANBus = CANConstants.kCANivoreBus;
+    public static final CANBus kCANBus = CANConstants.kRioBus;
 
     // Current limits
     public static final int kSupplyCurrentLimit = 40;
