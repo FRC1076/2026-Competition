@@ -29,6 +29,7 @@ import frc.robot.subsystems.drive.DriveIOHardware;
 import frc.robot.subsystems.drive.DriveIOSim;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.drive.TunerConstants;
+import frc.robot.subsystems.drive.DriveConstants.DriverControlConstants;
 import frc.robot.subsystems.flywheel.FlywheelIODisabled;
 import frc.robot.subsystems.flywheel.FlywheelIOKraken;
 import frc.robot.subsystems.flywheel.FlywheelSubsystem;
@@ -57,6 +58,7 @@ import frc.robot.subsystems.turret.TurretConstants;
 import frc.robot.subsystems.turret.TurretIODisabled;
 import frc.robot.subsystems.turret.TurretIOKraken;
 import frc.robot.subsystems.turret.TurretSubsystem;
+import frc.robot.utils.BatteryUtil;
 import frc.robot.utils.ShiftUtil;
 import lib.extendedcommands.MultiToggleableTrigger;
 import lib.extendedcommands.ToggleableTrigger;
@@ -274,6 +276,12 @@ public class RobotContainer {
             .onTrue(Commands.runOnce(() -> setAlliance(Alliance.Blue)).ignoringDisable(true));
         new Trigger(() -> m_elastic.getSelectedTeamColor() == Alliance.Red)
             .onTrue(Commands.runOnce(() -> setAlliance(Alliance.Red)).ignoringDisable(true));
+
+        // Slow down when battery low
+        new Trigger(() -> BatteryUtil.getFilteredBatteryVoltage() < DriverControlConstants.maximumBatteryVoltageForClutch)
+            .or(() -> BatteryUtil.getBrownoutCount() > DriverControlConstants.minimumBrownoutCountToAlwaysApplyClutch)
+            .and(m_driverController.R1().negate()).and(m_driverController.R2().negate()).and(m_driverController.L3().negate())
+                .whileTrue(teleopDriveCommand.applyLowBatteryClutch());
     }
 
     /** Bind triggers on driver controller to commands */

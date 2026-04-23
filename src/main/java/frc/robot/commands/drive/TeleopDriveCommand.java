@@ -12,6 +12,8 @@ import static frc.robot.subsystems.drive.DriveConstants.DriverControlConstants.F
 import static frc.robot.subsystems.drive.DriveConstants.DriverControlConstants.FPVClutchTranslationFactor;
 import static frc.robot.subsystems.drive.DriveConstants.DriverControlConstants.doubleClutchRotationFactor;
 import static frc.robot.subsystems.drive.DriveConstants.DriverControlConstants.doubleClutchTranslationFactor;
+import static frc.robot.subsystems.drive.DriveConstants.DriverControlConstants.lowBatteryClutchRotationFactor;
+import static frc.robot.subsystems.drive.DriveConstants.DriverControlConstants.lowBatteryClutchTranslationFactor;
 import static frc.robot.subsystems.drive.DriveConstants.DriverControlConstants.maxRotationSpeedRadPerSec;
 import static frc.robot.subsystems.drive.DriveConstants.DriverControlConstants.maxTranslationSpeedMPS;
 import static frc.robot.subsystems.drive.DriveConstants.DriverControlConstants.singleClutchRotationFactor;
@@ -255,6 +257,11 @@ public class TeleopDriveCommand extends Command {
                 return m_drive.getHeading();
             }
         });
+    }
+
+    /** Returns a command that applies a gentle clutch to help deal with low battery voltage */
+    public Command applyLowBatteryClutch() {
+        return applyClutchFactor(lowBatteryClutchTranslationFactor, lowBatteryClutchRotationFactor);
     }
 
     /** Returns a command that applies a single clutch to the TeleopDriveCommand */
