@@ -10,6 +10,7 @@ import frc.robot.commands.drive.TeleopDriveCommand;
 import frc.robot.subsystems.Elastic;
 import frc.robot.subsystems.drive.DriveConstants.AntiDefenseConstants;
 import frc.robot.subsystems.drive.DriveConstants.PathPlannerConstants;
+import lib.data.Acceleration2d;
 import lib.data.Pose2dFilter;
 import lib.vision.VisionLocalizationSystem;
 
@@ -331,6 +332,10 @@ public class DriveSubsystem extends SubsystemBase {
             FieldConstants.fieldWidth - io.getPose().getY(),
             io.getPose().getRotation().unaryMinus());
         return pose;
+    }
+
+    public Acceleration2d get2dGyroAcceleration() {
+        return new Acceleration2d(currentAccel.xAccel, currentAccel.yAccel);
     }
 
     public class DriveCommandFactory {
