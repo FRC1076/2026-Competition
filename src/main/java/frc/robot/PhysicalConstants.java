@@ -72,7 +72,7 @@ public class PhysicalConstants {
                     kDefaultMultiTagStdDevs,
                     PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
                     PoseStrategy.PNP_DISTANCE_TRIG_SOLVE,
-                    -10.722310, 13.231252, 11.811,
+                    -10.722310, 13.231252, 11.83,
                     0, 20, 142
                 );
 

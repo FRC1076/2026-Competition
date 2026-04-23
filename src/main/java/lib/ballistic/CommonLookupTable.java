@@ -27,10 +27,10 @@ public class CommonLookupTable {
         hubTable.hoodAngle.put(1.0, 0.0);
         hubTable.hoodAngle.put(2.0, 0.015);
         hubTable.hoodAngle.put(3.0, 0.03);
-        hubTable.hoodAngle.put(4.0, 0.045);
-        hubTable.hoodAngle.put(5.0, 0.06);
-        hubTable.hoodAngle.put(6.0, 0.075);
-        hubTable.hoodAngle.put(8.0, 0.105);
+        hubTable.hoodAngle.put(4.0, 0.04);
+        hubTable.hoodAngle.put(5.0, 0.05);
+        hubTable.hoodAngle.put(6.0, 0.06);
+        hubTable.hoodAngle.put(8.0, 0.07);
         hubTable.hoodAngle.put(10000.0, 0.105);
 
         hubTable.flywheelSpeed.put(1.0, 176.0);
