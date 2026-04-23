@@ -36,6 +36,7 @@ public final class Constants {
         public static final boolean kLogOdometry = true;
         public static final double kLoopPeriodMs = 20;
         public static final boolean kEnableSwitchablePDHChannel = true;
+        public static final double kBrownoutVoltage = 6; // Rio default is 6.75V
 
         public static enum RobotMode {
             REAL,

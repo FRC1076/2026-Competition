@@ -10,6 +10,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -99,6 +100,9 @@ public class Robot extends LoggedRobot {
         if (SystemConstants.kEnableRTPriority) {
             CommandScheduler.getInstance().schedule(RobotContainer.threadCommand());
         }
+
+        // Change brownout voltage
+        RobotController.setBrownoutVoltage(SystemConstants.kBrownoutVoltage);
     }
 
     /**
