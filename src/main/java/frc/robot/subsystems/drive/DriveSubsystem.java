@@ -11,6 +11,7 @@ import frc.robot.subsystems.Elastic;
 import frc.robot.subsystems.drive.DriveConstants.AntiDefenseConstants;
 import frc.robot.subsystems.drive.DriveConstants.PathPlannerConstants;
 import lib.data.Acceleration2d;
+import lib.data.Acceleration2dFilter;
 import lib.data.Pose2dFilter;
 import lib.vision.VisionLocalizationSystem;
 
@@ -54,6 +55,8 @@ public class DriveSubsystem extends SubsystemBase {
     public final DriveCommandFactory CommandBuilder;
     private final VisionLocalizationSystem vision;
     private final Elastic elastic;
+
+    private final Acceleration2dFilter accelFilter;
 
     /** Record to hold the acceleration of the drivetrain */
     private record LinearAccelerationState(
@@ -99,6 +102,8 @@ public class DriveSubsystem extends SubsystemBase {
         
         currentAccel = new LinearAccelerationState(0, 0, 0);
         previousAccel = new LinearAccelerationState(0, 0, 0);
+
+        accelFilter = new Acceleration2dFilter(AntiDefenseConstants.accelerationFilterTaps);
     }
 
     @Override
@@ -155,6 +160,8 @@ public class DriveSubsystem extends SubsystemBase {
         } else {
             isSlipping = false;
         }
+
+        accelFilter.update(get2dGyroAcceleration());
 
         Logger.recordOutput("Drive/ImpactDetected", impactDetected);
         Logger.recordOutput("Drive/IsSlipping", isSlipping);
@@ -336,6 +343,10 @@ public class DriveSubsystem extends SubsystemBase {
 
     public Acceleration2d get2dGyroAcceleration() {
         return new Acceleration2d(currentAccel.xAccel, currentAccel.yAccel);
+    }
+
+    public Acceleration2d getFiltered2dGyroAcceleration() {
+        return accelFilter.getFilteredAcceleration();
     }
 
     public class DriveCommandFactory {

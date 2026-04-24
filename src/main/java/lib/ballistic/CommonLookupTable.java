@@ -39,10 +39,10 @@ public class CommonLookupTable {
         hubTable.flywheelSpeed.put(2.7, 195.0);
         hubTable.flywheelSpeed.put(3.0, 201.0);
         hubTable.flywheelSpeed.put(3.5, 214.5);
-        hubTable.flywheelSpeed.put(4.0, 226.0);
-        hubTable.flywheelSpeed.put(5.0, 253.0);
-        hubTable.flywheelSpeed.put(6.0, 281.0);
-        hubTable.flywheelSpeed.put(8.0, 350.0);
+        hubTable.flywheelSpeed.put(4.0, 224.0);
+        hubTable.flywheelSpeed.put(5.0, 251.0);
+        hubTable.flywheelSpeed.put(6.0, 279.0);
+        hubTable.flywheelSpeed.put(8.0, 345.0);
         
         hubTable.timeOfFlight.put(1.0, 0.38);
         hubTable.timeOfFlight.put(2.0, 0.67);

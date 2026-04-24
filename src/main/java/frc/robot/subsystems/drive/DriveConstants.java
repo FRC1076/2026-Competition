@@ -61,6 +61,7 @@ public class DriveConstants {
 
         /** Taps to use for vision only pose linear filter */
         public static final int visionOnlyPoseTaps = 5;
+        public static final int accelerationFilterTaps = 5;
         /** Minimum difference in linear velocity in m/s between between vision and odom to be considered slipping in any direction */
         public static final double minDiffInLinearVel = 3;
         /** Minimum difference in amgular velocity in rad/s between between vision and odom to be considered slipping in any direction */
