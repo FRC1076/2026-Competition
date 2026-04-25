@@ -59,8 +59,8 @@ public class SuperstructureConstants {
     public static double kSlapdownDownAngle = 1.64;
     public static double kIntakeRollerVoltage = 9;
 
-    public static double kSlapdownShakeUpAngle = 0.1;
-    public static double kSlapdownShakePeriodSec = 1.8; // time for a full cycle
+    public static double kSlapdownShakeUpAngleRad = 1.1;
+    public static double kSlapdownShakePeriodSec = 1; // time for a full cycle
     
     public static enum IntakeStates {
         /** list of opereational states of the intake and thier inputs */
@@ -68,8 +68,8 @@ public class SuperstructureConstants {
         EXTENDED(kSlapdownDownAngle, 0),
         INTAKING(kSlapdownDownAngle, kIntakeRollerVoltage),
         //INTAKING(true, kSlapdownDownAngle, 1.3, 0.5, kIntakeRollerVoltage),
-        SHOOTING(true, kSlapdownDownAngle, 0.8, 1, 5),
-        RUN_KICK(true, kSlapdownDownAngle, 0.8, 0.8, 5),
+        SHOOTING(true, kSlapdownDownAngle, kSlapdownShakeUpAngleRad, kSlapdownShakePeriodSec, 5),
+        RUN_KICK(true, kSlapdownDownAngle, kSlapdownShakeUpAngleRad, kSlapdownShakePeriodSec, 5),
         REVERSE(kSlapdownDownAngle, -kIntakeRollerVoltage);
 
         public final double kSlapdownAngle;
