@@ -60,6 +60,7 @@ import frc.robot.subsystems.turret.TurretIOKraken;
 import frc.robot.subsystems.turret.TurretSubsystem;
 import frc.robot.utils.BatteryUtil;
 import frc.robot.utils.ShiftUtil;
+import lib.extendedcommands.CommandUtils;
 import lib.extendedcommands.MultiToggleableTrigger;
 import lib.extendedcommands.ToggleableTrigger;
 import lib.hardware.hid.SamuraiPS5Controller;
@@ -501,6 +502,8 @@ public class RobotContainer {
     }
 
     public void registerNamedCommands() {
+        m_elastic.putNumber("Auton Whole Shi(f)t Wait Time", 4);
+
         final SuperstructureCommandFactory commandFactory = m_superstructure.getCommandFactory();
         NamedCommands.registerCommand("Extend Intake", commandFactory.autonExtendIntake());
         NamedCommands.registerCommand("Retract Intake", commandFactory.autonRetractIntake());
@@ -514,6 +517,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("Shake Slapdown", commandFactory.startSlapdownShake());
         NamedCommands.registerCommand("Stop Slapdown Shake", commandFactory.stopSlapdownShakeAutonomous());
         NamedCommands.registerCommand("End", Commands.runOnce(() -> isAutonDone(true)));
+        NamedCommands.registerCommand("Auton Whole Shi(f)t Wait", CommandUtils.waitSuppliedSeconds(() -> m_elastic.readNumber("Auton Whole Shi(f)t Wait Time")));
     }
 
     /** Returns the amount of time left in the shift */

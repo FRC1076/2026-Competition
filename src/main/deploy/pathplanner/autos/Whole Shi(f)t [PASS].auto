@@ -41,9 +41,9 @@
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 4.0
+            "name": "Auton Whole Shi(f)t Wait"
           }
         },
         {

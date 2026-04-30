@@ -5,6 +5,7 @@
 package lib.extendedcommands;
 
 import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
 
 import org.apache.commons.lang3.NotImplementedException;
 
@@ -44,5 +45,10 @@ public class CommandUtils {
     /** tells the robot to periodically run a runnable that is not associated with any particular subsystem */
     public static void makePeriodic(Runnable action) {
         CommandScheduler.getInstance().schedule(Commands.run(action).ignoringDisable(false));
+    }
+
+    /** Tells the robot to wait the number of seconds specified by the supplier */
+    public static Command waitSuppliedSeconds(DoubleSupplier secondsSupplier) {
+        return new VariableWaitCommand(secondsSupplier);
     }
 }
