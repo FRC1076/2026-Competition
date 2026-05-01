@@ -8,7 +8,7 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.23,
+        "x": 1.3699040024424658,
         "y": 5.829
       },
       "isLocked": false,
@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 1.6,
-        "y": 5.85
+        "x": 1.2,
+        "y": 5.829
       },
       "prevControl": {
-        "x": 1.35,
-        "y": 5.85
+        "x": 0.6195775090351481,
+        "y": 5.829
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Next to Depot"
     }
   ],
   "rotationTargets": [],
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 0.6,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 1.5,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

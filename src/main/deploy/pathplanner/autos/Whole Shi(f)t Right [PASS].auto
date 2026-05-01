@@ -23,6 +23,18 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Depot to Next to Depot"
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "Shoot"
@@ -31,7 +43,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 2.0
+            "waitTime": 0.85
           }
         },
         {

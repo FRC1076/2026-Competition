@@ -35,6 +35,12 @@
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "Depot to Next to Depot"
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "Shoot"
