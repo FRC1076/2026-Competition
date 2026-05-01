@@ -24,9 +24,9 @@ public class DriveConstants {
         public static final double doubleClutchTranslationFactor = 0.35;
         public static final double doubleClutchRotationFactor = 0.4;
 
-        public static final double lowBatteryClutchTranslationFactor = 0.7;
-        public static final double lowBatteryClutchRotationFactor = 0.75;
-        public static final double maximumBatteryVoltageForClutch = 9.2;
+        public static final double lowBatteryClutchTranslationFactor = 0.8;
+        public static final double lowBatteryClutchRotationFactor = 0.85;
+        public static final double maximumBatteryVoltageForClutch = 8.5;
         public static final double minimumBrownoutCountToAlwaysApplyClutch = 30;
 
         public static final double FPVClutchTranslationFactor = 0.1;
