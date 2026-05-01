@@ -23,35 +23,33 @@ public class CommonLookupTable {
     
     static {
         /* *****HUB***** */
-        hubTable.hoodAngle.put(-10000.0, 0.0);
         hubTable.hoodAngle.put(1.0, 0.0);
-        hubTable.hoodAngle.put(2.0, 0.015);
-        hubTable.hoodAngle.put(3.0, 0.03);
-        hubTable.hoodAngle.put(4.0, 0.04);
-        hubTable.hoodAngle.put(5.0, 0.05);
-        hubTable.hoodAngle.put(6.0, 0.06);
-        hubTable.hoodAngle.put(8.0, 0.07);
-        hubTable.hoodAngle.put(10000.0, 0.105);
+        hubTable.hoodAngle.put(2.0, 0.01);
+        hubTable.hoodAngle.put(3.0, 0.02);
+        hubTable.hoodAngle.put(4.0, 0.03);
+        hubTable.hoodAngle.put(5.0, 0.04);
+        hubTable.hoodAngle.put(6.0, 0.05);
+        hubTable.hoodAngle.put(8.0, 0.06);
 
-        hubTable.flywheelSpeed.put(1.0, 176.0);
+        hubTable.flywheelSpeed.put(1.0, 175.0);
         hubTable.flywheelSpeed.put(2.0, 185.0);
-        hubTable.flywheelSpeed.put(2.3, 189.0);
-        hubTable.flywheelSpeed.put(2.7, 195.0);
-        hubTable.flywheelSpeed.put(3.0, 201.0);
+        hubTable.flywheelSpeed.put(2.3, 190.0);
+        hubTable.flywheelSpeed.put(2.7, 196.0);
+        hubTable.flywheelSpeed.put(3.0, 202.0);
         hubTable.flywheelSpeed.put(3.5, 214.5);
-        hubTable.flywheelSpeed.put(4.0, 224.0);
-        hubTable.flywheelSpeed.put(5.0, 251.0);
-        hubTable.flywheelSpeed.put(6.0, 279.0);
-        hubTable.flywheelSpeed.put(8.0, 345.0);
+        hubTable.flywheelSpeed.put(4.0, 225.0);
+        hubTable.flywheelSpeed.put(5.0, 252.0);
+        hubTable.flywheelSpeed.put(6.0, 280.0);
+        hubTable.flywheelSpeed.put(8.0, 347.0);
         
         hubTable.timeOfFlight.put(1.0, 0.38);
-        hubTable.timeOfFlight.put(2.0, 0.67);
-        hubTable.timeOfFlight.put(3.0, 0.9);
-        hubTable.timeOfFlight.put(3.5, 1.02);
-        hubTable.timeOfFlight.put(4.0, 1.12);
-        hubTable.timeOfFlight.put(5.0, 1.31);
-        hubTable.timeOfFlight.put(6.0, 1.5);
-        hubTable.timeOfFlight.put(8.0, 1.84);
+        hubTable.timeOfFlight.put(2.0, 0.68);
+        hubTable.timeOfFlight.put(3.0, 0.91);
+        hubTable.timeOfFlight.put(3.5, 1.03);
+        hubTable.timeOfFlight.put(4.0, 1.14);
+        hubTable.timeOfFlight.put(5.0, 1.34);
+        hubTable.timeOfFlight.put(6.0, 1.52);
+        hubTable.timeOfFlight.put(8.0, 1.86);
 
 
         /* *****PASSING***** */
