@@ -114,6 +114,8 @@ public class RobotContainer {
 
     private final Elastic m_elastic;
 
+    ToggleableTrigger m_touchpadToggle;
+
     // Controllers
     private final SamuraiPS5Controller m_driverController =
         new SamuraiPS5Controller(OIConstants.kDriverControllerPort);
@@ -219,6 +221,8 @@ public class RobotContainer {
         // Set the alliance color
         setAlliance(m_elastic.getSelectedTeamColor());
 
+        m_touchpadToggle = new ToggleableTrigger(m_driverController.touchpad(), false);
+
         registerNamedCommands();
         m_drive.configureAutoBuilder();
 
@@ -313,9 +317,14 @@ public class RobotContainer {
             .onTrue(superstructureCommands.intake())
             .onFalse(superstructureCommands.applyIntakeExtended());
 
-        // Double clutch
         m_driverController.L1()
-            .onTrue(superstructureCommands.startSlapdownShake())
+            .onTrue(
+                Commands.either(
+                    superstructureCommands.startSlapdownShakeHigh(),
+                    superstructureCommands.startSlapdownShake(),
+                    m_touchpadToggle.getToggledTrigger()
+                )
+            )
             .onFalse(superstructureCommands.stopSlapdownShake(m_driverController.L2()));
 
         m_driverController.R2().and(m_superstructure.isReadyToShoot())
@@ -541,6 +550,11 @@ public class RobotContainer {
     @AutoLogOutput(key = "Flywheel/Is Done Shooting")
     public boolean isDoneShooting() {
         return doneShooting.getAsBoolean();
+    }
+
+    @AutoLogOutput(key = "Slapdown/Is High Slapdown Kick Enabled")
+    public boolean isHighSlapdownKickEnabled() {
+        return m_touchpadToggle.getToggledTrigger().getAsBoolean();
     }
 
     public CANBusStatus getCANivoreBusStatus() {

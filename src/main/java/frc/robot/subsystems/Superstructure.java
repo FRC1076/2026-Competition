@@ -603,6 +603,10 @@ public class Superstructure {
             return applyIntakeStateRollerOnly(IntakeStates.RUN_KICK);
         }
 
+        public Command startSlapdownShakeHigh() {
+            return applyIntakeStateRollerOnly(IntakeStates.RUN_KICK_HIGH);
+        }
+
         public Command startSlapdownShakeAutonomous() {
             return applyIntakeStateRollerOnly(IntakeStates.RUN_KICK);
         }
