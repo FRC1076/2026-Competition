@@ -25,6 +25,8 @@ public class KickerConstants {
         public static final double kS = 2;
         public static final double kV = 0.043;
         public static final double kA = 0.0;
+
+        public static final double kVelocityTimeFilterSecs = 0.01;
     }
 
     public class FollowControl {

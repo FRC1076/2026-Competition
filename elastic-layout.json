@@ -9,7 +9,7 @@
         "containers": [
           {
             "title": "Shift Time",
-            "x": 1620.0,
+            "x": 1640.0,
             "y": 0.0,
             "width": 200.0,
             "height": 180.0,
@@ -45,7 +45,7 @@
             "title": "FlywheelVelocityTarget",
             "x": 1860.0,
             "y": 220.0,
-            "width": 240.0,
+            "width": 260.0,
             "height": 140.0,
             "type": "Number Slider",
             "properties": {
@@ -60,7 +60,7 @@
           },
           {
             "title": "ActiveHubColor",
-            "x": 1460.0,
+            "x": 1480.0,
             "y": 0.0,
             "width": 160.0,
             "height": 180.0,
@@ -88,7 +88,7 @@
             "title": "ShiftTime",
             "x": 160.0,
             "y": 280.0,
-            "width": 220.0,
+            "width": 260.0,
             "height": 160.0,
             "type": "Large Text Display",
             "properties": {
@@ -99,7 +99,7 @@
           },
           {
             "title": "MatchTime",
-            "x": 1820.0,
+            "x": 1840.0,
             "y": 0.0,
             "width": 280.0,
             "height": 180.0,
@@ -117,7 +117,7 @@
             "title": "MatchTime",
             "x": 0.0,
             "y": 0.0,
-            "width": 380.0,
+            "width": 420.0,
             "height": 280.0,
             "type": "Match Time",
             "properties": {
@@ -133,7 +133,7 @@
             "title": "Auton Side Chooser",
             "x": 1260.0,
             "y": 0.0,
-            "width": 160.0,
+            "width": 140.0,
             "height": 120.0,
             "type": "ComboBox Chooser",
             "properties": {
@@ -221,7 +221,7 @@
               "topic": "/AdvantageKit/SystemStats/BatteryVoltage",
               "period": 0.033,
               "data_type": "double",
-              "min_value": 6.75,
+              "min_value": 6.0,
               "max_value": 13.0,
               "divisions": 3,
               "inverted": false,
@@ -314,9 +314,9 @@
           {
             "title": "Turret Rotation Enabled",
             "x": 420.0,
-            "y": 320.0,
+            "y": 340.0,
             "width": 200.0,
-            "height": 120.0,
+            "height": 100.0,
             "type": "Boolean Box",
             "properties": {
               "topic": "/AdvantageKit/RealOutputs/SuperState/turretRotationEnabled",
@@ -332,7 +332,7 @@
             "title": "BrownedOut",
             "x": 420.0,
             "y": 140.0,
-            "width": 200.0,
+            "width": 120.0,
             "height": 100.0,
             "type": "Boolean Box",
             "properties": {
@@ -380,6 +380,50 @@
                 150.0,
                 100.0
               ]
+            }
+          },
+          {
+            "title": "BrownoutCount",
+            "x": 540.0,
+            "y": 140.0,
+            "width": 80.0,
+            "height": 100.0,
+            "type": "Large Text Display",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/Battery/BrownoutCount",
+              "period": 0.06,
+              "data_type": "int"
+            }
+          },
+          {
+            "title": "Wait for Whole Shi(f)t",
+            "x": 1400.0,
+            "y": 320.0,
+            "width": 140.0,
+            "height": 80.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Auton Whole Shi(f)t Wait Time",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": true
+            }
+          },
+          {
+            "title": "Kick High",
+            "x": 420.0,
+            "y": 240.0,
+            "width": 200.0,
+            "height": 100.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/AdvantageKit/RealOutputs/Slapdown/Is High Slapdown Kick Enabled",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
             }
           }
         ]

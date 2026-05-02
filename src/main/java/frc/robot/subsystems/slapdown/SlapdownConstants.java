@@ -31,7 +31,7 @@ public class SlapdownConstants {
 
     public static final double kV = 0;
     public static final double kS = 0;
-    public static final double kG = -0.75;
+    public static final double kG = -0.3;
     public static final double kA = 0;
 
     public static final double kCruiseVelocityRadPerSec = 40 * Math.PI;

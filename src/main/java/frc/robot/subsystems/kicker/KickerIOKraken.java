@@ -66,6 +66,8 @@ public class KickerIOKraken implements KickerIO {
         m_leadMotorConfig.Slot0.kV = m_unitConverter.fromSIkV(LeadControl.kV);
         m_leadMotorConfig.Slot0.kA = m_unitConverter.fromSIkA(LeadControl.kA);
 
+        m_leadMotorConfig.Feedback.VelocityFilterTimeConstant = LeadControl.kVelocityTimeFilterSecs;
+
         m_followMotorConfig = m_leadMotorConfig.clone();
 
         // Closed loop

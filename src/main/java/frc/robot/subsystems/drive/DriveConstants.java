@@ -32,7 +32,7 @@ public class DriveConstants {
         public static final double FPVClutchTranslationFactor = 0.1;
         public static final double FPVClutchRotationFactor = 0.1;
 
-        public static final double maxTranslationSpeedMPS = 6.0; // 5.0 is default
+        public static final double maxTranslationSpeedMPS = 7.0; // 5.0 is default
         public static final double maxRotationSpeedRadPerSec = 8.0; // 5.0 is default
     }
 
