@@ -258,7 +258,7 @@ public class Superstructure {
         final Pose3d shooterPose = new Pose3d(m_robotPoseSupplier.get()).transformBy(PhysicalConstants.kBotRelativeTurretPose);
         final ChassisSpeeds robotVelocity = m_robotVelocitySupplier.get();
         
-        final Pose3d shooterPoseAllianceColorCoordinates = shooterPose.relativeTo(fieldTargets.kAllianceOrigin());
+        //final Pose3d shooterPoseAllianceColorCoordinates = shooterPose.relativeTo(fieldTargets.kAllianceOrigin());
 
         // Translate the chassis speeds
         final ChassisSpeeds turretVelocity = ChassisSpeeds.fromRobotRelativeSpeeds(new ChassisSpeeds(
@@ -267,6 +267,8 @@ public class Superstructure {
             robotVelocity.omegaRadiansPerSecond
         ), shooterPose.getRotation().toRotation2d());
         
+        m_shootingParams = SOTMLaunchCalculator.calculateHub(shooterPose.toPose2d(), fieldTargets.kHubTarget().toPose2d(), turretVelocity);
+        /*
         targetIsHub = true;
         // TODO: check tolerance (+ 0.25) on alliance zone (otherwise we'll ram into the trench)
         if (shooterPoseAllianceColorCoordinates.getX() <= PhysicalConstants.FieldConstants.LinesVertical.allianceZone + 0.2 || (DriverStation.isAutonomous() && !m_passInAutoSupplier.getAsBoolean())) {
@@ -294,11 +296,15 @@ public class Superstructure {
         } else {
             m_shootingParams = SOTMLaunchCalculator.calculatePass(shooterPose.toPose2d(), passingTarget, turretVelocity);
             return;
-        }
+        }*/
     }
 
     public MutableSuperState getSuperState() {
         return m_superState;
+    }
+
+    public FieldTargets getCurrentFieldTargets() {
+        return fieldTargets;
     }
 
     /** Sets the team color for where to shoot fuel */

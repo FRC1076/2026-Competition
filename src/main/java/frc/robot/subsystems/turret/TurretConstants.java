@@ -28,6 +28,7 @@ public class TurretConstants {
 
     // Manual control
     public static final double kMaxManualControlVolts = 1.5;
+    public static final double kMaxManualSpeedRPS = 0.4;
 
     // If inverted and brake mode
     public static final InvertedValue kInvertedValue = InvertedValue.Clockwise_Positive;

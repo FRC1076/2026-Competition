@@ -155,6 +155,10 @@ public class TurretSubsystem extends SubsystemBase {
         return Commands.runOnce(() -> io.resetPositionTo(posRadPerSec));
     }
 
+    public double getPositionRadians() {
+        return inputs.motorPositionRad;
+    }
+
     public Command sysIdQuasistatic(Direction direction) {
         return sysId.quasistatic(direction);
     }

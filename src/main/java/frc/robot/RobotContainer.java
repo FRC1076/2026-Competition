@@ -74,6 +74,7 @@ import org.photonvision.PhotonCamera;
 import com.ctre.phoenix6.CANBus.CANBusStatus;
 import com.pathplanner.lib.auto.NamedCommands;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Threads;
@@ -307,6 +308,16 @@ public class RobotContainer {
         m_driverController.create()
             .onTrue(Commands.runOnce(() ->
                 m_drive.resetHeading()
+            ));
+
+        m_driverController.options()
+            .onTrue(Commands.runOnce(() -> 
+                m_drive.resetPose(
+                    new Pose2d(
+                        m_superstructure.getCurrentFieldTargets().kHubTarget().toPose2d().getTranslation(),
+                        m_drive.getHeading()
+                    )
+                )
             ));
 
         /*new ToggleableTrigger(m_driverController.touchpad(), false).getToggledTrigger()
