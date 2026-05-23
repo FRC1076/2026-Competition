@@ -8,6 +8,7 @@ import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.TorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -26,6 +27,7 @@ public class SpindexerIOKraken implements SpindexerIO {
 
     // Control requests
     private final VoltageOut m_voltageRequest;
+    private final TorqueCurrentFOC m_currentRequest;
     private final VelocityTorqueCurrentFOC m_velocityRequest;
 
     //Status Signals 
@@ -71,6 +73,7 @@ public class SpindexerIOKraken implements SpindexerIO {
         m_motor.getConfigurator().apply(m_motorConfig);
 
         m_voltageRequest = new VoltageOut(0).withEnableFOC(SpindexerConstants.kUseFOC);
+        m_currentRequest = new TorqueCurrentFOC(0);
         m_velocityRequest = new VelocityTorqueCurrentFOC(0).withSlot(0);
 
         // Set up Satus signals 
@@ -85,6 +88,12 @@ public class SpindexerIOKraken implements SpindexerIO {
     public void setVoltage(double volts) {
         m_voltageRequest.Output = volts;
         m_motor.setControl(m_voltageRequest);
+    }
+
+    @Override
+    public void setTorque(double amps) {
+        m_currentRequest.Output = amps;
+        m_motor.setControl(m_currentRequest);
     }
 
     /** Sets the velocity of the spindexer by FOC PID */

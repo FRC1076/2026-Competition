@@ -27,9 +27,11 @@ public class SpindexerConstants {
     public static final double kP = 12; //12; // TODO: tune this value
     public static final double kI = 0;
     public static final double kD = 0;
-    public static final double kS = 4.8;
-    public static final double kV = 0.016; // TODO: find this value
+    public static final double kS = 6;
+    public static final double kV = 0.028; // TODO: find this value
     public static final double kA = 0;
 
     public static final double kVelocityFilterTimeConstant = 0.06;
+
+    public static final double kPFFDeadband = 0;
 }

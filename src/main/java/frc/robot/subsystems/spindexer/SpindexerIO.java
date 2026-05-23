@@ -6,6 +6,8 @@ package frc.robot.subsystems.spindexer;
 
 import org.littletonrobotics.junction.AutoLog;
 
+import edu.wpi.first.wpilibj.DriverStation;
+
 public interface SpindexerIO {
     @AutoLog
     public static class SpindexerIOInputs {
@@ -18,6 +20,10 @@ public interface SpindexerIO {
     public abstract void setVoltage(double volts);
 
     public abstract void setVelocity(double radPerSec);
+
+    public default void setTorque(double amps) {
+        DriverStation.reportError("Torque Control Not Supported On This Spindexer IO Implementation.", true);
+    }
 
     public abstract void updateInputs(SpindexerIOInputs inputs);
 
