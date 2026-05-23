@@ -19,7 +19,7 @@ public class KickerConstants {
 
     public class LeadControl {
         // PID Constants
-        public static final double kP = 1;
+        public static final double kP = 0.9;
         public static final double kI = 0.0;
         public static final double kD = 0.0;
         public static final double kS = 2;
@@ -31,11 +31,11 @@ public class KickerConstants {
 
     public class FollowControl {
         // PID Constants
-        public static final double kP = 0.5;
+        public static final double kP = 0.14;
         public static final double kI = 0.0;
         public static final double kD = 0.0;
         public static final double kS = 1;
-        public static final double kV = 0.039;
+        public static final double kV = 0.028;
         public static final double kA = 0.0;
     }
     

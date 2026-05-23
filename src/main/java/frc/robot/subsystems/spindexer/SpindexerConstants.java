@@ -24,7 +24,7 @@ public class SpindexerConstants {
 
     public static final double kGearRatio = 3;
 
-    public static final double kP = 12; //12; // TODO: tune this value
+    public static final double kP = 10; //12; // TODO: tune this value
     public static final double kI = 0;
     public static final double kD = 0;
     public static final double kS = 4.8;
