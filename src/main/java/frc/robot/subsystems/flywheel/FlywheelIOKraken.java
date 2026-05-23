@@ -69,6 +69,9 @@ public class FlywheelIOKraken implements FlywheelIO {
         // Set brake mode based on constants
         m_leadMotorConfig.MotorOutput.NeutralMode = FlywheelConstants.kNeutralMode;
 
+        // Set the velocity filter time constant
+        m_leadMotorConfig.Feedback.VelocityFilterTimeConstant = FlywheelConstants.kVelocityFilterTimeConstant;
+
         // Configure motiom magic
         m_leadMotorConfig.Slot0.kP = m_unitConverter.fromSIkP(FlywheelConstants.kP);
         m_leadMotorConfig.Slot0.kI = m_unitConverter.fromSIkI(FlywheelConstants.kI);
