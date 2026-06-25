@@ -19,7 +19,7 @@ public class RollerConstants {
 
     // Current limits
     public static final int kSupplyCurrentLimit = 40;
-    public static final int kStatorCurrentLimit = 60;
+    public static final int kStatorCurrentLimit = 80;
 
     public static final InvertedValue kInverted = InvertedValue.CounterClockwise_Positive;
     public static final MotorAlignmentValue kFollowerAlignment = MotorAlignmentValue.Opposed;
@@ -32,9 +32,11 @@ public class RollerConstants {
     public static final double kP = 1; // TODO: tune this value
     public static final double kI = 0;
     public static final double kD = 0;
-    public static final double kS = 0;
-    public static final double kV = (5.0/140.0); // TODO: confirm this value
+    public static final double kS = 2.2;
+    public static final double kV = 0.001; // TODO: confirm this value
     public static final double kA = 0;
+
+    public static final double kVelocityFilterTimeConstant = 0.01;
 
     // FOC
     public static final boolean kUseFOC = true;

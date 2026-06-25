@@ -331,10 +331,10 @@ public class Superstructure {
     }
 
     /** Applies the target state to the rollers when safe */
-    public Command applyRollerVoltageUponSafe(double voltage) {
+    public Command applyRollerVoltageUponSafe(double velocity) {
         return Commands.sequence(
             Commands.waitUntil(safeToSpinRollers()),
-            m_roller.applyVoltage(voltage)
+            m_roller.applyVelocity(velocity)
         );
     }
 
@@ -366,7 +366,7 @@ public class Superstructure {
     public Command applyIntakeStateRollerOnly(IntakeStates state) {
         return Commands.parallel(
             setIntakeState(state),
-            applyRollerVoltageUponSafe(state.kRollerVoltage)
+            applyRollerVoltageUponSafe(state.kRollerVelocity)
         );
     }
 
@@ -382,7 +382,7 @@ public class Superstructure {
             Commands.parallel(
                 setIntakeState(state),
                 m_slapdown.applyPosition(state.kSlapdownAngle),
-                applyRollerVoltageUponSafe(state.kRollerVoltage)
+                applyRollerVoltageUponSafe(state.kRollerVelocity)
             ),
             Commands.waitUntil(() -> m_slapdown.withinTolerance(state.kSlapdownAngle)),
             m_slapdown.holdPositionStrong(state.kSlapdownAngle)

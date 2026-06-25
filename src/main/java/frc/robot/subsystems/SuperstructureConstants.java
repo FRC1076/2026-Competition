@@ -57,7 +57,7 @@ public class SuperstructureConstants {
     /* intitalizes numerical values for the FuelManagmentStates enum */
     public static double kSlapdownUpAngle = 0;
     public static double kSlapdownDownAngle = 1.64;
-    public static double kIntakeRollerVoltage = 9;
+    public static double kIntakeRollerVelocity = 201;
 
     public static double kSlapdownShakeUpAngleRad = 1.1;
     public static double kSlapdownShakePeriodSec = 0.8; // time for a full cycle
@@ -66,29 +66,29 @@ public class SuperstructureConstants {
         /** list of opereational states of the intake and thier inputs */
         RETRACTED(kSlapdownUpAngle,0),
         EXTENDED(kSlapdownDownAngle, 0),
-        INTAKING(kSlapdownDownAngle, kIntakeRollerVoltage),
+        INTAKING(kSlapdownDownAngle, kIntakeRollerVelocity),
         //INTAKING(true, kSlapdownDownAngle, 1.3, 0.5, kIntakeRollerVoltage),
-        SHOOTING(true, kSlapdownDownAngle, kSlapdownShakeUpAngleRad, kSlapdownShakePeriodSec, 5),
-        RUN_KICK(true, kSlapdownDownAngle, kSlapdownShakeUpAngleRad, kSlapdownShakePeriodSec, 5),
+        SHOOTING(true, kSlapdownDownAngle, kSlapdownShakeUpAngleRad, kSlapdownShakePeriodSec, 200),
+        RUN_KICK(true, kSlapdownDownAngle, kSlapdownShakeUpAngleRad, kSlapdownShakePeriodSec, 200),
         RUN_KICK_HIGH(true, kSlapdownDownAngle, 0.5, 1.6, 5),
-        REVERSE(kSlapdownDownAngle, -kIntakeRollerVoltage);
+        REVERSE(kSlapdownDownAngle, -kIntakeRollerVelocity);
 
         public final double kSlapdownAngle;
         public final boolean kRunSlapdownShake;
         public final double kSlapdownShakeUpAngle;
         public final double kSlapdownShakePeriodSecs;
-        public final double kRollerVoltage;
+        public final double kRollerVelocity;
 
         /** Constructor for intake states */
         private IntakeStates(
             double slapdownAngle,
-            double rollerVoltage
+            double rollerVelocity
         ) {
             this.kSlapdownAngle = slapdownAngle;
             this.kRunSlapdownShake = false;
             this.kSlapdownShakeUpAngle = slapdownAngle;
             this.kSlapdownShakePeriodSecs = Double.MAX_VALUE;
-            this.kRollerVoltage = rollerVoltage;
+            this.kRollerVelocity = rollerVelocity;
         }
 
         private IntakeStates(
@@ -96,13 +96,13 @@ public class SuperstructureConstants {
             double shakeDownAngle,
             double slapdownShakeUpAngle,
             double slapdownShakePeriodSecs,
-            double rollerVoltage
+            double rollerVelocity
         ) {
             this.kRunSlapdownShake = runSlapdownShake;
             this.kSlapdownAngle = shakeDownAngle;
             this.kSlapdownShakeUpAngle = slapdownShakeUpAngle;
             this.kSlapdownShakePeriodSecs = slapdownShakePeriodSecs;
-            this.kRollerVoltage = rollerVoltage;
+            this.kRollerVelocity = rollerVelocity;
         }
     }
 

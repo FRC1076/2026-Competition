@@ -66,6 +66,8 @@ public class RollerIOKraken implements RollerIO {
         m_leadMotorConfig.Slot0.kS = m_unitConverter.fromSIkS(RollerConstants.kS);
         m_leadMotorConfig.Slot0.kV = m_unitConverter.fromSIkV(RollerConstants.kV);
         m_leadMotorConfig.Slot0.kA = m_unitConverter.fromSIkA(RollerConstants.kA);
+
+        m_leadMotorConfig.Feedback.VelocityFilterTimeConstant = RollerConstants.kVelocityFilterTimeConstant;
         
         m_followMotorConfig = m_leadMotorConfig.clone();
 

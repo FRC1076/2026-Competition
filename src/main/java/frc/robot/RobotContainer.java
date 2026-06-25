@@ -461,7 +461,7 @@ public class RobotContainer {
         // Sets the rollers to do the opposite of their current state
         m_operatorController.leftTrigger()
             .onTrue(Commands.either(
-                m_rollers.applyVoltage(SuperstructureConstants.kIntakeRollerVoltage),
+                m_rollers.applyVoltage(SuperstructureConstants.kIntakeRollerVelocity),
                 m_rollers.applyVoltage(0),
                 () -> m_rollers.getVoltage() < 0.5
             ));
