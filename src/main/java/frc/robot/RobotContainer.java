@@ -221,7 +221,7 @@ public class RobotContainer {
         // Set the alliance color
         setAlliance(m_elastic.getSelectedTeamColor());
 
-        m_touchpadToggle = new ToggleableTrigger(m_driverController.touchpad(), false);
+        m_touchpadToggle = new ToggleableTrigger(m_driverController.touchpad(), true);
 
         registerNamedCommands();
         m_drive.configureAutoBuilder();

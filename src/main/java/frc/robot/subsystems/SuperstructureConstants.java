@@ -70,7 +70,7 @@ public class SuperstructureConstants {
         //INTAKING(true, kSlapdownDownAngle, 1.3, 0.5, kIntakeRollerVoltage),
         SHOOTING(true, kSlapdownDownAngle, kSlapdownShakeUpAngleRad, kSlapdownShakePeriodSec, 200),
         RUN_KICK(true, kSlapdownDownAngle, kSlapdownShakeUpAngleRad, kSlapdownShakePeriodSec, 200),
-        RUN_KICK_HIGH(true, kSlapdownDownAngle, 0.5, 1.6, 5),
+        RUN_KICK_HIGH(true, kSlapdownDownAngle, 0.5, 1.6, 200),
         REVERSE(kSlapdownDownAngle, -kIntakeRollerVelocity);
 
         public final double kSlapdownAngle;
