@@ -114,8 +114,6 @@ public class RobotContainer {
 
     private final Elastic m_elastic;
 
-    ToggleableTrigger m_touchpadToggle;
-
     // Controllers
     private final SamuraiPS5Controller m_driverController =
         new SamuraiPS5Controller(OIConstants.kDriverControllerPort);
@@ -221,8 +219,6 @@ public class RobotContainer {
         // Set the alliance color
         setAlliance(m_elastic.getSelectedTeamColor());
 
-        m_touchpadToggle = new ToggleableTrigger(m_driverController.touchpad(), true);
-
         registerNamedCommands();
         m_drive.configureAutoBuilder();
 
@@ -317,19 +313,29 @@ public class RobotContainer {
             .onTrue(superstructureCommands.intake())
             .onFalse(superstructureCommands.applyIntakeExtended());
 
-        m_driverController.L1()
-            .onTrue(
+        m_driverController.R2().and(m_superstructure.isReadyToShoot()).and(m_driverController.L1().negate()).and(m_driverController.L2().negate())
+            .onTrue(superstructureCommands.startSlapdownShake());
+
+        m_driverController.R2().and(m_superstructure.isReadyToShoot()).and(m_driverController.L1()).and(m_driverController.L2().negate())
+            .onTrue(superstructureCommands.startSlapdownShakeHigh());
+
+        m_driverController.L1().and(m_driverController.R2().negate()).and(m_driverController.L2().negate())
+            .onTrue(superstructureCommands.startSlapdownShakeHigh())
+            .onFalse(
                 Commands.either(
-                    superstructureCommands.startSlapdownShakeHigh(),
-                    superstructureCommands.startSlapdownShake(),
-                    m_touchpadToggle.getToggledTrigger()
-                )
-            )
-            .onFalse(superstructureCommands.stopSlapdownShake(m_driverController.L2()));
+                    Commands.none(),
+                    superstructureCommands.stopSlapdownShake(m_driverController.L2()),
+                    m_driverController.R2())
+                );
 
         m_driverController.R2().and(m_superstructure.isReadyToShoot())
             .onTrue(superstructureCommands.shoot())
-            .onFalse(superstructureCommands.stopShooting())
+            .onFalse(
+                    Commands.parallel(
+                       superstructureCommands.stopShooting(),
+                       superstructureCommands.stopSlapdownShake(m_driverController.L2())
+                    )
+                )
             .whileTrue(m_leds.setTempState(LEDStates.RAINBOW).ignoringDisable(true));
 
         m_driverController.square()
@@ -550,11 +556,6 @@ public class RobotContainer {
     @AutoLogOutput(key = "Flywheel/Is Done Shooting")
     public boolean isDoneShooting() {
         return doneShooting.getAsBoolean();
-    }
-
-    @AutoLogOutput(key = "Slapdown/Is High Slapdown Kick Enabled")
-    public boolean isHighSlapdownKickEnabled() {
-        return m_touchpadToggle.getToggledTrigger().getAsBoolean();
     }
 
     public CANBusStatus getCANivoreBusStatus() {

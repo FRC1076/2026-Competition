@@ -330,6 +330,10 @@ public class Superstructure {
         return m_flywheel.hasStoppedShooting(() -> m_shootingParams.launchSpeedRadPerSec());
     }
 
+    public Trigger intakeStateEquals(IntakeStates state) {
+        return new Trigger(() -> m_superState.getIntakeState() == state);
+    }
+
     /** Applies the target state to the rollers when safe */
     public Command applyRollerVoltageUponSafe(double velocity) {
         return Commands.sequence(

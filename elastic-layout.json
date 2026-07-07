@@ -314,9 +314,9 @@
           {
             "title": "Turret Rotation Enabled",
             "x": 420.0,
-            "y": 340.0,
+            "y": 260.0,
             "width": 200.0,
-            "height": 100.0,
+            "height": 80.0,
             "type": "Boolean Box",
             "properties": {
               "topic": "/AdvantageKit/RealOutputs/SuperState/turretRotationEnabled",
@@ -333,7 +333,7 @@
             "x": 420.0,
             "y": 140.0,
             "width": 120.0,
-            "height": 100.0,
+            "height": 120.0,
             "type": "Boolean Box",
             "properties": {
               "topic": "/AdvantageKit/SystemStats/BrownedOut",
@@ -387,7 +387,7 @@
             "x": 540.0,
             "y": 140.0,
             "width": 80.0,
-            "height": 100.0,
+            "height": 120.0,
             "type": "Large Text Display",
             "properties": {
               "topic": "/AdvantageKit/RealOutputs/Battery/BrownoutCount",
@@ -410,20 +410,21 @@
             }
           },
           {
-            "title": "Kick High",
+            "title": "Spindexer Velocity",
             "x": 420.0,
-            "y": 240.0,
+            "y": 340.0,
             "width": 200.0,
             "height": 100.0,
-            "type": "Boolean Box",
+            "type": "Number Bar",
             "properties": {
-              "topic": "/AdvantageKit/RealOutputs/Slapdown/Is High Slapdown Kick Enabled",
+              "topic": "/AdvantageKit/Spindexer/VelocityRadPerSec",
               "period": 0.06,
-              "data_type": "boolean",
-              "true_color": 4283215696,
-              "false_color": 4294198070,
-              "true_icon": "None",
-              "false_icon": "None"
+              "data_type": "double",
+              "min_value": 0.0,
+              "max_value": 100.0,
+              "divisions": 5,
+              "inverted": false,
+              "orientation": "horizontal"
             }
           }
         ]
