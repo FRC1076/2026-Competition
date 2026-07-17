@@ -24,11 +24,11 @@ public class SpindexerConstants {
 
     public static final double kGearRatio = 3;
 
-    public static final double kP = 10; //12; // TODO: tune this value
+    public static final double kP = 10.76; //12; // TODO: tune this value
     public static final double kI = 0;
     public static final double kD = 0;
-    public static final double kS = 4.8;
-    public static final double kV = 0.016; // TODO: find this value
+    public static final double kS = 6.8;
+    public static final double kV = 0.0365; // TODO: find this value
     public static final double kA = 0;
 
     public static final double kVelocityFilterTimeConstant = 0.06;
