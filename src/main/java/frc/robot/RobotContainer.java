@@ -292,8 +292,11 @@ public class RobotContainer {
         m_drive.setDefaultCommand(teleopDriveCommand);
 
         // Single clutch
-        m_driverController.R1().or(m_driverController.R2())
+        m_driverController.R1().and(m_driverController.R2().negate())
             .whileTrue(teleopDriveCommand.applySingleClutch());
+
+        m_driverController.R2()
+            .whileTrue(teleopDriveCommand.applyDoubleClutch());
 
         // Brake
         m_driverController.L3()

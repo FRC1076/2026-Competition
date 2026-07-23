@@ -18,11 +18,11 @@ public class DriveConstants {
     public static final int kOdometryUpdateFrequency = 250;
 
     public static class DriverControlConstants {
-        public static final double singleClutchTranslationFactor = 0.5;
-        public static final double singleClutchRotationFactor = 0.5;
+        public static final double singleClutchTranslationFactor = 0.75;
+        public static final double singleClutchRotationFactor = 0.75;
 
-        public static final double doubleClutchTranslationFactor = 0.35;
-        public static final double doubleClutchRotationFactor = 0.4;
+        public static final double doubleClutchTranslationFactor = 0.5;
+        public static final double doubleClutchRotationFactor = 0.5;
 
         public static final double lowBatteryClutchTranslationFactor = 0.8;
         public static final double lowBatteryClutchRotationFactor = 0.85;
