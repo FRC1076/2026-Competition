@@ -62,7 +62,7 @@ import frc.robot.utils.BatteryUtil;
 import frc.robot.utils.ShiftUtil;
 import lib.extendedcommands.CommandUtils;
 import lib.extendedcommands.MultiToggleableTrigger;
-import lib.extendedcommands.ToggleableTrigger;
+// import lib.extendedcommands.ToggleableTrigger;
 import lib.hardware.hid.SamuraiPS5Controller;
 import lib.hardware.hid.SamuraiXboxController;
 import lib.vision.PhotonVisionLocalizerWithTagPrioritization;
@@ -281,7 +281,7 @@ public class RobotContainer {
         // Slow down when battery low
         new Trigger(() -> BatteryUtil.getFilteredBatteryVoltage() < DriverControlConstants.maximumBatteryVoltageForClutch)
             .or(() -> BatteryUtil.getBrownoutCount() > DriverControlConstants.minimumBrownoutCountToAlwaysApplyClutch)
-            .and(m_driverController.R1().negate()).and(m_driverController.R2().negate()).and(m_driverController.L3().negate())
+            .and(m_driverController.R1().negate()).and(m_driverController.R2().negate()).and(m_driverController.L3().negate()).and(m_driverController.R3().negate())
                 .whileTrue(teleopDriveCommand.applyLowBatteryClutch());
     }
 
@@ -299,7 +299,7 @@ public class RobotContainer {
             .whileTrue(teleopDriveCommand.applyDoubleClutch());
 
         // Brake
-        m_driverController.L3()
+        m_driverController.L3().or(m_driverController.R3())
             .whileTrue(teleopDriveCommand.applySwerveBrake());
 
         // Reset the heading of the gyro
@@ -398,9 +398,9 @@ public class RobotContainer {
             .onFalse(superstructureCommands.stopReverseEverything());
 
         // Turn off the turret if we don't want it as a redundancy
-        new ToggleableTrigger(m_driverController.R3(), true).getToggledTrigger()
-            .onTrue(m_superstructure.setTurretRotationEnabledState(true))
-            .onFalse(m_superstructure.setTurretRotationEnabledState(false));
+        //new ToggleableTrigger(m_driverController.R3(), true).getToggledTrigger()
+            //.onTrue(m_superstructure.setTurretRotationEnabledState(true))
+            //.onFalse(m_superstructure.setTurretRotationEnabledState(false));
     }
 
     /** Bind triggers on operator controller to commands */
